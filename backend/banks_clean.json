@@ -1,0 +1,3394 @@
+[
+{
+  "model": "banks.bank",
+  "pk": 1,
+  "fields": {
+    "name": "Chet el kapitali ishtirokidagi \"Hamkorbank\" ATB",
+    "short_name": "Hamkorbank",
+    "website": "https://hamkorbank.uz",
+    "is_featured": true,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-02-27T05:20:41.432Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 2,
+  "fields": {
+    "name": "Aksiyadorlik tijorat \"Aloqabank\"",
+    "short_name": "Aloqabank",
+    "website": "https://aloqabank.uz",
+    "is_featured": true,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-02-27T05:20:42.117Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 3,
+  "fields": {
+    "name": "",
+    "short_name": "NBU",
+    "website": "https://nbu.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.475Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 4,
+  "fields": {
+    "name": "",
+    "short_name": "SQB",
+    "website": "https://sqb.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.480Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 5,
+  "fields": {
+    "name": "",
+    "short_name": "Agrobank",
+    "website": "https://agrobank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.484Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 6,
+  "fields": {
+    "name": "",
+    "short_name": "Mikrokreditbank",
+    "website": "https://mkbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.488Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 7,
+  "fields": {
+    "name": "",
+    "short_name": "Xalq Bank",
+    "website": "https://xb.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.495Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 8,
+  "fields": {
+    "name": "",
+    "short_name": "Garant Bank",
+    "website": "https://garantbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.499Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 9,
+  "fields": {
+    "name": "",
+    "short_name": "BRB",
+    "website": "https://brb.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.507Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 10,
+  "fields": {
+    "name": "",
+    "short_name": "Turonbank",
+    "website": "https://turonbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.515Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 11,
+  "fields": {
+    "name": "",
+    "short_name": "Asakabank",
+    "website": "https://asakabank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.527Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 12,
+  "fields": {
+    "name": "",
+    "short_name": "Ipak Yuli",
+    "website": "https://ipakyulibank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.532Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 13,
+  "fields": {
+    "name": "",
+    "short_name": "Ziraat Bank",
+    "website": "https://ziraatbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.537Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 14,
+  "fields": {
+    "name": "",
+    "short_name": "Trustbank",
+    "website": "https://trustbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.543Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 15,
+  "fields": {
+    "name": "",
+    "short_name": "Ipoteka Bank",
+    "website": "https://ipotekabank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.556Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 16,
+  "fields": {
+    "name": "",
+    "short_name": "KDB Bank",
+    "website": "https://kdb.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.563Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 17,
+  "fields": {
+    "name": "",
+    "short_name": "Universal Bank",
+    "website": "https://universalbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.568Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 18,
+  "fields": {
+    "name": "",
+    "short_name": "Kapitalbank",
+    "website": "https://kapitalbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.575Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 19,
+  "fields": {
+    "name": "",
+    "short_name": "Octobank",
+    "website": "https://octobank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.582Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 20,
+  "fields": {
+    "name": "",
+    "short_name": "Davr Bank",
+    "website": "https://davrbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.587Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 21,
+  "fields": {
+    "name": "",
+    "short_name": "InFinBank",
+    "website": "https://infinbank.com",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.594Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 22,
+  "fields": {
+    "name": "",
+    "short_name": "Asia Alliance",
+    "website": "https://aab.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.599Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 23,
+  "fields": {
+    "name": "",
+    "short_name": "Orient Finans",
+    "website": "https://ofb.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.604Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 24,
+  "fields": {
+    "name": "",
+    "short_name": "AVO Bank",
+    "website": "https://avo.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.611Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 25,
+  "fields": {
+    "name": "",
+    "short_name": "Poytaxt Bank",
+    "website": "https://poytaxtbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.616Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 26,
+  "fields": {
+    "name": "",
+    "short_name": "Tenge Bank",
+    "website": "https://tengebank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.621Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 27,
+  "fields": {
+    "name": "",
+    "short_name": "TBC Bank",
+    "website": "https://tbcbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.628Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 28,
+  "fields": {
+    "name": "",
+    "short_name": "Anor Bank",
+    "website": "https://anorbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.633Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 29,
+  "fields": {
+    "name": "",
+    "short_name": "Uzum Bank",
+    "website": "https://uzumbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.641Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 30,
+  "fields": {
+    "name": "",
+    "short_name": "Open Bank",
+    "website": "https://openbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.648Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 31,
+  "fields": {
+    "name": "",
+    "short_name": "Apex Bank",
+    "website": "https://apexbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.656Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 32,
+  "fields": {
+    "name": "",
+    "short_name": "Hayot Bank",
+    "website": "https://hayotbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.661Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 98,
+  "fields": {
+    "bank": 2,
+    "name": "Consumer Loan",
+    "min_score": 464,
+    "max_dti": "0.65",
+    "min_income": "2281794.00",
+    "interest_rate": "22.29",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:49.982Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 99,
+  "fields": {
+    "bank": 2,
+    "name": "Mortgage",
+    "min_score": 528,
+    "max_dti": "0.60",
+    "min_income": "4527613.00",
+    "interest_rate": "18.76",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:49.991Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 100,
+  "fields": {
+    "bank": 2,
+    "name": "Auto Loan",
+    "min_score": 480,
+    "max_dti": "0.62",
+    "min_income": "2897591.00",
+    "interest_rate": "19.57",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:49.997Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 101,
+  "fields": {
+    "bank": 1,
+    "name": "Consumer Loan",
+    "min_score": 459,
+    "max_dti": "0.65",
+    "min_income": "1834757.00",
+    "interest_rate": "22.62",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.004Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 102,
+  "fields": {
+    "bank": 1,
+    "name": "Mortgage",
+    "min_score": 527,
+    "max_dti": "0.60",
+    "min_income": "3770248.00",
+    "interest_rate": "17.08",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.011Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 103,
+  "fields": {
+    "bank": 1,
+    "name": "Auto Loan",
+    "min_score": 500,
+    "max_dti": "0.62",
+    "min_income": "2624962.00",
+    "interest_rate": "18.93",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.019Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 104,
+  "fields": {
+    "bank": 5,
+    "name": "Consumer Loan",
+    "min_score": 468,
+    "max_dti": "0.65",
+    "min_income": "1295216.00",
+    "interest_rate": "21.75",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.027Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 105,
+  "fields": {
+    "bank": 5,
+    "name": "Mortgage",
+    "min_score": 470,
+    "max_dti": "0.60",
+    "min_income": "4273843.00",
+    "interest_rate": "17.58",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.035Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 106,
+  "fields": {
+    "bank": 5,
+    "name": "Auto Loan",
+    "min_score": 492,
+    "max_dti": "0.62",
+    "min_income": "3225605.00",
+    "interest_rate": "20.74",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.041Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 107,
+  "fields": {
+    "bank": 6,
+    "name": "Consumer Loan",
+    "min_score": 431,
+    "max_dti": "0.65",
+    "min_income": "1451247.00",
+    "interest_rate": "21.72",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.048Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 108,
+  "fields": {
+    "bank": 6,
+    "name": "Mortgage",
+    "min_score": 527,
+    "max_dti": "0.60",
+    "min_income": "3926554.00",
+    "interest_rate": "17.21",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.056Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 109,
+  "fields": {
+    "bank": 6,
+    "name": "Auto Loan",
+    "min_score": 448,
+    "max_dti": "0.62",
+    "min_income": "3137032.00",
+    "interest_rate": "19.72",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.062Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 110,
+  "fields": {
+    "bank": 7,
+    "name": "Consumer Loan",
+    "min_score": 449,
+    "max_dti": "0.65",
+    "min_income": "2005941.00",
+    "interest_rate": "23.19",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.070Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 111,
+  "fields": {
+    "bank": 7,
+    "name": "Mortgage",
+    "min_score": 500,
+    "max_dti": "0.60",
+    "min_income": "3476511.00",
+    "interest_rate": "18.07",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.076Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 112,
+  "fields": {
+    "bank": 7,
+    "name": "Auto Loan",
+    "min_score": 473,
+    "max_dti": "0.62",
+    "min_income": "2752444.00",
+    "interest_rate": "20.02",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.082Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 113,
+  "fields": {
+    "bank": 8,
+    "name": "Consumer Loan",
+    "min_score": 480,
+    "max_dti": "0.65",
+    "min_income": "1977441.00",
+    "interest_rate": "21.62",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.088Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 114,
+  "fields": {
+    "bank": 8,
+    "name": "Mortgage",
+    "min_score": 522,
+    "max_dti": "0.60",
+    "min_income": "3246723.00",
+    "interest_rate": "16.99",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.093Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 115,
+  "fields": {
+    "bank": 8,
+    "name": "Auto Loan",
+    "min_score": 479,
+    "max_dti": "0.62",
+    "min_income": "2357747.00",
+    "interest_rate": "21.05",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.100Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 116,
+  "fields": {
+    "bank": 9,
+    "name": "Consumer Loan",
+    "min_score": 470,
+    "max_dti": "0.65",
+    "min_income": "2554807.00",
+    "interest_rate": "23.27",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.107Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 117,
+  "fields": {
+    "bank": 9,
+    "name": "Mortgage",
+    "min_score": 524,
+    "max_dti": "0.60",
+    "min_income": "4097885.00",
+    "interest_rate": "17.03",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.114Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 118,
+  "fields": {
+    "bank": 9,
+    "name": "Auto Loan",
+    "min_score": 486,
+    "max_dti": "0.62",
+    "min_income": "3080223.00",
+    "interest_rate": "21.09",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.122Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 119,
+  "fields": {
+    "bank": 10,
+    "name": "Consumer Loan",
+    "min_score": 471,
+    "max_dti": "0.65",
+    "min_income": "2735141.00",
+    "interest_rate": "21.66",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.129Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 120,
+  "fields": {
+    "bank": 10,
+    "name": "Mortgage",
+    "min_score": 477,
+    "max_dti": "0.60",
+    "min_income": "3757265.00",
+    "interest_rate": "18.00",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.138Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 121,
+  "fields": {
+    "bank": 10,
+    "name": "Auto Loan",
+    "min_score": 490,
+    "max_dti": "0.62",
+    "min_income": "3698779.00",
+    "interest_rate": "19.35",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.146Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 122,
+  "fields": {
+    "bank": 11,
+    "name": "Consumer Loan",
+    "min_score": 471,
+    "max_dti": "0.65",
+    "min_income": "1629837.00",
+    "interest_rate": "23.11",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.153Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 123,
+  "fields": {
+    "bank": 11,
+    "name": "Mortgage",
+    "min_score": 470,
+    "max_dti": "0.60",
+    "min_income": "3767132.00",
+    "interest_rate": "19.16",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.161Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 124,
+  "fields": {
+    "bank": 11,
+    "name": "Auto Loan",
+    "min_score": 447,
+    "max_dti": "0.62",
+    "min_income": "3532812.00",
+    "interest_rate": "18.93",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.168Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 125,
+  "fields": {
+    "bank": 12,
+    "name": "Consumer Loan",
+    "min_score": 477,
+    "max_dti": "0.65",
+    "min_income": "2662761.00",
+    "interest_rate": "21.34",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.174Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 126,
+  "fields": {
+    "bank": 12,
+    "name": "Mortgage",
+    "min_score": 515,
+    "max_dti": "0.60",
+    "min_income": "4330226.00",
+    "interest_rate": "17.19",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.183Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 127,
+  "fields": {
+    "bank": 12,
+    "name": "Auto Loan",
+    "min_score": 485,
+    "max_dti": "0.62",
+    "min_income": "2855329.00",
+    "interest_rate": "20.34",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.190Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 128,
+  "fields": {
+    "bank": 13,
+    "name": "Consumer Loan",
+    "min_score": 443,
+    "max_dti": "0.65",
+    "min_income": "1737971.00",
+    "interest_rate": "22.07",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.200Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 129,
+  "fields": {
+    "bank": 13,
+    "name": "Mortgage",
+    "min_score": 526,
+    "max_dti": "0.60",
+    "min_income": "3981405.00",
+    "interest_rate": "17.86",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.207Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 130,
+  "fields": {
+    "bank": 13,
+    "name": "Auto Loan",
+    "min_score": 487,
+    "max_dti": "0.62",
+    "min_income": "3750800.00",
+    "interest_rate": "19.47",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.214Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 131,
+  "fields": {
+    "bank": 14,
+    "name": "Consumer Loan",
+    "min_score": 466,
+    "max_dti": "0.65",
+    "min_income": "2193922.00",
+    "interest_rate": "23.35",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.222Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 132,
+  "fields": {
+    "bank": 14,
+    "name": "Mortgage",
+    "min_score": 501,
+    "max_dti": "0.60",
+    "min_income": "4594971.00",
+    "interest_rate": "16.93",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.230Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 133,
+  "fields": {
+    "bank": 14,
+    "name": "Auto Loan",
+    "min_score": 471,
+    "max_dti": "0.62",
+    "min_income": "3471498.00",
+    "interest_rate": "21.00",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.237Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 134,
+  "fields": {
+    "bank": 15,
+    "name": "Consumer Loan",
+    "min_score": 474,
+    "max_dti": "0.65",
+    "min_income": "2464845.00",
+    "interest_rate": "22.68",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.246Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 135,
+  "fields": {
+    "bank": 15,
+    "name": "Mortgage",
+    "min_score": 489,
+    "max_dti": "0.60",
+    "min_income": "3450732.00",
+    "interest_rate": "17.71",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.253Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 136,
+  "fields": {
+    "bank": 15,
+    "name": "Auto Loan",
+    "min_score": 447,
+    "max_dti": "0.62",
+    "min_income": "2442960.00",
+    "interest_rate": "20.39",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.260Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 137,
+  "fields": {
+    "bank": 16,
+    "name": "Consumer Loan",
+    "min_score": 454,
+    "max_dti": "0.65",
+    "min_income": "2224726.00",
+    "interest_rate": "21.83",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.268Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 138,
+  "fields": {
+    "bank": 16,
+    "name": "Mortgage",
+    "min_score": 496,
+    "max_dti": "0.60",
+    "min_income": "3550405.00",
+    "interest_rate": "16.97",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.275Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 139,
+  "fields": {
+    "bank": 16,
+    "name": "Auto Loan",
+    "min_score": 490,
+    "max_dti": "0.62",
+    "min_income": "2597940.00",
+    "interest_rate": "20.21",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.283Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 140,
+  "fields": {
+    "bank": 17,
+    "name": "Consumer Loan",
+    "min_score": 478,
+    "max_dti": "0.65",
+    "min_income": "2325748.00",
+    "interest_rate": "21.70",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.290Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 141,
+  "fields": {
+    "bank": 17,
+    "name": "Mortgage",
+    "min_score": 528,
+    "max_dti": "0.60",
+    "min_income": "4290216.00",
+    "interest_rate": "18.68",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.297Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 142,
+  "fields": {
+    "bank": 17,
+    "name": "Auto Loan",
+    "min_score": 455,
+    "max_dti": "0.62",
+    "min_income": "2496556.00",
+    "interest_rate": "19.19",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.304Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 143,
+  "fields": {
+    "bank": 18,
+    "name": "Consumer Loan",
+    "min_score": 456,
+    "max_dti": "0.65",
+    "min_income": "2650128.00",
+    "interest_rate": "23.12",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.311Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 144,
+  "fields": {
+    "bank": 18,
+    "name": "Mortgage",
+    "min_score": 504,
+    "max_dti": "0.60",
+    "min_income": "4420118.00",
+    "interest_rate": "18.46",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.318Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 145,
+  "fields": {
+    "bank": 18,
+    "name": "Auto Loan",
+    "min_score": 464,
+    "max_dti": "0.62",
+    "min_income": "2627964.00",
+    "interest_rate": "20.55",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.329Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 146,
+  "fields": {
+    "bank": 19,
+    "name": "Consumer Loan",
+    "min_score": 436,
+    "max_dti": "0.65",
+    "min_income": "2546439.00",
+    "interest_rate": "22.30",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.339Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 147,
+  "fields": {
+    "bank": 19,
+    "name": "Mortgage",
+    "min_score": 522,
+    "max_dti": "0.60",
+    "min_income": "4211797.00",
+    "interest_rate": "17.41",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.348Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 148,
+  "fields": {
+    "bank": 19,
+    "name": "Auto Loan",
+    "min_score": 497,
+    "max_dti": "0.62",
+    "min_income": "3012428.00",
+    "interest_rate": "19.78",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.355Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 149,
+  "fields": {
+    "bank": 20,
+    "name": "Consumer Loan",
+    "min_score": 468,
+    "max_dti": "0.65",
+    "min_income": "1377975.00",
+    "interest_rate": "23.43",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.363Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 150,
+  "fields": {
+    "bank": 20,
+    "name": "Mortgage",
+    "min_score": 513,
+    "max_dti": "0.60",
+    "min_income": "3839772.00",
+    "interest_rate": "17.43",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.371Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 151,
+  "fields": {
+    "bank": 20,
+    "name": "Auto Loan",
+    "min_score": 481,
+    "max_dti": "0.62",
+    "min_income": "3541251.00",
+    "interest_rate": "19.39",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.378Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 152,
+  "fields": {
+    "bank": 21,
+    "name": "Consumer Loan",
+    "min_score": 434,
+    "max_dti": "0.65",
+    "min_income": "2411587.00",
+    "interest_rate": "21.58",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.386Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 153,
+  "fields": {
+    "bank": 21,
+    "name": "Mortgage",
+    "min_score": 503,
+    "max_dti": "0.60",
+    "min_income": "3831931.00",
+    "interest_rate": "17.24",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.394Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 154,
+  "fields": {
+    "bank": 21,
+    "name": "Auto Loan",
+    "min_score": 445,
+    "max_dti": "0.62",
+    "min_income": "3234773.00",
+    "interest_rate": "19.09",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.401Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 155,
+  "fields": {
+    "bank": 22,
+    "name": "Consumer Loan",
+    "min_score": 475,
+    "max_dti": "0.65",
+    "min_income": "1404701.00",
+    "interest_rate": "23.53",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.408Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 156,
+  "fields": {
+    "bank": 22,
+    "name": "Mortgage",
+    "min_score": 497,
+    "max_dti": "0.60",
+    "min_income": "4698671.00",
+    "interest_rate": "18.51",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.415Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 157,
+  "fields": {
+    "bank": 22,
+    "name": "Auto Loan",
+    "min_score": 474,
+    "max_dti": "0.62",
+    "min_income": "3689425.00",
+    "interest_rate": "18.85",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.422Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 158,
+  "fields": {
+    "bank": 23,
+    "name": "Consumer Loan",
+    "min_score": 433,
+    "max_dti": "0.65",
+    "min_income": "1803074.00",
+    "interest_rate": "22.40",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.430Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 159,
+  "fields": {
+    "bank": 23,
+    "name": "Mortgage",
+    "min_score": 490,
+    "max_dti": "0.60",
+    "min_income": "3390686.00",
+    "interest_rate": "18.83",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.437Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 160,
+  "fields": {
+    "bank": 23,
+    "name": "Auto Loan",
+    "min_score": 440,
+    "max_dti": "0.62",
+    "min_income": "3715887.00",
+    "interest_rate": "19.29",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.444Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 161,
+  "fields": {
+    "bank": 24,
+    "name": "Consumer Loan",
+    "min_score": 472,
+    "max_dti": "0.65",
+    "min_income": "1800537.00",
+    "interest_rate": "21.85",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.450Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 162,
+  "fields": {
+    "bank": 24,
+    "name": "Mortgage",
+    "min_score": 494,
+    "max_dti": "0.60",
+    "min_income": "3809626.00",
+    "interest_rate": "18.50",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.457Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 163,
+  "fields": {
+    "bank": 24,
+    "name": "Auto Loan",
+    "min_score": 495,
+    "max_dti": "0.62",
+    "min_income": "2318420.00",
+    "interest_rate": "20.02",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.465Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 164,
+  "fields": {
+    "bank": 25,
+    "name": "Consumer Loan",
+    "min_score": 474,
+    "max_dti": "0.65",
+    "min_income": "1311053.00",
+    "interest_rate": "22.34",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.472Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 165,
+  "fields": {
+    "bank": 25,
+    "name": "Mortgage",
+    "min_score": 501,
+    "max_dti": "0.60",
+    "min_income": "3822246.00",
+    "interest_rate": "17.24",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.479Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 166,
+  "fields": {
+    "bank": 25,
+    "name": "Auto Loan",
+    "min_score": 478,
+    "max_dti": "0.62",
+    "min_income": "3632816.00",
+    "interest_rate": "20.96",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.487Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 167,
+  "fields": {
+    "bank": 26,
+    "name": "Consumer Loan",
+    "min_score": 468,
+    "max_dti": "0.65",
+    "min_income": "1948201.00",
+    "interest_rate": "23.57",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.494Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 168,
+  "fields": {
+    "bank": 26,
+    "name": "Mortgage",
+    "min_score": 526,
+    "max_dti": "0.60",
+    "min_income": "4695475.00",
+    "interest_rate": "17.35",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.501Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 169,
+  "fields": {
+    "bank": 26,
+    "name": "Auto Loan",
+    "min_score": 476,
+    "max_dti": "0.62",
+    "min_income": "2664940.00",
+    "interest_rate": "21.00",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.509Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 170,
+  "fields": {
+    "bank": 27,
+    "name": "Consumer Loan",
+    "min_score": 462,
+    "max_dti": "0.65",
+    "min_income": "1955717.00",
+    "interest_rate": "22.63",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.516Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 171,
+  "fields": {
+    "bank": 27,
+    "name": "Mortgage",
+    "min_score": 519,
+    "max_dti": "0.60",
+    "min_income": "4769442.00",
+    "interest_rate": "18.70",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.523Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 172,
+  "fields": {
+    "bank": 27,
+    "name": "Auto Loan",
+    "min_score": 442,
+    "max_dti": "0.62",
+    "min_income": "3176030.00",
+    "interest_rate": "19.83",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.530Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 173,
+  "fields": {
+    "bank": 28,
+    "name": "Consumer Loan",
+    "min_score": 463,
+    "max_dti": "0.65",
+    "min_income": "1212282.00",
+    "interest_rate": "23.34",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.537Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 174,
+  "fields": {
+    "bank": 28,
+    "name": "Mortgage",
+    "min_score": 488,
+    "max_dti": "0.60",
+    "min_income": "3386683.00",
+    "interest_rate": "19.09",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.544Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 175,
+  "fields": {
+    "bank": 28,
+    "name": "Auto Loan",
+    "min_score": 491,
+    "max_dti": "0.62",
+    "min_income": "2403972.00",
+    "interest_rate": "20.31",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.552Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 176,
+  "fields": {
+    "bank": 29,
+    "name": "Consumer Loan",
+    "min_score": 463,
+    "max_dti": "0.65",
+    "min_income": "1277980.00",
+    "interest_rate": "22.77",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.560Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 177,
+  "fields": {
+    "bank": 29,
+    "name": "Mortgage",
+    "min_score": 510,
+    "max_dti": "0.60",
+    "min_income": "4521947.00",
+    "interest_rate": "18.36",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.567Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 178,
+  "fields": {
+    "bank": 29,
+    "name": "Auto Loan",
+    "min_score": 480,
+    "max_dti": "0.62",
+    "min_income": "2549660.00",
+    "interest_rate": "18.96",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.575Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 179,
+  "fields": {
+    "bank": 30,
+    "name": "Consumer Loan",
+    "min_score": 433,
+    "max_dti": "0.65",
+    "min_income": "1682898.00",
+    "interest_rate": "22.99",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.582Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 180,
+  "fields": {
+    "bank": 30,
+    "name": "Mortgage",
+    "min_score": 486,
+    "max_dti": "0.60",
+    "min_income": "4225147.00",
+    "interest_rate": "18.91",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.591Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 181,
+  "fields": {
+    "bank": 30,
+    "name": "Auto Loan",
+    "min_score": 483,
+    "max_dti": "0.62",
+    "min_income": "2829898.00",
+    "interest_rate": "20.24",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.599Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 182,
+  "fields": {
+    "bank": 31,
+    "name": "Consumer Loan",
+    "min_score": 456,
+    "max_dti": "0.65",
+    "min_income": "1928603.00",
+    "interest_rate": "22.92",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.606Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 183,
+  "fields": {
+    "bank": 31,
+    "name": "Mortgage",
+    "min_score": 472,
+    "max_dti": "0.60",
+    "min_income": "3647586.00",
+    "interest_rate": "18.77",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.616Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 184,
+  "fields": {
+    "bank": 31,
+    "name": "Auto Loan",
+    "min_score": 500,
+    "max_dti": "0.62",
+    "min_income": "3417673.00",
+    "interest_rate": "19.92",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.624Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 185,
+  "fields": {
+    "bank": 3,
+    "name": "Consumer Loan",
+    "min_score": 459,
+    "max_dti": "0.65",
+    "min_income": "2164365.00",
+    "interest_rate": "21.67",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.631Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 186,
+  "fields": {
+    "bank": 3,
+    "name": "Mortgage",
+    "min_score": 490,
+    "max_dti": "0.60",
+    "min_income": "3293661.00",
+    "interest_rate": "18.75",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.639Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 187,
+  "fields": {
+    "bank": 3,
+    "name": "Auto Loan",
+    "min_score": 476,
+    "max_dti": "0.62",
+    "min_income": "2369809.00",
+    "interest_rate": "20.76",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.645Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 188,
+  "fields": {
+    "bank": 32,
+    "name": "Consumer Loan",
+    "min_score": 461,
+    "max_dti": "0.65",
+    "min_income": "2685861.00",
+    "interest_rate": "21.43",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.652Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 189,
+  "fields": {
+    "bank": 32,
+    "name": "Mortgage",
+    "min_score": 515,
+    "max_dti": "0.60",
+    "min_income": "3468956.00",
+    "interest_rate": "18.25",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.659Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 190,
+  "fields": {
+    "bank": 32,
+    "name": "Auto Loan",
+    "min_score": 447,
+    "max_dti": "0.62",
+    "min_income": "3339741.00",
+    "interest_rate": "19.75",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.666Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 191,
+  "fields": {
+    "bank": 4,
+    "name": "Consumer Loan",
+    "min_score": 454,
+    "max_dti": "0.65",
+    "min_income": "2571669.00",
+    "interest_rate": "21.56",
+    "max_amount": "100000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.673Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 192,
+  "fields": {
+    "bank": 4,
+    "name": "Mortgage",
+    "min_score": 491,
+    "max_dti": "0.60",
+    "min_income": "4025302.00",
+    "interest_rate": "18.43",
+    "max_amount": "800000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.682Z"
+  }
+},
+{
+  "model": "banks.bankproduct",
+  "pk": 193,
+  "fields": {
+    "bank": 4,
+    "name": "Auto Loan",
+    "min_score": 486,
+    "max_dti": "0.62",
+    "min_income": "3151927.00",
+    "interest_rate": "19.14",
+    "max_amount": "250000000.00",
+    "is_active": true,
+    "created_at": "2026-03-12T09:23:50.691Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 1,
+  "fields": {
+    "bank": 2,
+    "name": "Aloqabank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.325238",
+    "longitude": "69.294892",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.564Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 2,
+  "fields": {
+    "bank": 2,
+    "name": "Aloqabank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.288036",
+    "longitude": "69.316950",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.570Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 3,
+  "fields": {
+    "bank": 2,
+    "name": "Aloqabank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.292057",
+    "longitude": "69.254072",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.572Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 4,
+  "fields": {
+    "bank": 1,
+    "name": "Hamkorbank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.271571",
+    "longitude": "69.283279",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.574Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 5,
+  "fields": {
+    "bank": 1,
+    "name": "Hamkorbank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.343612",
+    "longitude": "69.248219",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.575Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 6,
+  "fields": {
+    "bank": 1,
+    "name": "Hamkorbank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.287062",
+    "longitude": "69.269814",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.577Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 7,
+  "fields": {
+    "bank": 5,
+    "name": "Agrobank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.339341",
+    "longitude": "69.262297",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.578Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 8,
+  "fields": {
+    "bank": 5,
+    "name": "Agrobank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.331485",
+    "longitude": "69.313920",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.580Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 9,
+  "fields": {
+    "bank": 5,
+    "name": "Agrobank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.305815",
+    "longitude": "69.326112",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.582Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 10,
+  "fields": {
+    "bank": 6,
+    "name": "Mikrokreditbank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.267673",
+    "longitude": "69.326695",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.583Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 11,
+  "fields": {
+    "bank": 6,
+    "name": "Mikrokreditbank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.300384",
+    "longitude": "69.257257",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.585Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 12,
+  "fields": {
+    "bank": 6,
+    "name": "Mikrokreditbank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.292776",
+    "longitude": "69.279585",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.586Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 13,
+  "fields": {
+    "bank": 7,
+    "name": "Xalq Bank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.288962",
+    "longitude": "69.329077",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.588Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 14,
+  "fields": {
+    "bank": 7,
+    "name": "Xalq Bank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.266830",
+    "longitude": "69.316065",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.590Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 15,
+  "fields": {
+    "bank": 7,
+    "name": "Xalq Bank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.304761",
+    "longitude": "69.252386",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.591Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 16,
+  "fields": {
+    "bank": 8,
+    "name": "Garant Bank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.281207",
+    "longitude": "69.327942",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.593Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 17,
+  "fields": {
+    "bank": 8,
+    "name": "Garant Bank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.346655",
+    "longitude": "69.311729",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.595Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 18,
+  "fields": {
+    "bank": 8,
+    "name": "Garant Bank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.346952",
+    "longitude": "69.286713",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.597Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 19,
+  "fields": {
+    "bank": 9,
+    "name": "BRB Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.343596",
+    "longitude": "69.266339",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.599Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 20,
+  "fields": {
+    "bank": 9,
+    "name": "BRB Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.314918",
+    "longitude": "69.288984",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.600Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 21,
+  "fields": {
+    "bank": 9,
+    "name": "BRB Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.279598",
+    "longitude": "69.255189",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.602Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 22,
+  "fields": {
+    "bank": 10,
+    "name": "Turonbank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.291940",
+    "longitude": "69.310623",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.604Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 23,
+  "fields": {
+    "bank": 10,
+    "name": "Turonbank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.314925",
+    "longitude": "69.262832",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.605Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 24,
+  "fields": {
+    "bank": 10,
+    "name": "Turonbank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.332023",
+    "longitude": "69.311076",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.607Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 25,
+  "fields": {
+    "bank": 11,
+    "name": "Asakabank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.296690",
+    "longitude": "69.262335",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.608Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 26,
+  "fields": {
+    "bank": 11,
+    "name": "Asakabank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.263775",
+    "longitude": "69.312359",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.609Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 27,
+  "fields": {
+    "bank": 11,
+    "name": "Asakabank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.294994",
+    "longitude": "69.294824",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.611Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 28,
+  "fields": {
+    "bank": 12,
+    "name": "Ipak Yuli Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.330455",
+    "longitude": "69.300057",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.612Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 29,
+  "fields": {
+    "bank": 12,
+    "name": "Ipak Yuli Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.269539",
+    "longitude": "69.275420",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.613Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 30,
+  "fields": {
+    "bank": 12,
+    "name": "Ipak Yuli Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.303738",
+    "longitude": "69.287638",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.614Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 31,
+  "fields": {
+    "bank": 13,
+    "name": "Ziraat Bank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.307191",
+    "longitude": "69.323396",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.616Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 32,
+  "fields": {
+    "bank": 13,
+    "name": "Ziraat Bank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.293343",
+    "longitude": "69.312529",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.617Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 33,
+  "fields": {
+    "bank": 13,
+    "name": "Ziraat Bank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.303665",
+    "longitude": "69.326030",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.618Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 34,
+  "fields": {
+    "bank": 14,
+    "name": "Trustbank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.341070",
+    "longitude": "69.274972",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.619Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 35,
+  "fields": {
+    "bank": 14,
+    "name": "Trustbank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.290944",
+    "longitude": "69.257611",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.621Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 36,
+  "fields": {
+    "bank": 14,
+    "name": "Trustbank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.329527",
+    "longitude": "69.320862",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.622Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 37,
+  "fields": {
+    "bank": 15,
+    "name": "Ipoteka Bank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.337319",
+    "longitude": "69.275637",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.624Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 38,
+  "fields": {
+    "bank": 15,
+    "name": "Ipoteka Bank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.274378",
+    "longitude": "69.245898",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.625Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 39,
+  "fields": {
+    "bank": 15,
+    "name": "Ipoteka Bank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.360467",
+    "longitude": "69.306945",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.626Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 40,
+  "fields": {
+    "bank": 16,
+    "name": "KDB Bank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.293322",
+    "longitude": "69.246199",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.627Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 41,
+  "fields": {
+    "bank": 16,
+    "name": "KDB Bank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.265602",
+    "longitude": "69.272393",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.629Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 42,
+  "fields": {
+    "bank": 16,
+    "name": "KDB Bank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.298848",
+    "longitude": "69.313921",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.630Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 43,
+  "fields": {
+    "bank": 17,
+    "name": "Universal Bank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.271385",
+    "longitude": "69.274067",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.631Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 44,
+  "fields": {
+    "bank": 17,
+    "name": "Universal Bank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.297207",
+    "longitude": "69.316575",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.633Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 45,
+  "fields": {
+    "bank": 17,
+    "name": "Universal Bank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.320886",
+    "longitude": "69.263761",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.634Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 46,
+  "fields": {
+    "bank": 18,
+    "name": "Kapitalbank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.311555",
+    "longitude": "69.324851",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.635Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 47,
+  "fields": {
+    "bank": 18,
+    "name": "Kapitalbank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.311650",
+    "longitude": "69.324956",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.636Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 48,
+  "fields": {
+    "bank": 18,
+    "name": "Kapitalbank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.359696",
+    "longitude": "69.283422",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.637Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 49,
+  "fields": {
+    "bank": 19,
+    "name": "Octobank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.331876",
+    "longitude": "69.262288",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.639Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 50,
+  "fields": {
+    "bank": 19,
+    "name": "Octobank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.292391",
+    "longitude": "69.324945",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.640Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 51,
+  "fields": {
+    "bank": 19,
+    "name": "Octobank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.305579",
+    "longitude": "69.233557",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.641Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 52,
+  "fields": {
+    "bank": 20,
+    "name": "Davr Bank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.310928",
+    "longitude": "69.279615",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.643Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 53,
+  "fields": {
+    "bank": 20,
+    "name": "Davr Bank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.302017",
+    "longitude": "69.247148",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.644Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 54,
+  "fields": {
+    "bank": 20,
+    "name": "Davr Bank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.277860",
+    "longitude": "69.320083",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.645Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 55,
+  "fields": {
+    "bank": 21,
+    "name": "InFinBank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.332042",
+    "longitude": "69.231281",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.647Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 56,
+  "fields": {
+    "bank": 21,
+    "name": "InFinBank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.330072",
+    "longitude": "69.310353",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.648Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 57,
+  "fields": {
+    "bank": 21,
+    "name": "InFinBank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.279292",
+    "longitude": "69.264941",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.650Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 58,
+  "fields": {
+    "bank": 22,
+    "name": "Asia Alliance Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.321430",
+    "longitude": "69.295021",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.651Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 59,
+  "fields": {
+    "bank": 22,
+    "name": "Asia Alliance Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.277233",
+    "longitude": "69.267792",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.653Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 60,
+  "fields": {
+    "bank": 22,
+    "name": "Asia Alliance Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.296124",
+    "longitude": "69.313666",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.654Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 61,
+  "fields": {
+    "bank": 23,
+    "name": "Orient Finans Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.340371",
+    "longitude": "69.235111",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.655Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 62,
+  "fields": {
+    "bank": 23,
+    "name": "Orient Finans Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.267836",
+    "longitude": "69.264405",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.657Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 63,
+  "fields": {
+    "bank": 23,
+    "name": "Orient Finans Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.282549",
+    "longitude": "69.251174",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.658Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 64,
+  "fields": {
+    "bank": 24,
+    "name": "AVO Bank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.332448",
+    "longitude": "69.323484",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.659Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 65,
+  "fields": {
+    "bank": 24,
+    "name": "AVO Bank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.324114",
+    "longitude": "69.307574",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.661Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 66,
+  "fields": {
+    "bank": 24,
+    "name": "AVO Bank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.280958",
+    "longitude": "69.312559",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.662Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 67,
+  "fields": {
+    "bank": 25,
+    "name": "Poytaxt Bank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.305509",
+    "longitude": "69.313236",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.663Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 68,
+  "fields": {
+    "bank": 25,
+    "name": "Poytaxt Bank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.296212",
+    "longitude": "69.245019",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.665Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 69,
+  "fields": {
+    "bank": 25,
+    "name": "Poytaxt Bank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.277979",
+    "longitude": "69.275894",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.666Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 70,
+  "fields": {
+    "bank": 26,
+    "name": "Tenge Bank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.313315",
+    "longitude": "69.272736",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.668Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 71,
+  "fields": {
+    "bank": 26,
+    "name": "Tenge Bank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.295757",
+    "longitude": "69.329326",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.669Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 72,
+  "fields": {
+    "bank": 26,
+    "name": "Tenge Bank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.268978",
+    "longitude": "69.237472",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.670Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 73,
+  "fields": {
+    "bank": 27,
+    "name": "TBC Bank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.313238",
+    "longitude": "69.317837",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.672Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 74,
+  "fields": {
+    "bank": 27,
+    "name": "TBC Bank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.347223",
+    "longitude": "69.280526",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.673Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 75,
+  "fields": {
+    "bank": 27,
+    "name": "TBC Bank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.267153",
+    "longitude": "69.247530",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.675Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 76,
+  "fields": {
+    "bank": 28,
+    "name": "Anor Bank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.350554",
+    "longitude": "69.241909",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.676Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 77,
+  "fields": {
+    "bank": 28,
+    "name": "Anor Bank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.285724",
+    "longitude": "69.244300",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.677Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 78,
+  "fields": {
+    "bank": 28,
+    "name": "Anor Bank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.325140",
+    "longitude": "69.275596",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.679Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 79,
+  "fields": {
+    "bank": 29,
+    "name": "Uzum Bank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.271295",
+    "longitude": "69.249129",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.680Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 80,
+  "fields": {
+    "bank": 29,
+    "name": "Uzum Bank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.359421",
+    "longitude": "69.273015",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.681Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 81,
+  "fields": {
+    "bank": 29,
+    "name": "Uzum Bank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.326364",
+    "longitude": "69.253388",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.683Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 82,
+  "fields": {
+    "bank": 30,
+    "name": "Open Bank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.328613",
+    "longitude": "69.279577",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.685Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 83,
+  "fields": {
+    "bank": 30,
+    "name": "Open Bank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.355905",
+    "longitude": "69.287030",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.686Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 84,
+  "fields": {
+    "bank": 30,
+    "name": "Open Bank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.282043",
+    "longitude": "69.290807",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.687Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 85,
+  "fields": {
+    "bank": 31,
+    "name": "Apex Bank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.268142",
+    "longitude": "69.240935",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.689Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 86,
+  "fields": {
+    "bank": 31,
+    "name": "Apex Bank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.317805",
+    "longitude": "69.279680",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.690Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 87,
+  "fields": {
+    "bank": 31,
+    "name": "Apex Bank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.299317",
+    "longitude": "69.279551",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.691Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 88,
+  "fields": {
+    "bank": 3,
+    "name": "NBU Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.337797",
+    "longitude": "69.260933",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.693Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 89,
+  "fields": {
+    "bank": 3,
+    "name": "NBU Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.284910",
+    "longitude": "69.258629",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.694Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 90,
+  "fields": {
+    "bank": 3,
+    "name": "NBU Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.323362",
+    "longitude": "69.315114",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.696Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 91,
+  "fields": {
+    "bank": 32,
+    "name": "Hayot Bank Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.270579",
+    "longitude": "69.231823",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.697Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 92,
+  "fields": {
+    "bank": 32,
+    "name": "Hayot Bank Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.309855",
+    "longitude": "69.291163",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.698Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 93,
+  "fields": {
+    "bank": 32,
+    "name": "Hayot Bank Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.287581",
+    "longitude": "69.308583",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.700Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 94,
+  "fields": {
+    "bank": 4,
+    "name": "SQB Branch 1",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.357645",
+    "longitude": "69.303832",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.701Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 95,
+  "fields": {
+    "bank": 4,
+    "name": "SQB Branch 2",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.282909",
+    "longitude": "69.255760",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.702Z"
+  }
+},
+{
+  "model": "banks.bankbranch",
+  "pk": 96,
+  "fields": {
+    "bank": 4,
+    "name": "SQB Branch 3",
+    "city": "Tashkent",
+    "address": "Tashkent",
+    "phone": null,
+    "working_hours": "09:00 - 18:00",
+    "latitude": "41.319370",
+    "longitude": "69.250499",
+    "is_active": true,
+    "created_at": "2026-03-11T19:29:30.704Z"
+  }
+}
+]

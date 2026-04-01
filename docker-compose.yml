@@ -1,0 +1,66 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: bank_db
+    restart: always
+    environment:
+      POSTGRES_DB: bankphd
+      POSTGRES_USER: bankuser
+      POSTGRES_PASSWORD: bankpass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bankuser -d bankphd"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7
+    container_name: bank_redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  backend:
+    build: ./backend
+    container_name: bank_backend
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+    environment:
+      DB_NAME: bankphd
+      DB_USER: bankuser
+      DB_PASSWORD: bankpass
+      DB_HOST: db
+      DB_PORT: 5432
+      DJANGO_SECRET_KEY: super-secret-key
+      PYTHONUNBUFFERED: 1
+
+    # 💣 DNS фикс
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+
+    # 💣 ЖЁСТКИЙ ОБХОД DNS (самое важное)
+    extra_hosts:
+      - "bank.uz:104.21.64.1"
+      - "www.bank.uz:104.21.64.1"
+
+    restart: always
+
+volumes:
+  postgres_data:

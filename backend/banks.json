@@ -1,0 +1,418 @@
+[
+{
+  "model": "banks.bank",
+  "pk": 1,
+  "fields": {
+    "name": "Chet el kapitali ishtirokidagi \"Hamkorbank\" ATB",
+    "short_name": "Hamkorbank",
+    "website": "https://hamkorbank.uz",
+    "is_featured": true,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-02-27T05:20:41.432Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 2,
+  "fields": {
+    "name": "Aksiyadorlik tijorat \"Aloqabank\"",
+    "short_name": "Aloqabank",
+    "website": "https://aloqabank.uz",
+    "is_featured": true,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-02-27T05:20:42.117Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 3,
+  "fields": {
+    "name": "",
+    "short_name": "NBU",
+    "website": "https://nbu.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.475Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 4,
+  "fields": {
+    "name": "",
+    "short_name": "SQB",
+    "website": "https://sqb.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.480Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 5,
+  "fields": {
+    "name": "",
+    "short_name": "Agrobank",
+    "website": "https://agrobank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.484Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 6,
+  "fields": {
+    "name": "",
+    "short_name": "Mikrokreditbank",
+    "website": "https://mkbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.488Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 7,
+  "fields": {
+    "name": "",
+    "short_name": "Xalq Bank",
+    "website": "https://xb.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.495Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 8,
+  "fields": {
+    "name": "",
+    "short_name": "Garant Bank",
+    "website": "https://garantbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.499Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 9,
+  "fields": {
+    "name": "",
+    "short_name": "BRB",
+    "website": "https://brb.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.507Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 10,
+  "fields": {
+    "name": "",
+    "short_name": "Turonbank",
+    "website": "https://turonbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.515Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 11,
+  "fields": {
+    "name": "",
+    "short_name": "Asakabank",
+    "website": "https://asakabank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.527Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 12,
+  "fields": {
+    "name": "",
+    "short_name": "Ipak Yuli",
+    "website": "https://ipakyulibank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.532Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 13,
+  "fields": {
+    "name": "",
+    "short_name": "Ziraat Bank",
+    "website": "https://ziraatbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.537Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 14,
+  "fields": {
+    "name": "",
+    "short_name": "Trustbank",
+    "website": "https://trustbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.543Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 15,
+  "fields": {
+    "name": "",
+    "short_name": "Ipoteka Bank",
+    "website": "https://ipotekabank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.556Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 16,
+  "fields": {
+    "name": "",
+    "short_name": "KDB Bank",
+    "website": "https://kdb.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.563Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 17,
+  "fields": {
+    "name": "",
+    "short_name": "Universal Bank",
+    "website": "https://universalbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.568Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 18,
+  "fields": {
+    "name": "",
+    "short_name": "Kapitalbank",
+    "website": "https://kapitalbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.575Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 19,
+  "fields": {
+    "name": "",
+    "short_name": "Octobank",
+    "website": "https://octobank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.582Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 20,
+  "fields": {
+    "name": "",
+    "short_name": "Davr Bank",
+    "website": "https://davrbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.587Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 21,
+  "fields": {
+    "name": "",
+    "short_name": "InFinBank",
+    "website": "https://infinbank.com",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.594Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 22,
+  "fields": {
+    "name": "",
+    "short_name": "Asia Alliance",
+    "website": "https://aab.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.599Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 23,
+  "fields": {
+    "name": "",
+    "short_name": "Orient Finans",
+    "website": "https://ofb.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.604Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 24,
+  "fields": {
+    "name": "",
+    "short_name": "AVO Bank",
+    "website": "https://avo.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.611Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 25,
+  "fields": {
+    "name": "",
+    "short_name": "Poytaxt Bank",
+    "website": "https://poytaxtbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.616Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 26,
+  "fields": {
+    "name": "",
+    "short_name": "Tenge Bank",
+    "website": "https://tengebank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.621Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 27,
+  "fields": {
+    "name": "",
+    "short_name": "TBC Bank",
+    "website": "https://tbcbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.628Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 28,
+  "fields": {
+    "name": "",
+    "short_name": "Anor Bank",
+    "website": "https://anorbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.633Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 29,
+  "fields": {
+    "name": "",
+    "short_name": "Uzum Bank",
+    "website": "https://uzumbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.641Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 30,
+  "fields": {
+    "name": "",
+    "short_name": "Open Bank",
+    "website": "https://openbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.648Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 31,
+  "fields": {
+    "name": "",
+    "short_name": "Apex Bank",
+    "website": "https://apexbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.656Z"
+  }
+},
+{
+  "model": "banks.bank",
+  "pk": 32,
+  "fields": {
+    "name": "",
+    "short_name": "Hayot Bank",
+    "website": "https://hayotbank.uz",
+    "is_featured": false,
+    "priority_weight": 1,
+    "is_active": true,
+    "created_at": "2026-03-11T09:15:39.661Z"
+  }
+}
+]
