@@ -1,17 +1,15 @@
 from django.urls import path
 
 # ==========================================
-# 🔥 CORE VIEWS
+# 💣 CORE VIEWS
 # ==========================================
 from .views import (
     BankProductsAPIView,
-    BankProductDetailAPIView,  # 💣 ДОБАВИЛИ
+    BankProductDetailAPIView,
     TopRecommendationsAPIView,
     MarketRatingAPIView,
-    RecommendationClickAPIView,
-    RecommendationApplyAPIView,
-    RecommendationDecisionAPIView,
-    MobileBanksAnalyticsAPIView
+    MobileBanksAnalyticsAPIView,
+    BestBankProductsAPIView,
 )
 
 # ==========================================
@@ -19,15 +17,16 @@ from .views import (
 # ==========================================
 from .views_api import (
     BankListAPIView,
-    RecommendationAPIView
+    RecommendationAPIView,
+    TopBanksAPIView,
 )
 
 # ==========================================
-# 🏢 BRANCHES
+# 💣 AGGREGATED
 # ==========================================
-from .views_branches import (
-    BankBranchesAPIView,
-    BankBranchesMapAPIView
+from .views_aggregated import (
+    AggregatedProductsAPIView,
+    AggregatedProductDetailAPIView,
 )
 
 # ==========================================
@@ -38,59 +37,202 @@ from .views_monitoring import (
     DigitalRankingAPIView,
     InterestMonitorAPIView,
     MarketForecastAPIView,
-    CompetitionMapAPIView
+    CompetitionMapAPIView,
 )
+
+# ==========================================
+# 🗺 BRANCHES
+# ==========================================
+from .views_branches import (
+    BankBranchesAPIView,
+    BankBranchesMapAPIView,
+    BankBranchDetailAPIView,
+)
+
+# ==========================================
+# 💱 CURRENCY
+# ==========================================
+from .views_currency import (
+    CurrencyRatesView,
+)
+
+from .views_currency_history import (
+    CurrencyHistoryView,
+)
+
+app_name = "banks"
 
 urlpatterns = [
 
     # ==================================================
-    # 🏦 BANK LIST
+    # 🏦 BANKS
     # ==================================================
-    path("", BankListAPIView.as_view(), name="banks-list"),
+    path(
+        "",
+        BankListAPIView.as_view(),
+        name="banks-list",
+    ),
+
+    # ==================================================
+    # 🗺 ALL BRANCHES MAP
+    # ==================================================
+    path(
+        "branches/",
+        BankBranchesMapAPIView.as_view(),
+        name="branches-map",
+    ),
+
+    # ==================================================
+    # 🏦 BANK BRANCHES
+    # ==================================================
+    path(
+        "<int:bank_id>/branches/",
+        BankBranchesAPIView.as_view(),
+        name="bank-branches",
+    ),
+
+    # ==================================================
+    # 🏦 BRANCH DETAIL
+    # ==================================================
+    path(
+        "branches/<int:branch_id>/",
+        BankBranchDetailAPIView.as_view(),
+        name="branch-detail",
+    ),
 
     # ==================================================
     # 💣 PRODUCTS
     # ==================================================
-    path("products/", BankProductsAPIView.as_view(), name="products-list"),
-
-    # 💣 ВОТ ГЛАВНЫЙ ФИКС
     path(
-        "products/<int:product_id>/",
+        "products/",
+        BankProductsAPIView.as_view(),
+        name="products-list",
+    ),
+
+    # ==================================================
+    # 💣 PRODUCT DETAIL
+    # ==================================================
+    path(
+        "products/<int:pk>/",
         BankProductDetailAPIView.as_view(),
-        name="product-detail"
+        name="product-detail",
+    ),
+
+    # ==================================================
+    # 💣 BEST PRODUCTS
+    # ==================================================
+    path(
+        "best-products/",
+        BestBankProductsAPIView.as_view(),
+        name="best-products",
+    ),
+
+    # ==================================================
+    # 💣 AGGREGATED PRODUCTS
+    # ==================================================
+    path(
+        "products/aggregated/",
+        AggregatedProductsAPIView.as_view(),
+        name="aggregated-products",
+    ),
+
+    # ==================================================
+    # 💣 AGGREGATED DETAIL
+    # ==================================================
+    path(
+        "products/aggregated/<slug:slug>/",
+        AggregatedProductDetailAPIView.as_view(),
+        name="aggregated-detail",
     ),
 
     # ==================================================
     # 💣 RECOMMENDATIONS
     # ==================================================
-    path("recommendations/", RecommendationAPIView.as_view(), name="recommendations"),
+    path(
+        "recommendations/",
+        RecommendationAPIView.as_view(),
+        name="recommendations",
+    ),
 
     # ==================================================
-    # ⚠️ LEGACY
+    # 💣 TOP BANKS
     # ==================================================
-    path("top/", TopRecommendationsAPIView.as_view()),
-    path("mobile-analytics/", MobileBanksAnalyticsAPIView.as_view()),
-    path("rating/", MarketRatingAPIView.as_view()),
+    path(
+        "top-banks/",
+        TopBanksAPIView.as_view(),
+        name="top-banks",
+    ),
+
+    # ==================================================
+    # 💱 CURRENT RATES
+    # ==================================================
+    path(
+        "currency-rates/",
+        CurrencyRatesView.as_view(),
+        name="currency-rates",
+    ),
+
+    # ==================================================
+    # 💱 CURRENCY HISTORY
+    # ==================================================
+    path(
+        "currency-history/",
+        CurrencyHistoryView.as_view(),
+        name="currency-history",
+    ),
+
+    # ==================================================
+    # ⚠️ LEGACY API
+    # ==================================================
+    path(
+        "top/",
+        TopRecommendationsAPIView.as_view(),
+        name="legacy-top",
+    ),
+
+    path(
+        "mobile-analytics/",
+        MobileBanksAnalyticsAPIView.as_view(),
+        name="mobile-analytics",
+    ),
+
+    path(
+        "rating/",
+        MarketRatingAPIView.as_view(),
+        name="market-rating",
+    ),
 
     # ==================================================
     # 📊 MONITORING
     # ==================================================
-    path("monitoring/alerts/", MarketAlertsAPIView.as_view()),
-    path("monitoring/digital-ranking/", DigitalRankingAPIView.as_view()),
-    path("monitoring/interest-monitor/", InterestMonitorAPIView.as_view()),
-    path("monitoring/forecast/", MarketForecastAPIView.as_view()),
-    path("monitoring/competition-map/", CompetitionMapAPIView.as_view()),
+    path(
+        "monitoring/alerts/",
+        MarketAlertsAPIView.as_view(),
+        name="monitoring-alerts",
+    ),
 
-    # ==================================================
-    # 🧠 USER INTERACTIONS
-    # ==================================================
-    path("click/", RecommendationClickAPIView.as_view()),
-    path("apply/", RecommendationApplyAPIView.as_view()),
-    path("decision/", RecommendationDecisionAPIView.as_view()),
+    path(
+        "monitoring/digital-ranking/",
+        DigitalRankingAPIView.as_view(),
+        name="digital-ranking",
+    ),
 
-    # ==================================================
-    # 🏢 BRANCHES
-    # ==================================================
-    path("<int:bank_id>/branches/", BankBranchesAPIView.as_view()),
-    path("branches/map/", BankBranchesMapAPIView.as_view()),
+    path(
+        "monitoring/interest-monitor/",
+        InterestMonitorAPIView.as_view(),
+        name="interest-monitor",
+    ),
+
+    path(
+        "monitoring/forecast/",
+        MarketForecastAPIView.as_view(),
+        name="market-forecast",
+    ),
+
+    path(
+        "monitoring/competition-map/",
+        CompetitionMapAPIView.as_view(),
+        name="competition-map",
+    ),
+
 ]

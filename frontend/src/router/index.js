@@ -1,134 +1,352 @@
 import { createRouter, createWebHistory } from "vue-router"
 import { useAuthStore } from "@/stores/auth"
 
-// 🔐 SMS авторизация
+// ==========================
+// AUTH
+// ==========================
 import AuthPhone from "@/views/AuthPhone.vue"
 
-// 🌍 LANDING
+// ==========================
+// LANDING
+// ==========================
 import LandingView from "@/views/LandingView.vue"
 
-// 💣 Layout
+// ==========================
+// LAYOUT
+// ==========================
 import MainLayout from "@/layouts/MainLayout.vue"
 
-// Lazy views
+// ==========================
+// Lazy Views
+// ==========================
 const DashboardView = () => import("@/views/DashboardView.vue")
 const ScoringView = () => import("@/views/ScoringView.vue")
 const RecommendationsView = () => import("@/views/RecommendationsView.vue")
 const AnalyticsView = () => import("@/views/AnalyticsView.vue")
 const MonitoringView = () => import("@/views/MonitoringView.vue")
+
+// 👤
+const ProfileView = () => import("@/views/ProfileView.vue")
 const ProfileSetupView = () => import("@/views/ProfileSetupView.vue")
+
+// 💰
 const LoanView = () => import("@/views/LoanView.vue")
+const LoanDetailView = () => import("@/views/ProductDetailView.vue")
+
+// 🏦
+const DepositsView = () => import("@/views/DepositsView.vue")
+const DepositDetailView = () => import("@/views/DepositDetailView.vue")
+
+// 💳
+const CardsView = () => import("@/views/CardsView.vue")
+const CardDetailView = () => import("@/views/CardDetailView.vue")
+
+// 🏛
 const BankBranchesView = () => import("@/views/BankBranchesView.vue")
+
+// =====================================
+// ROUTES
+// =====================================
 
 const routes = [
 
-  // 🌍 LANDING (главная)
   {
     path: "/",
+    name: "Landing",
     component: LandingView,
-    meta: { title: "FinAnalytics" }
   },
 
-  // 🔐 LOGIN
   {
     path: "/login",
+    name: "Login",
     component: AuthPhone,
-    meta: { title: "Login" }
   },
 
-  // 💣 ПРИЛОЖЕНИЕ
   {
     path: "/app",
+
     component: MainLayout,
-    meta: { requiresAuth: true },
+
+    meta: {
+      requiresAuth: true,
+    },
 
     children: [
 
       {
         path: "",
+        redirect: "/app/profile",
+      },
+
+      {
+        path: "dashboard",
+        name: "Dashboard",
         component: DashboardView,
-        meta: { title: "Dashboard" }
+        meta: {
+          title: "Dashboard",
+        },
+      },
+
+      {
+        path: "profile",
+        name: "Profile",
+        component: ProfileView,
+        meta: {
+          title: "Profile",
+        },
+      },
+
+      {
+        path: "profile/edit",
+        name: "ProfileEdit",
+        component: ProfileSetupView,
+        meta: {
+          title: "Profile Edit",
+        },
       },
 
       {
         path: "scoring",
-        component: ScoringView
+        name: "Scoring",
+        component: ScoringView,
+        meta: {
+          title: "Scoring",
+        },
       },
 
       {
         path: "recommendations",
-        component: RecommendationsView
+        name: "Recommendations",
+        component: RecommendationsView,
+        meta: {
+          title: "Recommendations",
+        },
       },
 
       {
         path: "analytics",
-        component: AnalyticsView
+        name: "Analytics",
+        component: AnalyticsView,
+        meta: {
+          title: "Analytics",
+        },
       },
 
       {
         path: "monitoring",
-        component: MonitoringView
+        name: "Monitoring",
+        component: MonitoringView,
+        meta: {
+          title: "Monitoring",
+        },
       },
 
+      // =======================
+      // LOANS
+      // =======================
+
       {
-        path: "profile-setup",
-        component: ProfileSetupView
+        path: "loans",
+        name: "Loans",
+        component: LoanView,
+        meta: {
+          title: "Loans",
+        },
       },
 
       {
         path: "loan/:id",
-        component: LoanView
+        name: "LoanDetail",
+        component: LoanDetailView,
+        meta: {
+          title: "Loan Detail",
+        },
+      },
+
+      // =======================
+      // DEPOSITS
+      // =======================
+
+      {
+        path: "deposits",
+        name: "Deposits",
+        component: DepositsView,
+        meta: {
+          title: "Deposits",
+        },
       },
 
       {
-        path: "bank/:id/branches",
-        component: BankBranchesView
-      }
+        path: "deposit/:id",
+        name: "DepositDetail",
+        component: DepositDetailView,
+        meta: {
+          title: "Deposit Detail",
+        },
+      },
 
-    ]
-  }
+      // =======================
+      // CARDS
+      // =======================
+
+      {
+        path: "cards",
+        name: "Cards",
+        component: CardsView,
+        meta: {
+          title: "Cards",
+        },
+      },
+
+      {
+        path: "card/:id",
+        name: "CardDetail",
+        component: CardDetailView,
+        meta: {
+          title: "Card Detail",
+        },
+      },
+
+      // =======================
+      // BANK
+      // =======================
+
+      {
+        path: "bank/:id/branches",
+        name: "BankBranches",
+        component: BankBranchesView,
+        meta: {
+          title: "Bank Branches",
+        },
+      },
+
+    ],
+
+  },
+
+  {
+    path: "/:pathMatch(.*)*",
+    redirect: "/",
+  },
 
 ]
+
+// =====================================
+// ROUTER
+// =====================================
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
 })
 
+// =====================================
+// AUTH GUARD
+// =====================================
 
-// ==========================================
-// 💣 GLOBAL GUARD
-// ==========================================
 router.beforeEach((to) => {
 
   const auth = useAuthStore()
 
-  // 🔐 если требует авторизацию
-  if (to.meta.requiresAuth && !auth.isAuthenticated) {
+  // =====================================
+  // WAIT INIT
+  // =====================================
+
+  if (!auth.initialized) {
+
+    return true
+
+  }
+
+  // =====================================
+  // NOT AUTHORIZED
+  // =====================================
+
+  if (
+
+    to.meta.requiresAuth &&
+
+    !auth.isAuthenticated
+
+  ) {
+
     return "/login"
+
   }
 
-  // 🔥 если уже залогинен → не пускаем на login
-  if (to.path === "/login" && auth.isAuthenticated) {
-    return "/app"
-  }
+  // =====================================
+  // ALREADY LOGIN
+  // =====================================
 
-  // 💣 если нет профиля → отправляем на setup
   if (
+
+    to.path === "/login" &&
+
+    auth.isAuthenticated
+
+  ) {
+
+    return auth.isProfileCompleted
+
+      ? "/app/dashboard"
+
+      : "/app/profile"
+
+  }
+
+  // =====================================
+  // PROFILE LOCK
+  // =====================================
+
+  if (
+
     auth.isAuthenticated &&
-    !auth.isProfileCompleted &&
-    !to.path.startsWith("/app/profile-setup")
+
+    !auth.isProfileCompleted
+
   ) {
-    return "/app/profile-setup"
+
+    const allowedRoutes = new Set([
+
+      "/app/profile",
+
+      "/app/profile/edit",
+
+    ])
+
+    if (
+
+      !allowedRoutes.has(to.path)
+
+    ) {
+
+      return "/app/profile"
+
+    }
+
   }
 
-  // 🔥 если профиль есть → не пускаем обратно
-  if (
-    to.path === "/app/profile-setup" &&
-    auth.isProfileCompleted
-  ) {
-    return "/app"
-  }
+  // =====================================
+  // ACCESS GRANTED
+  // =====================================
+
+  return true
+
+})
+
+// =====================================
+// TITLE
+// =====================================
+
+router.afterEach((to) => {
+
+  document.title =
+
+    to.meta?.title
+
+      ? `${to.meta.title} | Bank Analytics`
+
+      : "Bank Analytics"
 
 })
 

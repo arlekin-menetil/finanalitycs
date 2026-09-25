@@ -1,9 +1,9 @@
 import axios from "axios"
 
+// 💣 baseURL через env (ВАЖНО)
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000/api", // 💣 ВАЖНО
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:8000/api",
 })
-
 
 // ==========================================
 // 🧠 REQUEST INTERCEPTOR
@@ -26,7 +26,7 @@ let isRefreshing = false
 let failedQueue = []
 
 const processQueue = (error, token = null) => {
-  failedQueue.forEach(prom => {
+  failedQueue.forEach((prom) => {
     if (error) {
       prom.reject(error)
     } else {
@@ -47,69 +47,133 @@ api.interceptors.response.use(
 
     const originalRequest = error.config
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (!error.response) {
+      return Promise.reject(error)
+    }
+
+    if (
+      error.response.status === 401 &&
+      !originalRequest._retry
+    ) {
+
+      if (
+        originalRequest.url?.includes("/auth/login")
+      ) {
+        return Promise.reject(error)
+      }
 
       if (isRefreshing) {
+
         return new Promise((resolve, reject) => {
-          failedQueue.push({ resolve, reject })
+
+          failedQueue.push({
+            resolve,
+            reject
+          })
+
         })
-        .then(token => {
-          originalRequest.headers.Authorization = 'Bearer ' + token
-          return api(originalRequest)
-        })
-        .catch(err => Promise.reject(err))
+          .then((token) => {
+
+            originalRequest.headers.Authorization =
+              "Bearer " + token
+
+            return api(originalRequest)
+
+          })
+          .catch((err) =>
+            Promise.reject(err)
+          )
+
       }
 
       originalRequest._retry = true
       isRefreshing = true
 
-      const refreshToken = localStorage.getItem("refresh")
+      const refreshToken =
+        localStorage.getItem("refresh")
 
       if (!refreshToken) {
-        logout()
+
+        forceLogout()
+
         return Promise.reject(error)
+
       }
 
       try {
+
         const res = await axios.post(
-          "http://127.0.0.1:8000/api/token/refresh/", // 💣 тоже фикс
-          { refresh: refreshToken }
+
+          `${import.meta.env.VITE_API_URL ||
+          "http://localhost:8000/api"
+          }/token/refresh/`,
+
+          {
+            refresh: refreshToken
+          }
+
         )
 
-        const newAccess = res.data.access
+        const newAccess =
+          res.data.access
 
-        localStorage.setItem("access", newAccess)
+        localStorage.setItem(
+          "access",
+          newAccess
+        )
 
-        api.defaults.headers.Authorization = `Bearer ${newAccess}`
-        originalRequest.headers.Authorization = `Bearer ${newAccess}`
+        api.defaults.headers.Authorization =
+          `Bearer ${newAccess}`
 
-        processQueue(null, newAccess)
+        originalRequest.headers.Authorization =
+          `Bearer ${newAccess}`
+
+        processQueue(
+          null,
+          newAccess
+        )
 
         return api(originalRequest)
 
-      } catch (err) {
-        processQueue(err, null)
-        logout()
+      }
+
+      catch (err) {
+
+        processQueue(
+          err,
+          null
+        )
+
+        forceLogout()
+
         return Promise.reject(err)
 
-      } finally {
-        isRefreshing = false
       }
+
+      finally {
+
+        isRefreshing = false
+
+      }
+
     }
 
     return Promise.reject(error)
+
   }
 )
 
 
 // ==========================================
-// 💣 LOGOUT
+// 💣 FORCE LOGOUT
 // ==========================================
-function logout() {
+function forceLogout() {
+
   localStorage.removeItem("access")
   localStorage.removeItem("refresh")
 
   window.location.href = "/login"
+
 }
 
 export default api

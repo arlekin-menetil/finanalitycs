@@ -2,187 +2,325 @@ import { defineStore } from "pinia"
 import api from "@/api/axios"
 
 export const useAuthStore = defineStore("auth", {
+
   state: () => ({
+
     access: localStorage.getItem("access") || null,
+
     refresh: localStorage.getItem("refresh") || null,
 
     user: null,
+
     profile: null,
 
     loading: false,
+
     error: null,
 
     initialized: false,
+
   }),
 
   getters: {
+
+    // ==========================================
+    // AUTH
+    // ==========================================
+
     isAuthenticated: (state) => !!state.access,
 
+    // ==========================================
+    // PROFILE
+    // ==========================================
+
     isProfileCompleted: (state) => {
-      return state.profile?.is_profile_completed || false
+
+      return Boolean(
+
+        state.profile?.is_profile_completed,
+
+      )
+
     },
+
+    // ==========================================
+    // PLATFORM ACCESS
+    // ==========================================
+
+    canUsePlatform() {
+
+      return this.isAuthenticated &&
+
+        this.isProfileCompleted
+
+    },
+
   },
 
   actions: {
 
     // ==========================================
-    // 🔐 LOGIN
+    // LOGIN
     // ==========================================
+
     async login(phone, password) {
+
       try {
+
         this.loading = true
+
         this.error = null
 
-        const response = await api.post("/auth/login/", {
-          phone,
-          password,
-        })
+        const { data } = await api.post(
 
-        this.access = response.data.access
-        this.refresh = response.data.refresh
+          "/auth/login/",
 
-        localStorage.setItem("access", this.access)
-        localStorage.setItem("refresh", this.refresh)
+          {
 
-        // 💣 ставим токен
-        api.defaults.headers.common["Authorization"] = `Bearer ${this.access}`
+            phone,
 
-        await this.fetchUser()
+            password,
+
+          },
+
+        )
+
+        this.setTokens(data)
+
+        await this.loadUser()
 
         return true
 
-      } catch (err) {
-        this.error = err.response?.data || "Login failed"
+      }
+
+      catch (err) {
+
+        this.error =
+
+          err.response?.data ||
+
+          "Login failed"
+
         throw err
-      } finally {
+
+      }
+
+      finally {
+
         this.loading = false
+
       }
+
     },
 
-
     // ==========================================
-    // 👤 USER
+    // TOKENS
     // ==========================================
-    async fetchUser() {
-      try {
-        const res = await api.get("/auth/me/")
-        this.user = res.data
 
-        await this.fetchProfile()
+    setTokens(data) {
 
-      } catch (e) {
-        console.error("User fetch error", e)
+      this.access = data.access
 
-        // 💣 если токен умер → logout
-        if (e.response?.status === 401) {
-          this.logout()
-        }
-      }
+      this.refresh = data.refresh
+
+      localStorage.setItem(
+
+        "access",
+
+        data.access,
+
+      )
+
+      localStorage.setItem(
+
+        "refresh",
+
+        data.refresh,
+
+      )
+
+      api.defaults.headers.common.Authorization =
+
+        `Bearer ${data.access}`
+
     },
 
+    // ==========================================
+    // USER
+    // ==========================================
+
+    async loadUser() {
+
+      const { data } = await api.get(
+
+        "/auth/me/",
+
+      )
+
+      this.user = data
+
+      await this.fetchProfile()
+
+      return data
+
+    },
 
     // ==========================================
-    // 💣 PROFILE
+    // PROFILE
     // ==========================================
+
     async fetchProfile() {
+
       try {
-        const res = await api.get("/profile/")
-        this.profile = res.data
-      } catch (e) {
-        console.error("Profile fetch error", e)
-        this.profile = null
+
+        const { data } = await api.get(
+
+          "/profile/",
+
+        )
+
+        this.profile = data
+
+        return data
+
       }
+
+      catch (e) {
+
+        console.warn(
+
+          "Profile not found",
+
+        )
+
+        this.profile = null
+
+        return null
+
+      }
+
     },
 
+    // ==========================================
+    // PROFILE SETUP
+    // ==========================================
 
-    // ==========================================
-    // 💣 PROFILE SETUP
-    // ==========================================
-    async setupProfile(data) {
+    async setupProfile(payload) {
+
+      this.loading = true
+
       try {
-        this.loading = true
 
-        const res = await api.post("/profile/setup/", data)
+        const { data } = await api.post(
 
-        // 💣 обновляем профиль после сохранения
+          "/profile/setup/",
+
+          payload,
+
+        )
+
         await this.fetchProfile()
 
-        return res.data
+        return data
 
-      } catch (e) {
-        console.error("Profile setup error", e)
-        throw e
-      } finally {
+      }
+
+      finally {
+
         this.loading = false
+
       }
+
     },
 
-
     // ==========================================
-    // 🔄 REFRESH TOKEN (НОВОЕ 💣)
+    // REFRESH PROFILE
     // ==========================================
-    async refreshToken() {
-      try {
-        const res = await api.post("/token/refresh/", {
-          refresh: this.refresh,
-        })
 
-        this.access = res.data.access
-        localStorage.setItem("access", this.access)
+    async refreshProfile() {
 
-        api.defaults.headers.common["Authorization"] = `Bearer ${this.access}`
+      return await this.fetchProfile()
 
-        return true
-
-      } catch (e) {
-        console.error("Refresh token failed", e)
-        this.logout()
-        return false
-      }
     },
 
+    // ==========================================
+    // LOGOUT
+    // ==========================================
 
-    // ==========================================
-    // 🚪 LOGOUT
-    // ==========================================
     logout() {
+
       this.access = null
+
       this.refresh = null
+
       this.user = null
+
       this.profile = null
+
+      this.loading = false
+
       this.error = null
 
       localStorage.removeItem("access")
+
       localStorage.removeItem("refresh")
 
-      delete api.defaults.headers.common["Authorization"]
+      delete api.defaults.headers.common.Authorization
 
-      window.location.href = "/login"
     },
 
+    // ==========================================
+    // INIT
+    // ==========================================
 
-    // ==========================================
-    // 🔄 INIT
-    // ==========================================
     async init() {
+
       try {
-        if (this.access) {
-          api.defaults.headers.common["Authorization"] = `Bearer ${this.access}`
 
-          try {
-            await this.fetchUser()
-          } catch (e) {
-            // 💣 если access умер → пробуем refresh
-            const ok = await this.refreshToken()
+        const access =
 
-            if (ok) {
-              await this.fetchUser()
-            }
-          }
+          localStorage.getItem("access")
+
+        if (!access) {
+
+          this.initialized = true
+
+          return
+
         }
-      } finally {
-        this.initialized = true
+
+        this.access = access
+
+        api.defaults.headers.common.Authorization =
+
+          `Bearer ${access}`
+
+        await this.loadUser()
+
       }
+
+      catch (e) {
+
+        console.error(
+
+          "Auth init:",
+
+          e,
+
+        )
+
+        this.logout()
+
+      }
+
+      finally {
+
+        this.initialized = true
+
+      }
+
     },
+
   },
+
 })

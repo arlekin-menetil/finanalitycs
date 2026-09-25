@@ -1,18 +1,80 @@
 from decimal import Decimal
-from banks.models import BankProduct, RecommendationSnapshot
+
+from banks.models import (
+    BankProduct,
+    RecommendationRule,
+)
+
 from scoring.models import CreditScore
 from profiles.models import FinancialProfile
 
+# ==================================================
+# RANKING VERSION
+# ==================================================
 
-RANKING_VERSION = "4.0"
+RANKING_VERSION = "6.0"
 
 
-def clamp(value, min_value=Decimal("0"), max_value=Decimal("1")):
-    if value < min_value:
-        return min_value
-    if value > max_value:
-        return max_value
+# ==================================================
+# DEFAULT WEIGHTS
+# ==================================================
+
+APPROVAL_WEIGHT = Decimal("0.20")
+CREDIT_WEIGHT = Decimal("0.15")
+DTI_WEIGHT = Decimal("0.10")
+INCOME_WEIGHT = Decimal("0.05")
+INTEREST_WEIGHT = Decimal("0.20")
+PRIORITY_WEIGHT = Decimal("0.30")
+STABILITY_WEIGHT = Decimal("0.05")
+
+FEATURED_BONUS = Decimal("0.15")
+ONLINE_BONUS = Decimal("0.02")
+
+
+# ==================================================
+# SAFE DECIMAL
+# ==================================================
+
+
+def to_decimal(value, default="0"):
+
+    try:
+
+        if value in (None, ""):
+            return Decimal(default)
+
+        return Decimal(str(value))
+
+    except Exception:
+
+        return Decimal(default)
+
+
+# ==================================================
+# CLAMP
+# ==================================================
+
+
+def clamp(
+    value,
+    minimum=Decimal("0"),
+    maximum=Decimal("1"),
+):
+
+    value = to_decimal(value)
+
+    if value < minimum:
+        return minimum
+
+    if value > maximum:
+        return maximum
+
     return value
+
+
+# ==================================================
+# NORMALIZE DTI
+# ==================================================
 
 
 def normalize_dti(dti):
@@ -20,22 +82,321 @@ def normalize_dti(dti):
     if dti is None:
         return Decimal("0")
 
-    dti = Decimal(dti)
+    dti = to_decimal(dti)
 
     if dti > 1:
-        return dti / Decimal("100")
+        dti /= Decimal("100")
 
-    return dti
+    return clamp(dti)
 
 
-def get_top_recommendations(user, limit=5):
+# ==================================================
+# NORMALIZE CREDIT SCORE
+# ==================================================
 
-    score_obj = (
-        CreditScore.objects
-        .filter(user=user)
-        .order_by("-created_at")
-        .first()
+
+def normalize_credit_score(score):
+
+    score = to_decimal(score)
+
+    if score <= 0:
+        return Decimal("0.30")
+
+    return clamp(score / Decimal("1000"))
+
+
+# ==================================================
+# LOAD RECOMMENDATION RULES
+# ==================================================
+
+
+def get_rules():
+
+    return {
+        rule.bank_id: rule
+        for rule in RecommendationRule.objects.filter(enabled=True).select_related(
+            "bank"
+        )
+    }
+
+
+# ==================================================
+# BANK PRIORITY
+# ==================================================
+
+
+def get_priority(bank, rules):
+
+    if not bank:
+        return 1
+
+    rule = rules.get(bank.id)
+
+    if rule:
+
+        return max(
+            int(rule.priority or 1),
+            1,
+        )
+
+    return max(
+        int(getattr(bank, "priority_weight", 1) or 1),
+        1,
     )
+
+
+# ==================================================
+# FEATURED
+# ==================================================
+
+
+def is_featured(bank, rules):
+
+    if not bank:
+        return False
+
+    rule = rules.get(bank.id)
+
+    if rule is not None:
+        return bool(rule.featured)
+
+    return bool(
+        getattr(
+            bank,
+            "is_featured",
+            False,
+        )
+    )
+
+
+# ==================================================
+# INTEREST COMPONENT
+# ==================================================
+
+
+def calculate_interest_component(
+    product,
+    min_rate,
+    max_rate,
+):
+
+    if product.interest_rate is None or max_rate <= min_rate:
+        return Decimal("0.50")
+
+    return clamp((max_rate - to_decimal(product.interest_rate)) / (max_rate - min_rate))
+
+
+# ==================================================
+# STABILITY COMPONENT
+# ==================================================
+
+
+def get_stability_component(
+    risk_category,
+):
+
+    risk = (risk_category or "medium").lower()
+
+    if risk == "low":
+        return Decimal("1.00")
+
+    if risk == "medium":
+        return Decimal("0.70")
+
+    return Decimal("0.40")
+
+
+# ==================================================
+# CALCULATE RANKING SCORE
+# ==================================================
+
+
+def calculate_ranking(
+    approval_component,
+    credit_component,
+    dti_component,
+    income_component,
+    interest_component,
+    priority_component,
+    stability_component,
+    featured=False,
+    online=False,
+):
+
+    score = (
+        approval_component * APPROVAL_WEIGHT
+        + credit_component * CREDIT_WEIGHT
+        + dti_component * DTI_WEIGHT
+        + income_component * INCOME_WEIGHT
+        + interest_component * INTEREST_WEIGHT
+        + priority_component * PRIORITY_WEIGHT
+        + stability_component * STABILITY_WEIGHT
+    )
+
+    if featured:
+
+        score += FEATURED_BONUS
+
+    if online:
+
+        score += ONLINE_BONUS
+
+    return clamp(score)
+
+
+# ==================================================
+# APPROVAL
+# ==================================================
+
+
+def calculate_approval(
+    approval_probability,
+    interest_component,
+    priority_component,
+    credit_component,
+):
+
+    return clamp(
+        approval_probability * Decimal("0.55")
+        + interest_component * Decimal("0.15")
+        + priority_component * Decimal("0.20")
+        + credit_component * Decimal("0.10")
+    )
+
+
+# ==================================================
+# LOAN LIMIT
+# ==================================================
+
+
+def calculate_limit(
+    income,
+    approval,
+    product,
+):
+
+    loan_limit = income * Decimal("6") * approval
+
+    max_amount = to_decimal(
+        getattr(
+            product,
+            "max_amount",
+            None,
+        )
+    )
+
+    if max_amount > 0:
+
+        loan_limit = min(
+            loan_limit,
+            max_amount,
+        )
+
+    return loan_limit
+
+
+# ==================================================
+# SORT PRODUCTS
+# ==================================================
+
+
+def sort_products(
+    products,
+    rules,
+):
+
+    def priority(product):
+
+        bank = getattr(
+            product,
+            "bank",
+            None,
+        )
+
+        return get_priority(
+            bank,
+            rules,
+        )
+
+    def featured(product):
+
+        bank = getattr(
+            product,
+            "bank",
+            None,
+        )
+
+        return is_featured(
+            bank,
+            rules,
+        )
+
+    return sorted(
+        products,
+        key=lambda product: (
+            # =====================================
+            # AI RANKING SCORE
+            # =====================================
+            float(
+                getattr(
+                    product,
+                    "ranking_score",
+                    0,
+                )
+                or 0
+            ),
+            # =====================================
+            # APPROVAL PROBABILITY
+            # =====================================
+            float(
+                getattr(
+                    product,
+                    "approval_probability",
+                    0,
+                )
+                or 0
+            ),
+            # =====================================
+            # FEATURED BANK
+            # =====================================
+            int(
+                featured(
+                    product,
+                )
+            ),
+            # =====================================
+            # BANK PRIORITY
+            # =====================================
+            priority(
+                product,
+            ),
+            # =====================================
+            # LOWER INTEREST RATE IS BETTER
+            # =====================================
+            -float(
+                getattr(
+                    product,
+                    "interest_rate",
+                    999,
+                )
+                or 999
+            ),
+        ),
+        reverse=True,
+    )
+
+
+# ==================================================
+# RECOMMENDATIONS
+# ==================================================
+
+
+def get_top_recommendations(
+    user,
+    limit=100,
+):
+
+    score_obj = CreditScore.objects.filter(user=user).order_by("-created_at").first()
 
     if not score_obj:
         return []
@@ -45,218 +406,238 @@ def get_top_recommendations(user, limit=5):
     if not profile:
         return []
 
-    user_score = score_obj.score or 0
+    rules = get_rules()
 
-    approval_probability = Decimal(
-        str(score_obj.approval_probability or 0)
-    ) / Decimal("100")
+    # ==================================================
+    # PRODUCT TYPES
+    # ==================================================
 
-    user_dti = normalize_dti(profile.dti_ratio)
+    RECOMMENDATION_PRODUCT_TYPES = [
+        "loan",
+        "business_credit",
+        "micro",
+        "mortgage",
+        "auto",
+        "education",
+        "green",
+        "card",
+        "overdraft",
+        "installment",
+    ]
 
-    user_income = profile.monthly_income_total or Decimal("0")
+    # ==================================================
+    # LOAD PRODUCTS
+    # ==================================================
 
-    risk_category = (score_obj.risk_category or "medium").lower()
-
-    # =========================
-    # 💣 ОСНОВНОЙ QUERY
-    # =========================
-
-    products = (
-        BankProduct.objects
-        .filter(
+    products = list(
+        BankProduct.objects.filter(
             is_active=True,
             bank__is_active=True,
-            min_score__lte=user_score,
-            max_dti__gte=user_dti,
-            min_income__lte=user_income
-        )
-        .select_related("bank")
+            product_type__in=RECOMMENDATION_PRODUCT_TYPES,
+        ).select_related("bank")
     )
-
-    # =========================
-    # 💣 FALLBACK ЕСЛИ ПУСТО
-    # =========================
-
-    if not products.exists():
-        products = (
-            BankProduct.objects
-            .filter(is_active=True)
-            .select_related("bank")
-        )
-
-    products = list(products)
 
     if not products:
         return []
 
-    # =========================
-    # MARKET NORMALIZATION
-    # =========================
+    interest_rates = [
+        to_decimal(p.interest_rate) for p in products if p.interest_rate is not None
+    ]
 
-    interest_rates = [p.interest_rate or Decimal("0") for p in products]
+    if not interest_rates:
+        return []
 
     min_rate = min(interest_rates)
     max_rate = max(interest_rates)
 
-    priority_values = [p.bank.priority_weight or 1 for p in products]
+    max_priority = max(
+        get_priority(
+            p.bank,
+            rules,
+        )
+        for p in products
+        if p.bank
+    )
 
-    max_priority = max(priority_values) if priority_values else 1
+    # ==================================================
+    # USER DATA
+    # ==================================================
+
+    score_component = normalize_credit_score(score_obj.score or 0)
+
+    approval_probability = to_decimal(score_obj.approval_probability) / Decimal("100")
+
+    user_dti = normalize_dti(profile.dti_ratio)
+
+    user_income = to_decimal(profile.monthly_income_total)
+
+    risk_category = (score_obj.risk_category or "medium").lower()
 
     ranked_products = []
 
+    # ==================================================
+    # CALCULATE SCORE
+    # ==================================================
+
     for product in products:
 
-        score_gap = Decimal(user_score) - Decimal(product.min_score or 0)
-
-        approval_component = clamp(
-            approval_probability + (score_gap / Decimal("1000"))
+        bank = getattr(
+            product,
+            "bank",
+            None,
         )
 
-        if product.max_dti:
-            dti_ratio = clamp(user_dti / product.max_dti)
-            dti_component = Decimal("1") - dti_ratio
-        else:
-            dti_component = Decimal("0.5")
+        approval_component = clamp(approval_probability)
 
-        if product.min_income:
-            income_ratio = user_income / product.min_income
-            income_component = clamp(income_ratio / Decimal("2"))
-        else:
-            income_component = Decimal("0.5")
+        credit_component = clamp(score_component)
 
-        if max_rate > min_rate:
+        dti_component = Decimal("1") - clamp(user_dti)
+
+        income_component = clamp(user_income / Decimal("10000000"))
+
+        if product.interest_rate is not None and max_rate > min_rate:
+
             interest_component = clamp(
-                (max_rate - product.interest_rate) /
-                (max_rate - min_rate)
+                (max_rate - to_decimal(product.interest_rate)) / (max_rate - min_rate)
             )
+
         else:
+
             interest_component = Decimal("0.5")
 
         priority_component = clamp(
-            Decimal(product.bank.priority_weight or 1) / Decimal(max_priority)
+            Decimal(
+                str(
+                    get_priority(
+                        bank,
+                        rules,
+                    )
+                )
+            )
+            / Decimal(str(max_priority))
         )
 
         if risk_category == "low":
+
             stability_component = Decimal("1")
+
         elif risk_category == "medium":
-            stability_component = Decimal("0.6")
+
+            stability_component = Decimal("0.7")
+
         else:
-            stability_component = Decimal("0.3")
 
-        featured_bonus = Decimal("0.02") if product.bank.is_featured else Decimal("0")
+            stability_component = Decimal("0.4")
 
-        # 💣 УСИЛЕННЫЙ RANKING
-        ranking_score = (
-            approval_component * Decimal("0.30") +
-            dti_component * Decimal("0.20") +
-            income_component * Decimal("0.10") +
-            interest_component * Decimal("0.20") +
-            priority_component * Decimal("0.05") +
-            stability_component * Decimal("0.10") +
-            featured_bonus
+        featured = is_featured(
+            bank,
+            rules,
         )
 
-        ranking_score = clamp(ranking_score)
+        ranking_score = calculate_ranking(
+            approval_component,
+            credit_component,
+            dti_component,
+            income_component,
+            interest_component,
+            priority_component,
+            stability_component,
+            featured=featured,
+            online=getattr(
+                product,
+                "is_online",
+                False,
+            ),
+        )
 
-        ranking_percent = ranking_score * Decimal("100")
+        approval = calculate_approval(
+            approval_probability,
+            interest_component,
+            priority_component,
+            credit_component,
+        )
 
-        # =========================
-        # INTEREST FACTOR
-        # =========================
+        loan_limit = calculate_limit(
+            user_income,
+            approval,
+            product,
+        )
 
-        if max_rate > min_rate:
-            interest_factor = clamp(
-                Decimal("1") - ((product.interest_rate - min_rate) / Decimal("10"))
+        product.ranking_score = float(
+            round(
+                ranking_score * Decimal("100"),
+                2,
             )
-        else:
-            interest_factor = Decimal("1")
-
-        # =========================
-        # BANK FACTOR
-        # =========================
-
-        bank_factor = Decimal(str(product.bank.priority_weight or 1))
-
-        # =========================
-        # 💣 НОВЫЙ APPROVAL (СТАБИЛЬНЫЙ)
-        # =========================
-
-        adjusted_approval = clamp(
-            (approval_probability * Decimal("0.7")) +
-            (interest_factor * Decimal("0.2")) +
-            (bank_factor * Decimal("0.1"))
         )
-
-        # =========================
-        # LOAN LIMIT
-        # =========================
-
-        base_multiplier = Decimal("8")
-
-        risk_adjustment = adjusted_approval + Decimal("0.5")
-
-        loan_limit = (
-            user_income *
-            base_multiplier *
-            risk_adjustment *
-            interest_factor *
-            bank_factor
-        )
-
-        if product.max_amount:
-            loan_limit = min(loan_limit, product.max_amount)
-
-        # =========================
-        # FINAL OUTPUT
-        # =========================
-
-        product.ranking_score = float(round(ranking_percent, 2))
 
         product.approval_probability = float(
-            round(adjusted_approval * Decimal("100"), 2)
+            round(
+                approval * Decimal("100"),
+                2,
+            )
         )
 
-        product.loan_limit_hint = float(loan_limit)
-
-        product.ranking_explain = {
-            "version": RANKING_VERSION,
-            "approval_component": float(round(approval_component, 4)),
-            "dti_component": float(round(dti_component, 4)),
-            "income_component": float(round(income_component, 4)),
-            "interest_component": float(round(interest_component, 4)),
-            "priority_component": float(round(priority_component, 4)),
-            "stability_component": float(round(stability_component, 4)),
-            "featured_bonus": float(featured_bonus)
-        }
+        product.loan_limit_hint = float(
+            round(
+                loan_limit,
+                2,
+            )
+        )
 
         ranked_products.append(product)
 
-    ranked_products.sort(
-        key=lambda x: x.ranking_score,
-        reverse=True
+    # ==================================================
+    # SORT
+    # ==================================================
+
+    ranked_products = sort_products(
+        ranked_products,
+        rules,
     )
 
-    RecommendationSnapshot.objects.create(
-        user=user,
-        ranking_version=RANKING_VERSION,
-        user_score=user_score,
-        approval_probability=approval_probability,
-        dti_ratio=user_dti,
-        monthly_income=user_income,
-        risk_category=risk_category,
-        min_market_rate=min_rate,
-        max_market_rate=max_rate,
-        feature_vector={
-            "approval": float(approval_probability),
-            "dti": float(user_dti),
-            "income": float(user_income),
-            "risk_category": risk_category,
-            "market_min_rate": float(min_rate),
-            "market_max_rate": float(max_rate),
-        }
+    # ==================================================
+    # BEST PRODUCT PER BANK
+    # ==================================================
+
+    best_by_bank = {}
+
+    for product in ranked_products:
+
+        bank_name = (
+            getattr(
+                product,
+                "bank_name",
+                None,
+            )
+            or (
+                product.bank.name
+                if getattr(
+                    product,
+                    "bank",
+                    None,
+                )
+                else None
+            )
+            or "Unknown Bank"
+        )
+
+        if bank_name not in best_by_bank:
+
+            best_by_bank[bank_name] = product
+
+    best_products = list(best_by_bank.values())
+
+    # ==================================================
+    # FINAL SORT
+    # ==================================================
+
+    best_products = sort_products(
+        best_products,
+        rules,
     )
 
     if limit:
-        return ranked_products[:limit]
 
-    return ranked_products
+        return best_products[:limit]
+
+    return best_products

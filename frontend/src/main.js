@@ -18,13 +18,22 @@ async function bootstrap() {
 
   app.use(pinia)
 
-  // 💣 ИНИЦИАЛИЗАЦИЯ AUTH ДО ROUTER
+  // 🔥 ИНИЦИАЛИЗАЦИЯ AUTH ДО ROUTER
   const auth = useAuthStore()
-  await auth.init()
 
+  try {
+    await auth.init()
+  } catch (e) {
+    console.error("Auth init error:", e)
+  }
+
+  // 🔥 теперь подключаем router
   app.use(router)
+
+  // 🔥 i18n
   app.use(i18n)
 
+  // 🚀 mount
   app.mount("#app")
 }
 

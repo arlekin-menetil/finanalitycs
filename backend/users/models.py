@@ -29,7 +29,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # 📱 ОСНОВА
     phone_number = models.CharField(max_length=15, unique=True)
 
-    # 👤 ЛИЧНЫЕ ДАННЫЕ (KYC START)
+    # 👤 ЛИЧНЫЕ ДАННЫЕ
     first_name = models.CharField(max_length=100, blank=True)
     last_name = models.CharField(max_length=100, blank=True)
 
@@ -42,7 +42,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # 🔐 СТАТУСЫ
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    is_verified = models.BooleanField(default=False)  # 💣 прошёл ли KYC
+    is_verified = models.BooleanField(default=False)
 
     # 🧠 РОЛИ
     ROLE_CHOICES = (
@@ -119,3 +119,12 @@ class SMSCode(models.Model):
     @staticmethod
     def generate_code():
         return str(random.randint(100000, 999999))
+
+    # =========================
+    # 🧹 ОЧИСТКА СТАРЫХ КОДОВ
+    # =========================
+    @staticmethod
+    def cleanup_old_codes():
+        SMSCode.objects.filter(
+            created_at__lt=timezone.now() - timedelta(minutes=10)
+        ).delete()

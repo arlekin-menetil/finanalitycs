@@ -1,6 +1,6 @@
 """
 Django settings for bankanalytics project.
-Fintech Architecture Version
+Fintech Architecture Version (Production Ready)
 """
 
 from pathlib import Path
@@ -20,13 +20,19 @@ DEBUG = os.getenv("DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(",")
 
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = "DENY"
+
 
 # ======================
 # APPLICATIONS
 # ======================
 
 INSTALLED_APPS = [
-
     # Django core
     "django.contrib.admin",
     "django.contrib.auth",
@@ -38,6 +44,7 @@ INSTALLED_APPS = [
     # Third-party
     "corsheaders",
     "rest_framework",
+    "rest_framework.authtoken",
     "rest_framework_simplejwt",
 
     # Local apps
@@ -48,6 +55,11 @@ INSTALLED_APPS = [
     "credit_analysis",
     "scoring",
     "banks",
+
+    # 🔥 НОВОЕ (для auth)
+    "authapp",
+    "finance_calendar",
+    "reports",
 ]
 
 
@@ -56,13 +68,14 @@ INSTALLED_APPS = [
 # ======================
 
 MIDDLEWARE = [
-
     "corsheaders.middleware.CorsMiddleware",
 
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
+
     "django.middleware.csrf.CsrfViewMiddleware",
+
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -103,6 +116,9 @@ DATABASES = {
         "HOST": os.getenv("DB_HOST", "db"),
         "PORT": int(os.getenv("DB_PORT", 5432)),
         "CONN_MAX_AGE": 60,
+        "OPTIONS": {
+            "connect_timeout": 5,
+        },
     }
 }
 
@@ -134,8 +150,10 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+
+    # 🔥 ВАЖНО: по умолчанию открыто
     "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.permissions.IsAuthenticated",
+        "rest_framework.permissions.AllowAny",
     ),
 }
 
@@ -145,7 +163,7 @@ REST_FRAMEWORK = {
 # ======================
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     "AUTH_HEADER_TYPES": ("Bearer",),
     "UPDATE_LAST_LOGIN": True,
@@ -153,11 +171,18 @@ SIMPLE_JWT = {
 
 
 # ======================
-# REDIS (готовность под Celery / async)
+# REDIS
 # ======================
 
 REDIS_HOST = os.getenv("REDIS_HOST", "redis")
 REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}/1",
+    }
+}
 
 
 # ======================
@@ -177,6 +202,8 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STATICFILES_DIRS = [BASE_DIR / "static"] if (BASE_DIR / "static").exists() else []
 
 
 # ======================
@@ -206,9 +233,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # CORS SETTINGS
 # ======================
 
-CORS_ALLOW_ALL_ORIGINS = True
-
-# Можно заменить на безопасный вариант:
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:5173",
-# ]
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
+else:
+    CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")

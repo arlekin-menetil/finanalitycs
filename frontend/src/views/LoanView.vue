@@ -1,201 +1,396 @@
 <script setup>
 
-import { ref, onMounted } from "vue"
-import { useRoute, useRouter } from "vue-router"
-import { useI18n } from "vue-i18n"
-import api from "@/api/axios"
-import { useRecommendationsStore } from "@/stores/recommendations"
+import {
+  ref,
+  onMounted,
+  computed
+} from "vue"
 
+import {
+  useRoute,
+  useRouter
+} from "vue-router"
+
+import api from "@/api/axios"
+
+import LoanHeader from "@/components/loan/LoanHeader.vue"
+import LoanStats from "@/components/loan/LoanStats.vue"
+import LoanInfo from "@/components/loan/LoanInfo.vue"
+import LoanDescription from "@/components/loan/LoanDescription.vue"
+import LoanRequirements from "@/components/loan/LoanRequirements.vue"
+import LoanBranches from "@/components/loan/LoanBranches.vue"
+import LoanActions from "@/components/loan/LoanActions.vue"
+
+
+// ==========================================
+// 🔥 ROUTER
+// ==========================================
 const route = useRoute()
 const router = useRouter()
-const { t } = useI18n()
 
-const recommendationsStore = useRecommendationsStore()
 
+// ==========================================
+// 🔥 STATE
+// ==========================================
 const loading = ref(true)
+
 const error = ref(false)
 
 const product = ref(null)
 
+const branches = ref([])
+
 
 // ==========================================
-// 🚀 LOAD
+// 🚀 LOAD PRODUCT + BRANCHES
 // ==========================================
 onMounted(async () => {
+
   try {
 
     const id = route.params.id
 
-    const res = await api.get(`/banks/products/${id}/`)
+    if (!id) {
+
+      throw new Error(
+        "Product ID missing"
+      )
+
+    }
+
+    // ======================================
+    // PRODUCT
+    // ======================================
+    const res = await api.get(
+      `/banks/products/${id}/`
+    )
+
     product.value = res.data
 
-  } catch (e) {
+    console.log(
+      "PRODUCT:",
+      product.value
+    )
 
-    console.error("Loan load error:", e)
+    console.log(
+      "RANKING SCORE:",
+      product.value?.ranking_score
+    )
+
+    console.log(
+      "APPROVAL PROBABILITY:",
+      product.value?.approval_probability
+    )
+
+    // ======================================
+    // ONLINE PRODUCTS
+    // ======================================
+    if (
+      product.value?.is_online
+    ) {
+
+      console.log(
+        "ONLINE PRODUCT - SKIP BRANCHES"
+      )
+
+      return
+
+    }
+
+    // ======================================
+    // BRANCHES
+    // ======================================
+    const bankId =
+
+      product.value?.bank?.id ||
+
+      product.value?.bank_id
+
+    console.log(
+      "BANK ID:",
+      bankId
+    )
+
+    if (!bankId) {
+
+      return
+
+    }
+
+    try {
+
+      const branchRes =
+        await api.get(
+          `/banks/${bankId}/branches/`
+        )
+
+      console.log(
+        "BRANCH RESPONSE:",
+        branchRes.data
+      )
+
+      branches.value =
+
+        branchRes.data?.branches ||
+
+        branchRes.data?.results ||
+
+        []
+
+      console.log(
+        "BRANCHES LOADED:",
+        branches.value.length
+      )
+
+    }
+
+    catch (branchErr) {
+
+      console.warn(
+        "Branches load error:",
+        branchErr
+      )
+
+      branches.value = []
+
+    }
+
+  }
+
+  catch (err) {
+
+    console.error(
+      "Loan load error:",
+      err
+    )
+
     error.value = true
 
-  } finally {
+  }
+
+  finally {
 
     loading.value = false
 
   }
+
 })
-
-
-// ==========================================
-// 💣 APPLY
-// ==========================================
-async function apply(){
-
-  if(!product.value) return
-
-  try{
-
-    await recommendationsStore.click(
-      product.value.id,
-      product.value.ranking_score || 0
-    )
-
-    await recommendationsStore.apply(product.value.id)
-
-    if(product.value.website){
-      window.open(product.value.website, "_blank")
-    }
-
-  }catch(e){
-    console.error("Apply error:", e)
-  }
-
-}
 
 
 // ==========================================
 // 🔙 BACK
 // ==========================================
-function goBack(){
+function goBack() {
+
   router.back()
+
 }
 
 
 // ==========================================
-// 💰 FORMAT
+// 💰 FORMAT MONEY
 // ==========================================
-function formatMoney(v){
-  if(!v) return "-"
-  return new Intl.NumberFormat("ru-RU").format(v) + " UZS"
+function formatMoney(value) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
+    return "-"
+
+  }
+
+  return (
+
+    new Intl.NumberFormat(
+      "ru-RU"
+    ).format(value)
+
+    + " UZS"
+
+  )
+
+}
+
+
+// ==========================================
+// ⭐ RATING
+// ==========================================
+const rating = computed(() => {
+
+  const score = Number(
+    product.value?.ranking_score
+  )
+
+  if (
+    Number.isNaN(score)
+  ) {
+
+    return 50
+
+  }
+
+  return Math.max(
+    0,
+    Math.min(
+      100,
+      Math.round(score)
+    )
+  )
+
+})
+
+
+// ==========================================
+// 🔥 APPLY
+// ==========================================
+function apply() {
+
+  if (!product.value) {
+
+    console.warn(
+      "Product not loaded"
+    )
+
+    return
+
+  }
+
+  const url =
+
+    product.value?.source_url ||
+
+    product.value?.website ||
+
+    product.value?.bank_url ||
+
+    null
+
+  console.log(
+    "OPEN URL:",
+    url
+  )
+
+  if (!url) {
+
+    alert(
+      "Ссылка на оформление кредита отсутствует"
+    )
+
+    return
+
+  }
+
+  window.open(
+    url,
+    "_blank",
+    "noopener,noreferrer"
+  )
+
+}
+
+
+// ==========================================
+// 📄 MORE OFFERS
+// ==========================================
+function goToRecommendations() {
+
+  router.push(
+    "/app/recommendations"
+  )
+
 }
 
 </script>
-
 
 <template>
 
 <div class="loan-page">
 
-<!-- LOADING -->
-<div v-if="loading" class="state">
-{{ t("loan.loading") || "Загрузка..." }}
-</div>
+  <!-- ===================================== -->
+  <!-- 🔥 LOADING -->
+  <!-- ===================================== -->
 
-<!-- ERROR -->
-<div v-else-if="error" class="state error">
-{{ t("loan.error") || "Ошибка загрузки продукта" }}
-</div>
-
-<!-- CONTENT -->
-<div v-else-if="product">
-
-<!-- HEADER -->
-<div class="header">
-
-<button class="back" @click="goBack">
-← {{ t("loan.back") || "Назад" }}
-</button>
-
-<h1>
-{{ product.product_name }}
-</h1>
-
-<p class="bank">
-🏦 {{ product.bank_name }}
-</p>
-
-</div>
+  <div
+    v-if="loading"
+    class="state"
+  >
+    Загрузка кредита...
+  </div>
 
 
-<!-- MAIN GRID -->
-<div class="grid">
+  <!-- ===================================== -->
+  <!-- ❌ ERROR -->
+  <!-- ===================================== -->
 
-<!-- LEFT -->
-<div class="card main">
-
-<div class="rate">
-{{ product.interest_rate ?? "-" }}%
-</div>
-
-<div class="label">
-{{ t("loan.interestRate") || "Процентная ставка" }}
-</div>
-
-<div class="match">
-
-{{ t("loan.match") || "Подходит" }}:
-<strong>{{ Math.round(product.ranking_score || 0) }}%</strong>
-
-</div>
-
-</div>
+  <div
+    v-else-if="error"
+    class="state error"
+  >
+    Ошибка загрузки продукта
+  </div>
 
 
-<!-- RIGHT -->
-<div class="card">
+  <!-- ===================================== -->
+  <!-- 📭 EMPTY -->
+  <!-- ===================================== -->
 
-<div class="info-row">
-<span>{{ t("loan.limit") || "Лимит" }}</span>
-<strong>{{ formatMoney(product.max_amount || product.loan_limit_hint) }}</strong>
-</div>
-
-<div class="info-row">
-<span>{{ t("loan.term") || "Срок" }}</span>
-<strong>{{ product.term || "-" }} {{ t("loan.months") || "мес" }}</strong>
-</div>
-
-<div class="info-row">
-<span>{{ t("loan.approval") || "Одобрение" }}</span>
-<strong>{{ product.approval_probability ?? "-" }}%</strong>
-</div>
-
-</div>
-
-</div>
+  <div
+    v-else-if="!product"
+    class="state"
+  >
+    Продукт не найден
+  </div>
 
 
-<!-- DESCRIPTION -->
-<div class="card">
+  <!-- ===================================== -->
+  <!-- ✅ CONTENT -->
+  <!-- ===================================== -->
 
-<h3>{{ t("loan.description") || "Описание" }}</h3>
+  <template v-else>
 
-<p>
-{{ product.description || "Описание продукта отсутствует" }}
-</p>
+    <!-- HEADER -->
+    <LoanHeader
+      :product="product"
+      @back="goBack"
+    />
 
-</div>
+    <!-- STATS -->
+    <LoanStats
+      :product="product"
+      :rating="rating"
+      :format-money="formatMoney"
+    />
 
+    <!-- INFO -->
+    <LoanInfo
+      :product="product"
+    />
 
-<!-- ACTIONS -->
-<div class="actions">
+    <!-- DESCRIPTION -->
+    <LoanDescription
+      :product="product"
+    />
 
-<button class="apply" @click="apply">
-🔥 {{ t("loan.apply") || "Оформить онлайн" }}
-</button>
+    <!-- REQUIREMENTS -->
+    <LoanRequirements
+      :product="product"
+    />
 
-<button class="secondary" @click="router.push('/recommendations')">
-{{ t("loan.more") || "Другие предложения" }}
-</button>
+    <!-- BRANCHES -->
+    <LoanBranches
+      :product="product"
+      :branches="branches"
+    />
 
-</div>
+    <!-- ACTIONS -->
+    <LoanActions
+      @apply="apply"
+      @more="goToRecommendations"
+    />
 
-</div>
+  </template>
 
 </div>
 
@@ -205,127 +400,52 @@ function formatMoney(v){
 <style scoped>
 
 .loan-page{
-max-width:1000px;
-margin:auto;
-padding:40px;
+
+  width:100%;
+
+  max-width:1100px;
+
+  margin:0 auto;
+
+  padding:40px 24px 80px;
 }
 
-/* STATE */
 
 .state{
-padding:40px;
-text-align:center;
+
+  padding:80px 20px;
+
+  text-align:center;
+
+  font-size:18px;
+
+  color:#64748b;
 }
+
 
 .error{
-color:#ef4444;
+
+  color:#ef4444;
 }
 
-/* HEADER */
 
-.header{
-margin-bottom:30px;
-}
-
-.back{
-background:none;
-border:none;
-cursor:pointer;
-margin-bottom:10px;
-}
-
-.bank{
-color:#6b7280;
-margin-top:6px;
-}
-
-/* GRID */
-
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:20px;
-margin-bottom:20px;
-}
-
-.card{
-background:white;
-padding:20px;
-border-radius:16px;
-border:1px solid #e5e7eb;
-}
-
-.main{
-text-align:center;
-}
-
-.rate{
-font-size:42px;
-font-weight:700;
-}
-
-.label{
-font-size:13px;
-color:#6b7280;
-margin-top:6px;
-}
-
-.match{
-margin-top:10px;
-font-size:14px;
-}
-
-/* INFO */
-
-.info-row{
-display:flex;
-justify-content:space-between;
-margin-bottom:12px;
-}
-
-/* ACTIONS */
-
-.actions{
-display:flex;
-gap:10px;
-margin-top:20px;
-}
-
-.apply{
-flex:1;
-background:#16a34a;
-color:white;
-border:none;
-padding:12px;
-border-radius:10px;
-cursor:pointer;
-}
-
-.apply:hover{
-background:#15803d;
-}
-
-.secondary{
-flex:1;
-background:#f3f4f6;
-border:none;
-padding:12px;
-border-radius:10px;
-cursor:pointer;
-}
-
-/* MOBILE */
+/* ==========================================
+🔥 MOBILE
+========================================== */
 
 @media (max-width:768px){
 
-.grid{
-grid-template-columns:1fr;
-}
+  .loan-page{
 
-.loan-page{
-padding:20px;
-}
+    padding:20px 14px 50px;
+  }
 
+  .state{
+
+    padding:50px 10px;
+
+    font-size:16px;
+  }
 }
 
 </style>

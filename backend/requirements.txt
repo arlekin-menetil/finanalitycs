@@ -42,3 +42,4 @@ google-play-scraper==1.2.4
 # HTTP (на будущее под API 💣)
 # ==============================
 requests==2.31.0
+gunicorn

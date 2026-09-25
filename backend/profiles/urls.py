@@ -3,68 +3,86 @@ from rest_framework.routers import DefaultRouter
 
 from .views import (
     FinancialProfileAPIView,
+    ProfileSetupAPIView,
+    EmploymentUploadAPIView,
     IncomeViewSet,
     ObligationViewSet,
-    ProfileSetupAPIView,
 )
 
-# =====================================
-# Router
-# =====================================
+from .dashboard import ProfileDashboardAPIView
+
+
+# ==========================================
+# DRF ROUTER
+# ==========================================
 
 router = DefaultRouter()
 
 router.register(
     r"incomes",
     IncomeViewSet,
-    basename="incomes"
+    basename="income",
 )
 
 router.register(
     r"obligations",
     ObligationViewSet,
-    basename="obligations"
+    basename="obligation",
 )
 
 
-# =====================================
-# URL patterns
-# =====================================
+# ==========================================
+# URL PATTERNS
+# ==========================================
 
 urlpatterns = [
 
-    # ===============================
-    # 👤 PROFILE (GET)
-    # ===============================
+    # ==========================================
+    # 👤 PROFILE
+    # GET /api/profile/
+    # ==========================================
     path(
         "",
         FinancialProfileAPIView.as_view(),
-        name="financial-profile"
+        name="financial-profile",
     ),
 
-    # ===============================
-    # 💣 PROFILE SETUP (POST)
-    # ===============================
+    # ==========================================
+    # 🚀 PROFILE DASHBOARD
+    # GET /api/profile/dashboard/
+    # ==========================================
+    path(
+        "dashboard/",
+        ProfileDashboardAPIView.as_view(),
+        name="profile-dashboard",
+    ),
+
+    # ==========================================
+    # 📝 PROFILE SETUP
+    # POST /api/profile/setup/
+    # ==========================================
     path(
         "setup/",
         ProfileSetupAPIView.as_view(),
-        name="profile-setup"
+        name="profile-setup",
     ),
 
-    # ===============================
-    # 💰 INCOMES
-    # ===============================
+    # ==========================================
+    # 💼 EMPLOYMENT DOCUMENT
+    # POST /api/profile/upload-employment/
+    # ==========================================
     path(
-        "incomes/",
-        include((router.urls, "incomes"))
+        "upload-employment/",
+        EmploymentUploadAPIView.as_view(),
+        name="employment-upload",
     ),
 
-    # ===============================
-    # 💳 OBLIGATIONS
-    # ===============================
+    # ==========================================
+    # 💰 INCOMES / OBLIGATIONS
+    # ==========================================
     path(
-        "obligations/",
-        include((router.urls, "obligations"))
+        "",
+        include(router.urls),
     ),
 
 ]

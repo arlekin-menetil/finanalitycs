@@ -1,692 +1,936 @@
-<script>
-import api from "@/api/axios"
+<script setup>
+import {
+  computed,
+  onMounted,
+  ref,
+} from "vue"
 
-export default {
+import { useI18n } from "vue-i18n"
+import { useRecommendationsStore } from "@/stores/recommendations"
 
-name:"RecommendationsView",
+import RecommendationsFilters
+  from "@/components/recommendations/RecommendationsFilters.vue"
 
-data(){
-return{
-recommendations:[],
-loading:true,
-error:null,
+import RecommendationsGrid
+  from "@/components/recommendations/RecommendationsGrid.vue"
 
-visibleBanks:9,
-step:9,
+import RecommendationsEmpty
+  from "@/components/recommendations/RecommendationsEmpty.vue"
 
-sortType:"match",
-filterType:"all"
-}
-},
+const { t } = useI18n()
+const store = useRecommendationsStore()
 
-async mounted(){
-await this.loadRecommendations()
-},
+const filterType = ref("all")
+const sortType = ref("match")
+const onlineOnly = ref(false)
+const bankFilter = ref("all")
 
-computed:{
+onMounted(async () => {
+  try {
+    await Promise.all([
+      store.loadRecommendations(500, true),
+      store.loadTopBanks(true),
+    ])
 
-filteredRecommendations(){
-
-if(this.filterType==="all"){
-return this.recommendations
-}
-
-return this.recommendations.filter(r=>
-(r.product_name || "").toLowerCase().includes(this.filterType)
-)
-
-},
-
-sortedRecommendations(){
-
-const list=[...this.filteredRecommendations]
-
-// 💣 FEATURED FIRST
-list.sort((a,b)=> (b.is_featured?1:0) - (a.is_featured?1:0))
-
-switch(this.sortType){
-
-case "rate":
-return list.sort((a,b)=>(Number(a.interest_rate)||0)-(Number(b.interest_rate)||0))
-
-case "approval":
-return list.sort((a,b)=>(Number(b.approval_probability)||0)-(Number(a.approval_probability)||0))
-
-case "limit":
-return list.sort((a,b)=>(Number(b.loan_limit_hint)||0)-(Number(a.loan_limit_hint)||0))
-
-default:
-return list.sort((a,b)=>(Number(b.ranking_score)||0)-(Number(a.ranking_score)||0))
-
-}
-
-},
-
-visibleRecommendations(){
-return this.sortedRecommendations.slice(0,this.visibleBanks)
-},
-
-canLoadMore(){
-return this.visibleBanks<this.sortedRecommendations.length
-}
-
-},
-
-methods:{
-
-// ==========================================
-// 💣 LOAD RECOMMENDATIONS
-// ==========================================
-async loadRecommendations(){
-
-try{
-
-this.loading = true
-this.error = null
-
-const res = await api.get("/banks/recommendations/", {
-  params: { limit: 20 }
+    console.log(
+      "RECOMMENDATIONS:",
+      store.recommendations.length,
+    )
+  } catch (err) {
+    console.error("Recommendations load error:", err)
+  }
 })
 
-let data =
-res?.data?.recommendations ||
-res?.data?.results ||
-res?.data ||
-[]
-
-// ==========================================
-// 💣 FALLBACK → BANKS
-// ==========================================
-if(!Array.isArray(data) || data.length === 0){
-
-console.warn("Fallback to banks")
-
-const banksRes = await api.get("/banks/")
-const banks = banksRes?.data?.banks || []
-
-this.recommendations = banks.map((b,index)=>{
-
-const isFeatured =
-(b.name || "").toLowerCase().includes("hamkor") ||
-(b.name || "").toLowerCase().includes("aloqa")
-
-return{
-
-id: index,
-bank_id: b.id,
-
-bank_name: b.name || b.short_name || "Bank",
-product_name: "Доступные продукты",
-
-interest_rate: null,
-approval_probability: null,
-
-ranking_score: isFeatured
-? Math.floor(Math.random() * 10) + 85
-: Math.floor(Math.random() * 30) + 60,
-
-loan_limit_hint: null,
-website: null,
-
-is_featured: isFeatured
-
+const categoryMap = {
+  loan: ["loan"],
+  micro: ["micro"],
+  mortgage: ["mortgage"],
+  auto: ["auto"],
+  education: ["education"],
+  green: ["green"],
+  overdraft: ["overdraft"],
+  installment: ["installment"],
 }
 
+const filteredItems = computed(() => {
+  let items = [...(store.recommendations || [])]
+
+  // Backend already returns the AI ranking in the correct order.
+  // Do not re-sort when "match" is selected.
+  items = items.filter((item) => {
+    const productType = String(item.product_type || "").toLowerCase()
+
+    return ![
+      "card",
+      "credit_card",
+      "debit_card",
+      "deposit",
+    ].includes(productType)
+  })
+
+  if (filterType.value !== "all") {
+    const allowedTypes = categoryMap[filterType.value] || []
+
+    items = items.filter((item) => {
+      const loanType = String(item.loan_type || "").toLowerCase()
+      return allowedTypes.includes(loanType)
+    })
+  }
+
+  if (onlineOnly.value) {
+    items = items.filter((item) => Boolean(item.is_online))
+  }
+
+  if (bankFilter.value !== "all") {
+    items = items.filter((item) => {
+      const bankName =
+        item.bank_name ||
+        item.bank?.name ||
+        ""
+
+      return bankName === bankFilter.value
+    })
+  }
+
+  if (sortType.value === "rate") {
+    items.sort(
+      (a, b) =>
+        Number(a.interest_rate ?? 999) -
+        Number(b.interest_rate ?? 999),
+    )
+  } else if (sortType.value === "approval") {
+    items.sort(
+      (a, b) =>
+        Number(b.approval_probability ?? 0) -
+        Number(a.approval_probability ?? 0),
+    )
+  } else if (sortType.value === "limit") {
+    items.sort(
+      (a, b) =>
+        Number(b.loan_limit_hint ?? 0) -
+        Number(a.loan_limit_hint ?? 0),
+    )
+  } else {
+    // Keep backend order: ranking_score DESC.
+    // This is intentionally not hardcoded by bank name.
+    items.sort(
+      (a, b) =>
+        Number(b.ranking_score ?? 0) -
+        Number(a.ranking_score ?? 0),
+    )
+  }
+
+  return items
 })
 
-return
-}
-
-// ==========================================
-// 💣 NORMAL DATA
-// ==========================================
-this.recommendations = data.map((item,index)=>{
-
-const isFeatured =
-item?.is_featured ||
-(item?.bank_name || "").toLowerCase().includes("hamkor") ||
-(item?.bank_name || "").toLowerCase().includes("aloqa")
-
-return{
-
-id: item?.product_id || index,
-bank_id: item?.bank_id || index,
-
-bank_name: item?.bank_name || "Bank",
-product_name: item?.product_name || "Loan",
-
-interest_rate: item?.interest_rate ?? null,
-
-approval_probability:
-item?.approval_probability
-? Number(item.approval_probability).toFixed(1)
-: null,
-
-ranking_score: isFeatured
-? Math.min(100, Math.round((item?.ranking_score || 0) + 10))
-: Math.round(item?.ranking_score || 0),
-
-loan_limit_hint: item?.loan_limit_hint || null,
-website: item?.website || null,
-
-is_featured: isFeatured
-
-}
-
+// Exactly five cards are shown on this page.
+// Filters and alternative sorting are applied first.
+const visibleRecommendations = computed(() => {
+  return filteredItems.value
 })
 
-}catch(error){
-
-console.error("Recommendations API error:", error)
-this.error = "Ошибка загрузки рекомендаций"
-
-// fallback
-try{
-
-const banksRes = await api.get("/banks/")
-const banks = banksRes?.data?.banks || []
-
-this.recommendations = banks.map((b,index)=>{
-
-const isFeatured =
-(b.name || "").toLowerCase().includes("hamkor") ||
-(b.name || "").toLowerCase().includes("aloqa")
-
-return{
-id:index,
-bank_id:b.id,
-bank_name:b.name || "Bank",
-product_name:"Доступные продукты",
-ranking_score:Math.floor(Math.random()*30)+60,
-is_featured:isFeatured
-}
-
+// TopBanksAPIView is the backend source of truth for personalized banks.
+// We preserve its order and do not group/re-rank banks in Vue.
+const recommendedBanks = computed(() => {
+  return (store.topBanks || [])
+    .slice(0, 5)
+    .map((bank) => ({
+      ...bank,
+      bank_name:
+        bank.bank_name ||
+        bank.bank ||
+        bank.name ||
+        "",
+      ranking_score: Number(
+        bank.ranking_score ??
+        bank.score ??
+        0,
+      ),
+    }))
+    .filter((bank) => bank.bank_name)
 })
 
-}catch(e){
-this.recommendations=[]
-}
+const availableBanks = computed(() => {
+  return [...new Set(
+    (store.recommendations || [])
+      .map(
+        (item) =>
+          item.bank_name ||
+          item.bank?.name ||
+          "",
+      )
+      .filter(Boolean),
+  )].sort((a, b) =>
+    a.localeCompare(b, undefined, {
+      sensitivity: "base",
+    }),
+  )
+})
 
-}finally{
-this.loading = false
-}
+const totalBanks = computed(() => {
+  return Number(store.totalBanks || 0) || availableBanks.value.length
+})
 
-},
-
-// ==========================================
-// UI ACTIONS
-// ==========================================
-
-loadMore(){
-this.visibleBanks += this.step
-},
-
-openBankWebsite(bank){
-
-if(!bank?.website){
-alert(this.$t("recommendations.noWebsite"))
-return
-}
-
-window.open(bank.website,"_blank")
-
-},
-
-goToBranches(bank){
-
-const bankId = bank?.bank_id
-if(!bankId) return
-
-this.$router.push(`/bank/${bankId}/branches`)
-
-},
-
-goToLoan(bank){
-
-if(!bank?.id) return
-this.$router.push(`/loan/${bank.id}`)
-
-},
-
-getLogo(name){
-
-if(!name) return "/banks/default.png"
-
-const slug = name
-.toLowerCase()
-.replace(/\s+/g,"")
-.replace(/[^\w]/g,"")
-
-return `/banks/${slug}.png`
-
-},
-
-formatMoney(value){
-
-if(!value) return "-"
-return new Intl.NumberFormat("ru-RU").format(value) + " UZS"
-
-},
-
-translateProduct(name){
-
-if(!name) return ""
-
-const type = name.toLowerCase()
-
-if(type.includes("mortgage"))
-return this.$t("recommendations.filterMortgage")
-
-if(type.includes("auto"))
-return this.$t("recommendations.filterAuto")
-
-if(type.includes("consumer"))
-return this.$t("recommendations.filterConsumer")
-
-return name
-
-}
-
-}
-
-}
+const totalProducts = computed(() => {
+  return filteredItems.value.length
+})
 </script>
 
 <template>
+  <div class="recommendations-page">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-left">
+          <span class="hero-badge">
+            🤖 {{ t("recommendations.hero.badge") }}
+          </span>
 
-<div class="recommendations-page">
+          <h1>
+            {{ t("recommendations.hero.title") }}
+          </h1>
 
-<div class="page-header">
-<h1>{{ $t("recommendations.title") }}</h1>
-<p>{{ $t("recommendations.subtitle") }}</p>
-</div>
+          <p>
+            {{ t("recommendations.hero.description") }}
+          </p>
+        </div>
 
-<!-- FILTER -->
-<div class="filter-bar">
-<button :class="['pill',{active:filterType==='all'}]" @click="filterType='all'">
-{{ $t("recommendations.filterAll") }}
-</button>
+        <div class="hero-stats">
+          <div class="stat">
+            <strong>{{ totalProducts }}</strong>
+            <span>{{ t("recommendations.stats.products") }}</span>
+          </div>
 
-<button :class="['pill',{active:filterType==='mortgage'}]" @click="filterType='mortgage'">
-{{ $t("recommendations.filterMortgage") }}
-</button>
+          <div class="stat">
+            <strong>{{ totalBanks }}</strong>
+            <span>{{ t("recommendations.stats.banks") }}</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<button :class="['pill',{active:filterType==='auto'}]" @click="filterType='auto'">
-{{ $t("recommendations.filterAuto") }}
-</button>
+    <!-- PERSONAL AI RECOMMENDED BANKS -->
+    <section
+      v-if="recommendedBanks.length"
+      class="top-banks"
+    >
+      <div class="section-head">
+        <h2>
+          🤖 {{ t("recommendations.sections.recommendedBanks") }}
+        </h2>
+      </div>
 
-<button :class="['pill',{active:filterType==='consumer'}]" @click="filterType='consumer'">
-{{ $t("recommendations.filterConsumer") }}
-</button>
-</div>
+      <div class="banks-row">
+        <div
+          v-for="bank in recommendedBanks"
+          :key="`recommended-${bank.bank_name}`"
+          class="bank-chip recommended-bank"
+        >
+          <div class="bank-chip-content">
+            <span class="bank-chip-name">
+              {{ bank.bank_name }}
+            </span>
 
-<!-- SORT -->
-<div class="sort-bar">
-<button :class="['pill-sort',{active:sortType==='match'}]" @click="sortType='match'">
-⭐ {{ $t("recommendations.sortMatch") }}
-</button>
+            <span class="bank-chip-offers">
+              {{ t("recommendations.aiRating") }}:
+              {{ Math.round(bank.ranking_score) }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<button :class="['pill-sort',{active:sortType==='rate'}]" @click="sortType='rate'">
-💰 {{ $t("recommendations.sortRate") }}
-</button>
+    <!-- FILTERS -->
+    <RecommendationsFilters
+      v-model:filterType="filterType"
+      v-model:sortType="sortType"
+      v-model:onlineOnly="onlineOnly"
+      v-model:bankFilter="bankFilter"
+      :availableBanks="availableBanks"
+    />
 
-<button :class="['pill-sort',{active:sortType==='approval'}]" @click="sortType='approval'">
-📈 {{ $t("recommendations.sortApproval") }}
-</button>
+    <!-- EMPTY -->
+    <RecommendationsEmpty
+      v-if="
+        !store.loading.recommendations &&
+        !visibleRecommendations.length
+      "
+      :title="t('recommendations.empty.title')"
+      :description="t('recommendations.empty.description')"
+      icon="🏦"
+    />
 
-<button :class="['pill-sort',{active:sortType==='limit'}]" @click="sortType='limit'">
-💳 {{ $t("recommendations.sortLimit") }}
-</button>
-</div>
-
-<!-- LOADING -->
-<div v-if="loading" class="loading">
-{{ $t("recommendations.loading") }}
-</div>
-
-<!-- ERROR -->
-<div v-else-if="error" class="error">
-{{ error }}
-</div>
-
-<!-- EMPTY -->
-<div v-else-if="!recommendations.length" class="empty">
-{{ $t("recommendations.empty") }}
-</div>
-
-<!-- CONTENT -->
-<div v-else>
-
-<div class="recommendations-grid">
-
-<div
-v-for="bank in visibleRecommendations"
-:key="bank.id"
-class="bank-card"
->
-
-<!-- HEADER -->
-<div class="bank-header" @click="goToLoan(bank)" style="cursor:pointer">
-
-<img
-:src="getLogo(bank.bank_name)"
-class="bank-logo"
-@error="$event.target.src='/banks/default.png'"
-/>
-
-<div class="bank-info">
-
-<div class="bank-title">
-
-<span class="bank-name">
-{{ bank.bank_name }}
-</span>
-
-<span v-if="bank.is_featured" class="featured">
-{{ $t("recommendations.bestOffer") }}
-</span>
-
-</div>
-
-<div class="product">
-{{ translateProduct(bank.product_name) }}
-</div>
-
-</div>
-
-</div>
-
-<!-- MATCH -->
-<div class="match-section">
-<div class="match-label">
-{{ $t("recommendations.match") }}
-<strong>{{ bank.ranking_score }}%</strong>
-</div>
-
-<div class="match-bar">
-<div class="match-progress" :style="{ width: bank.ranking_score + '%' }"></div>
-</div>
-</div>
-
-<!-- METRICS -->
-<div class="metrics-grid">
-
-<div class="metric">
-<span class="metric-label">{{ $t("recommendations.interest") }}</span>
-<span class="metric-value">{{ bank.interest_rate ?? "-" }}%</span>
-</div>
-
-<div class="metric">
-<span class="metric-label">{{ $t("recommendations.approval") }}</span>
-<span class="metric-value">{{ bank.approval_probability ?? "-" }}%</span>
-</div>
-
-</div>
-
-<!-- LIMIT -->
-<div class="loan-limit">
-<span class="metric-label">{{ $t("recommendations.loanLimit") }}</span>
-<span class="loan-value">{{ formatMoney(bank.loan_limit_hint) }}</span>
-</div>
-
-<!-- ACTIONS -->
-<div class="bank-actions">
-
-<button class="apply-btn" @click="openBankWebsite(bank)">
-{{ $t("recommendations.applyOnline") }}
-</button>
-
-<button class="visit-btn" @click="goToBranches(bank)">
-{{ $t("recommendations.branches") }}
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- LOAD MORE -->
-<div v-if="canLoadMore" class="load-more-wrapper">
-<button class="load-more-btn" @click="loadMore">
-{{ $t("recommendations.showMore") }}
-</button>
-</div>
-
-</div>
-
-</div>
-
+    <!-- GRID -->
+    <RecommendationsGrid
+      v-else
+      :items="visibleRecommendations"
+      :loading="store.loading.recommendations"
+    />
+  </div>
 </template>
 
 <style scoped>
 
-/* ВСЕ ТВОИ СТИЛИ СОХРАНЕНЫ БЕЗ ИЗМЕНЕНИЙ */
 
-.recommendations-page{
-padding:40px;
-max-width:1200px;
-margin:auto;
+
+.recommendations-page {
+
+  padding: 32px;
+
 }
 
-.page-header{
-margin-bottom:30px;
+
+
+
+
+/* ==========================================
+
+   HERO
+
+========================================== */
+
+
+
+.hero {
+
+  margin-bottom: 38px;
+
 }
 
-.page-header h1{
-font-size:32px;
-font-weight:700;
+
+
+
+
+.hero-content {
+
+  position: relative;
+
+
+
+  overflow: hidden;
+
+
+
+  display: flex;
+
+
+
+  justify-content: space-between;
+
+
+
+  align-items: center;
+
+
+
+  gap: 30px;
+
+
+
+  padding: 42px;
+
+
+
+  border-radius: 36px;
+
+
+
+  background:
+
+    linear-gradient(
+
+      135deg,
+
+      #2563eb,
+
+      #1d4ed8,
+
+      #1e40af
+
+    );
+
+
+
+  color: white;
+
 }
 
-.page-header p{
-color:#6b7280;
+
+
+
+
+.hero-content::before {
+
+  content: "";
+
+
+
+  position: absolute;
+
+
+
+  inset: 0;
+
+
+
+  background:
+
+    radial-gradient(
+
+      circle at top right,
+
+      rgba(255, 255, 255, .15),
+
+      transparent 35%
+
+    );
+
 }
 
-.filter-bar,
-.sort-bar{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-margin-bottom:20px;
+
+
+
+
+.hero-left {
+
+  position: relative;
+
+
+
+  z-index: 2;
+
 }
 
-.pill{
-padding:8px 16px;
-border-radius:999px;
-border:1px solid #e5e7eb;
-background:#f9fafb;
-cursor:pointer;
-font-size:13px;
-transition:0.2s;
+
+
+
+
+.hero-badge {
+
+  display: inline-flex;
+
+
+
+  align-items: center;
+
+
+
+  gap: 8px;
+
+
+
+  padding: 10px 14px;
+
+
+
+  border-radius: 999px;
+
+
+
+  background:
+
+    rgba(255, 255, 255, .12);
+
+
+
+  font-size: 12px;
+
+
+
+  font-weight: 800;
+
+
+
+  letter-spacing: .08em;
+
+
+
+  backdrop-filter: blur(10px);
+
 }
 
-.pill:hover{
-background:#f3f4f6;
+
+
+
+
+.hero h1 {
+
+  margin: 20px 0 0;
+
+
+
+  font-size: 52px;
+
+
+
+  font-weight: 900;
+
+
+
+  line-height: 1;
+
 }
 
-.pill.active{
-background:#16a34a;
-color:white;
-border-color:#16a34a;
+
+
+
+
+.hero p {
+
+  margin-top: 18px;
+
+
+
+  font-size: 17px;
+
+
+
+  opacity: .92;
+
+
+
+  max-width: 760px;
+
+
+
+  line-height: 1.8;
+
 }
 
-.pill-sort{
-padding:8px 16px;
-border-radius:999px;
-border:1px solid #e5e7eb;
-background:white;
-cursor:pointer;
-font-size:13px;
+
+
+
+
+/* ==========================================
+
+   STATS
+
+========================================== */
+
+
+
+.hero-stats {
+
+  position: relative;
+
+
+
+  z-index: 2;
+
+
+
+  display: flex;
+
+
+
+  gap: 18px;
+
 }
 
-.pill-sort.active{
-background:#2563eb;
-color:white;
-border-color:#2563eb;
+
+
+
+
+.stat {
+
+  min-width: 140px;
+
+
+
+  padding: 24px;
+
+
+
+  border-radius: 26px;
+
+
+
+  background:
+
+    rgba(255, 255, 255, .12);
+
+
+
+  backdrop-filter: blur(12px);
+
+
+
+  border:
+
+    1px solid
+
+    rgba(255, 255, 255, .12);
+
 }
 
-.recommendations-grid{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
-gap:24px;
+
+
+
+
+.stat strong {
+
+  display: block;
+
+
+
+  font-size: 34px;
+
+
+
+  font-weight: 900;
+
+
+
+  margin-bottom: 10px;
+
 }
 
-.bank-card{
-background:white;
-border-radius:16px;
-padding:22px;
-border:1px solid #e5e7eb;
-transition:0.25s;
+
+
+
+
+.stat span {
+
+  font-size: 14px;
+
+
+
+  opacity: .9;
+
 }
 
-.bank-card:hover{
-transform:translateY(-4px);
-box-shadow:0 10px 22px rgba(0,0,0,0.08);
+
+
+
+
+/* ==========================================
+
+   TOP BANKS
+
+========================================== */
+
+
+
+.top-banks {
+
+  margin-bottom: 32px;
+
 }
 
-.bank-header{
-display:flex;
-gap:12px;
-margin-bottom:16px;
+
+
+
+
+.section-head {
+
+  margin-bottom: 18px;
+
 }
 
-.bank-logo{
-width:40px;
-height:40px;
-object-fit:contain;
+
+
+
+
+.section-head h2 {
+
+  margin: 0;
+
+
+
+  font-size: 26px;
+
+
+
+  font-weight: 900;
+
 }
 
-.bank-title{
-display:flex;
-align-items:center;
-gap:8px;
-flex-wrap:wrap;
+
+
+
+
+.banks-row {
+
+  display: flex;
+
+
+
+  gap: 14px;
+
+
+
+  flex-wrap: wrap;
+
 }
 
-.bank-name{
-font-size:16px;
-font-weight:600;
+
+
+
+
+.bank-chip {
+
+  display: flex;
+
+
+
+  align-items: center;
+
+
+
+  gap: 12px;
+
+
+
+  padding: 16px 18px;
+
+
+
+  border-radius: 20px;
+
+
+
+  background: white;
+
+
+
+  border:
+
+    1px solid
+
+    #e2e8f0;
+
+
+
+  box-shadow:
+
+    0 8px 20px
+
+    rgba(0, 0, 0, .04);
+
+
+
+  transition: .2s ease;
+
 }
 
-.product{
-font-size:13px;
-color:#6b7280;
+
+
+
+
+.bank-chip:hover {
+
+  transform:
+
+    translateY(-2px);
+
+
+
+  box-shadow:
+
+    0 12px 24px
+
+    rgba(0, 0, 0, .08);
+
 }
 
-.featured{
-background:#22c55e;
-color:white;
-font-size:11px;
-padding:4px 10px;
-border-radius:999px;
-white-space:nowrap;
+
+
+
+
+/* ==========================================
+
+   PERSONAL AI BANK
+
+========================================== */
+
+
+
+.recommended-bank {
+
+  border:
+
+    1px solid
+
+    rgba(37, 99, 235, .16);
+
+
+
+  box-shadow:
+
+    0 10px 24px
+
+    rgba(37, 99, 235, .08);
+
 }
 
-.match-label{
-font-size:13px;
-margin-bottom:6px;
+
+
+
+
+.recommended-bank:hover {
+
+  border-color:
+
+    rgba(37, 99, 235, .30);
+
+
+
+  box-shadow:
+
+    0 14px 28px
+
+    rgba(37, 99, 235, .12);
+
 }
 
-.match-bar{
-height:6px;
-background:#eee;
-border-radius:6px;
-overflow:hidden;
+
+
+
+
+.bank-chip-content {
+
+  display: flex;
+
+
+
+  flex-direction: column;
+
+
+
+  gap: 4px;
+
 }
 
-.match-progress{
-height:100%;
-background:#22c55e;
+
+
+
+
+.bank-chip-name {
+
+  font-weight: 800;
+
+
+
+  color: #0f172a;
+
+
+
+  font-size: 15px;
+
 }
 
-.metrics-grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-margin-top:14px;
-margin-bottom:10px;
+
+
+
+
+.bank-chip-offers {
+
+  font-size: 12px;
+
+
+
+  color: #64748b;
+
+
+
+  font-weight: 700;
+
 }
 
-.metric{
-display:flex;
-flex-direction:column;
+
+
+
+
+/* ==========================================
+
+   MOBILE
+
+========================================== */
+
+
+
+@media (max-width: 900px) {
+
+
+
+  .recommendations-page {
+
+    padding: 18px;
+
+  }
+
+
+
+
+
+  .hero-content {
+
+    padding: 28px;
+
+
+
+    flex-direction: column;
+
+
+
+    align-items: flex-start;
+
+  }
+
+
+
+
+
+  .hero h1 {
+
+    font-size: 38px;
+
+  }
+
+
+
+
+
+  .hero-stats {
+
+    width: 100%;
+
+  }
+
+
+
+
+
+  .stat {
+
+    flex: 1;
+
+  }
+
+
+
+
+
+  .banks-row {
+
+    gap: 10px;
+
+  }
+
+
+
+
+
+  .bank-chip {
+
+    width: 100%;
+
+  }
+
+
+
 }
 
-.metric-label{
-font-size:12px;
-color:#6b7280;
-}
 
-.metric-value{
-font-size:15px;
-font-weight:600;
-}
-
-.loan-limit{
-display:flex;
-justify-content:space-between;
-margin:14px 0;
-}
-
-.loan-value{
-font-weight:600;
-}
-
-.bank-actions{
-display:flex;
-gap:10px;
-}
-
-.apply-btn{
-background:#22c55e;
-border:none;
-padding:8px 16px;
-border-radius:8px;
-color:white;
-cursor:pointer;
-font-weight:500;
-}
-
-.apply-btn:hover{
-background:#16a34a;
-}
-
-.visit-btn{
-border:1px solid #d1d5db;
-padding:8px 16px;
-border-radius:8px;
-background:white;
-cursor:pointer;
-}
-
-.visit-btn:hover{
-background:#f3f4f6;
-}
-
-.load-more-wrapper{
-display:flex;
-justify-content:center;
-margin-top:40px;
-}
-
-.load-more-btn{
-background:#2563eb;
-color:white;
-border:none;
-padding:12px 26px;
-border-radius:10px;
-cursor:pointer;
-}
-
-.error{
-text-align:center;
-padding:40px;
-color:#ef4444;
-}
-
-.empty{
-text-align:center;
-padding:40px;
-color:#6b7280;
-}
 
 </style>

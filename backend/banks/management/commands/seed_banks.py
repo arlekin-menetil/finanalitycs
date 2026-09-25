@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from banks.models import Bank
+from banks.models import Bank, normalize_name
 
 
 BANKS = [
@@ -16,9 +16,9 @@ BANKS = [
     ("Hamkorbank", "https://hamkorbank.uz"),
     ("Asakabank", "https://asakabank.uz"),
 
-    ("Ipak Yuli", "https://ipakyulibank.uz"),
+    ("Ipak Yuli Bank", "https://ipakyulibank.uz"),
     ("Ziraat Bank", "https://ziraatbank.uz"),
-    ("Trustbank", "https://trustbank.uz"),
+    ("Trastbank", "https://trustbank.uz"),
     ("Aloqabank", "https://aloqabank.uz"),
     ("Ipoteka Bank", "https://ipotekabank.uz"),
 
@@ -28,9 +28,9 @@ BANKS = [
     ("Octobank", "https://octobank.uz"),
     ("Davr Bank", "https://davrbank.uz"),
 
-    ("InFinBank", "https://infinbank.com"),
-    ("Asia Alliance", "https://aab.uz"),
-    ("Orient Finans", "https://ofb.uz"),
+    ("Infinbank", "https://infinbank.com"),
+    ("Asia Alliance Bank", "https://aab.uz"),
+    ("Orient Finans Bank", "https://ofb.uz"),
     ("AVO Bank", "https://avo.uz"),
     ("Poytaxt Bank", "https://poytaxtbank.uz"),
 
@@ -42,6 +42,9 @@ BANKS = [
 
     ("Apex Bank", "https://apexbank.uz"),
     ("Hayot Bank", "https://hayotbank.uz"),
+
+    # 🔥 ДОБАВИЛИ
+    ("Mybank", "https://mybank.uz"),
 ]
 
 
@@ -53,18 +56,25 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
 
         created = 0
+        updated = 0
 
-        for short_name, website in BANKS:
+        for name, website in BANKS:
 
-            is_featured = short_name in FEATURED
+            is_featured = name in FEATURED
 
-            priority = 1.3 if short_name == "Hamkorbank" else 1.25 if short_name == "Aloqabank" else 1
+            priority = (
+                1.3 if name == "Hamkorbank"
+                else 1.25 if name == "Aloqabank"
+                else 1
+            )
+
+            normalized = normalize_name(name)
 
             bank, was_created = Bank.objects.update_or_create(
-
-                short_name=short_name,
-
+                normalized_name=normalized,
                 defaults={
+                    "name": name,
+                    "short_name": name,
                     "website": website,
                     "is_active": True,
                     "is_featured": is_featured,
@@ -74,8 +84,12 @@ class Command(BaseCommand):
 
             if was_created:
                 created += 1
-                print(f"✔ Created: {short_name}")
+                print(f"✔ Created: {name}")
+            else:
+                updated += 1
+                print(f"♻️ Updated: {name}")
 
         print("")
-        print(f"Created banks: {created}")
-        print("Seed finished")
+        print(f"🆕 Created banks: {created}")
+        print(f"♻️ Updated banks: {updated}")
+        print("✅ Seed finished")

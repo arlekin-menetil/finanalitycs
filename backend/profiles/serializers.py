@@ -1,10 +1,11 @@
 from rest_framework import serializers
+
 from .models import (
     FinancialProfile,
     Income,
     Obligation,
     Employment,
-    Identity
+    Identity,
 )
 
 
@@ -15,18 +16,19 @@ from .models import (
 class IncomeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Income
-        fields = [
+        fields = (
             "id",
             "source",
             "amount",
             "created_at",
             "updated_at",
-        ]
-        read_only_fields = [
+        )
+
+        read_only_fields = (
             "id",
             "created_at",
             "updated_at",
-        ]
+        )
 
 
 # ============================
@@ -36,34 +38,36 @@ class IncomeSerializer(serializers.ModelSerializer):
 class ObligationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Obligation
-        fields = [
+        fields = (
             "id",
             "description",
             "monthly_payment",
             "created_at",
             "updated_at",
-        ]
-        read_only_fields = [
+        )
+
+        read_only_fields = (
             "id",
             "created_at",
             "updated_at",
-        ]
+        )
 
 
 # ============================
-# 💼 Employment Serializer
+# 💼 Legacy Employment Serializer
+# (оставляем для совместимости)
 # ============================
 
 class EmploymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employment
-        fields = [
+        fields = (
             "company_name",
             "position",
             "salary",
             "work_experience_months",
             "is_company_verified",
-        ]
+        )
 
 
 # ============================
@@ -73,14 +77,14 @@ class EmploymentSerializer(serializers.ModelSerializer):
 class IdentitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Identity
-        fields = [
+        fields = (
             "passport_series",
             "passport_number",
-        ]
+        )
 
 
 # ============================
-# 🧠 Financial Profile Serializer (FIXED)
+# 🧠 Financial Profile Serializer
 # ============================
 
 class FinancialProfileSerializer(serializers.ModelSerializer):
@@ -88,82 +92,119 @@ class FinancialProfileSerializer(serializers.ModelSerializer):
     incomes = IncomeSerializer(many=True, read_only=True)
     obligations = ObligationSerializer(many=True, read_only=True)
 
-    # 💣 KYC (старый способ)
-    employment = serializers.SerializerMethodField()
     identity = serializers.SerializerMethodField()
 
-    # 💣 НОВОЕ: прямые поля
-    full_name = serializers.CharField(read_only=True)
-    birth_date = serializers.DateField(read_only=True)
-    passport = serializers.CharField(read_only=True)
-    job_type = serializers.CharField(read_only=True)
-    experience = serializers.IntegerField(read_only=True)
-
-    income = serializers.DecimalField(max_digits=14, decimal_places=2, read_only=True)
-    expenses = serializers.DecimalField(max_digits=14, decimal_places=2, read_only=True)
-    credit_score = serializers.IntegerField(read_only=True)
-
-    is_profile_completed = serializers.BooleanField(read_only=True)
+    # legacy
+    employment = serializers.SerializerMethodField()
 
     class Meta:
         model = FinancialProfile
-        fields = [
-            # 💣 KYC (новое)
+
+        fields = (
+
+            # ======================
+            # KYC
+            # ======================
+
             "full_name",
             "birth_date",
             "passport",
             "job_type",
-            "experience",
 
-            # 💣 финансы (новое)
+            # ======================
+            # Employment
+            # ======================
+
+            "employment_document",
+            "company_name",
+            "company_inn",
+            "position",
+            "department",
+
+            "employment_start",
+            "employment_end",
+
+            "is_current_employee",
+
+            "employment_verified",
+
+            "employment_pinfl",
+
+            "work_experience_months",
+
+            # ======================
+            # Finance
+            # ======================
+
             "income",
             "expenses",
             "credit_score",
 
-            # === агрегаты ===
+            # ======================
+            # Aggregates
+            # ======================
+
             "monthly_income_total",
             "monthly_obligations_total",
             "net_balance",
             "dti_ratio",
 
-            # === статус ===
+            # ======================
+            # Status
+            # ======================
+
             "is_profile_completed",
 
-            # === system ===
+            # ======================
+            # System
+            # ======================
+
             "profile_version",
             "calculated_at",
 
-            # === relations ===
+            # ======================
+            # Relations
+            # ======================
+
             "incomes",
             "obligations",
 
-            # 💣 legacy (оставляем)
+            # ======================
+            # Legacy
+            # ======================
+
             "employment",
             "identity",
-        ]
+        )
 
         read_only_fields = fields
 
-    # ============================
-    # 💼 Employment getter
-    # ============================
+    # =====================================
+    # Legacy Employment
+    # =====================================
 
     def get_employment(self, obj):
+
         user = obj.user
 
         if hasattr(user, "employment"):
-            return EmploymentSerializer(user.employment).data
+            return EmploymentSerializer(
+                user.employment
+            ).data
 
         return None
 
-    # ============================
-    # 🪪 Identity getter
-    # ============================
+    # =====================================
+    # Identity
+    # =====================================
 
     def get_identity(self, obj):
+
         user = obj.user
 
         if hasattr(user, "identity"):
-            return IdentitySerializer(user.identity).data
+            return IdentitySerializer(
+                user.identity
+            ).data
 
         return None

@@ -1,6 +1,8 @@
 from rest_framework import viewsets, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.parsers import MultiPartParser, FormParser
 from django.db import transaction
 
 from .models import FinancialProfile, Income, Obligation
@@ -10,6 +12,7 @@ from .serializers import (
     ObligationSerializer
 )
 from profiles.services.financial_calculator import recalculate_profile
+from profiles.services.employment_parser import parse_employment_document
 
 
 # ==================================
@@ -58,7 +61,11 @@ class ProfileSetupAPIView(APIView):
         profile.birth_date = request.data.get("birth_date", profile.birth_date)
         profile.passport = request.data.get("passport", profile.passport)
         profile.job_type = request.data.get("job_type", profile.job_type)
-        profile.experience = request.data.get("experience", profile.experience)
+        work_experience = request.data.get("work_experience_months")
+
+        if work_experience is not None:
+            profile.work_experience_months = work_experience
+
 
         # ==================================
         # 💣 ФИНАНСЫ
@@ -92,6 +99,78 @@ class ProfileSetupAPIView(APIView):
             "is_profile_completed": True
         })
 
+# ==================================
+# 💼 EMPLOYMENT DOCUMENT UPLOAD
+# ==================================
+
+class EmploymentUploadAPIView(APIView):
+
+    permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    @transaction.atomic
+    def post(self, request):
+
+        profile = get_or_create_profile(request.user)
+
+        pdf = request.FILES.get("file")
+
+        if not pdf:
+            return Response(
+                {
+                    "detail": "PDF file is required."
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+
+            parsed = parse_employment_document(pdf)
+
+            profile.employment_document = pdf
+
+            profile.company_name = parsed.get("company_name", "")
+            profile.company_inn = parsed.get("company_inn", "")
+            profile.position = parsed.get("position", "")
+            profile.department = parsed.get("department", "")
+
+            profile.employment_start = parsed.get("employment_start")
+            profile.employment_end = parsed.get("employment_end")
+
+            profile.is_current_employee = parsed.get(
+                "is_current_employee",
+                False,
+            )
+
+            profile.work_experience_months = parsed.get(
+                "work_experience_months",
+                0,
+            )
+
+            profile.employment_verified = parsed.get(
+                "employment_verified",
+                False,
+            )
+
+            profile.employment_pinfl = parsed.get(
+                "employment_pinfl",
+                "",
+            )
+
+            profile.save()
+
+            serializer = FinancialProfileSerializer(profile)
+
+            return Response(serializer.data)
+
+        except Exception as e:
+
+            return Response(
+                {
+                    "detail": str(e)
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
 # ==================================
 # Income ViewSet (FULL CRUD)

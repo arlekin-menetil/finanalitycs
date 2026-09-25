@@ -1,147 +1,469 @@
 <script setup>
 
-import { onMounted, ref, nextTick } from "vue"
+import {
+  onMounted,
+  ref,
+  nextTick,
+  onBeforeUnmount,
+} from "vue"
+
 import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
+
 import api from "@/api/axios"
 
-import L from "leaflet"
-import "leaflet/dist/leaflet.css"
 
-// 💣 FIX ICONS (ВАЖНО ДЛЯ ПРОДА)
-import markerIcon from "leaflet/dist/images/marker-icon.png"
-import markerShadow from "leaflet/dist/images/marker-shadow.png"
+// ==========================================
+// 🔥 YANDEX MAPS
+// ==========================================
+const ymapsRef = ref(null)
 
-delete L.Icon.Default.prototype._getIconUrl
-L.Icon.Default.mergeOptions({
-  iconUrl: markerIcon,
-  shadowUrl: markerShadow,
-})
+const map = ref(null)
 
+const placemarks = ref([])
+
+let mapDestroyed = false
+
+
+// ==========================================
+// 🔥 ROUTE / I18N
+// ==========================================
 const { t } = useI18n()
+
 const route = useRoute()
 
+
+// ==========================================
+// 🔥 STATE
+// ==========================================
 const bankName = ref("")
+
 const branches = ref([])
-const map = ref(null)
-const markers = ref([])
+
 const activeBranch = ref(null)
 
+const loading = ref(true)
+
+const error = ref(false)
+
 
 // ==========================================
-// 🧠 TRANSLATE
+// 🔥 WAIT YANDEX
 // ==========================================
-function translateBranchName(name){
-  if(!name) return ""
-  return name.replace("Branch", t("branches.branch"))
+function waitForYandex(){
+
+  return new Promise((resolve) => {
+
+    const check = () => {
+
+      if (
+        window.ymaps
+        && window.ymaps.Map
+      ) {
+
+        resolve()
+
+      } else {
+
+        setTimeout(check, 200)
+      }
+    }
+
+    check()
+  })
 }
 
 
 // ==========================================
-// 🚀 LOAD
+// 🔥 TRANSLATE
+// ==========================================
+function translateBranchName(name){
+
+  if (!name) {
+    return t("branches.branch")
+  }
+
+  return name.replace(
+    "Branch",
+    t("branches.branch")
+  )
+}
+
+
+// ==========================================
+// 🔥 SAFE DESTROY
+// ==========================================
+function destroyMap(){
+
+  try {
+
+    if (map.value) {
+
+      map.value.geoObjects.removeAll()
+
+      map.value.destroy()
+
+      map.value = null
+    }
+
+  } catch(err){
+
+    console.warn(
+      "Map destroy error:",
+      err
+    )
+  }
+}
+
+
+// ==========================================
+// 🔥 LOAD
 // ==========================================
 async function loadBranches(){
 
-  try{
+  loading.value = true
 
-    const bankId = route.params.id
+  error.value = false
 
-    const res = await api.get(`/banks/${bankId}/branches/`)
-    const data = res.data
+  try {
 
-    bankName.value = data.bank || "Банк"
-    branches.value = data.branches || []
+    const bankId =
+      route.params.id
+
+    const res = await api.get(
+      `/banks/${bankId}/branches/`
+    )
+
+    const data =
+      res.data || {}
+
+    bankName.value =
+      data.bank
+      || "Банк"
+
+    // ==========================================
+    // 🔥 NORMALIZE + FILTER
+    // ==========================================
+    branches.value = (
+      data.branches
+      || []
+    )
+    .map((branch, index) => ({
+
+      id:
+        Number(branch.id || index),
+
+      name:
+        String(
+          branch.name
+          || "Филиал"
+        ),
+
+      address:
+        String(
+          branch.address
+          || ""
+        ),
+
+      city:
+        branch.city
+        || null,
+
+      phone:
+        branch.phone
+        || null,
+
+      working_hours:
+        branch.working_hours
+        || null,
+
+      lat:
+        Number(
+          branch.lat
+          || branch.latitude
+        ),
+
+      lng:
+        Number(
+          branch.lng
+          || branch.longitude
+        ),
+    }))
+
+    .filter(branch => (
+
+      typeof branch.lat === "number"
+      && typeof branch.lng === "number"
+
+      && !isNaN(branch.lat)
+      && !isNaN(branch.lng)
+
+      && isFinite(branch.lat)
+      && isFinite(branch.lng)
+
+      && branch.lat !== 0
+      && branch.lng !== 0
+
+    ))
 
     await nextTick()
-    initMap()
 
-  }catch(e){
+    await waitForYandex()
 
-    console.error("Branches load error:", e)
+    if (mapDestroyed) {
+      return
+    }
 
-  }
+    window.ymaps.ready(async () => {
 
-}
+      if (mapDestroyed) {
+        return
+      }
 
-
-// ==========================================
-// 🗺 INIT MAP
-// ==========================================
-function initMap(){
-
-  if(!branches.value.length) return
-
-  // 💣 RESET
-  markers.value = []
-
-  if(map.value){
-    map.value.remove()
-  }
-
-  map.value = L.map("map")
-
-  L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    { maxZoom:19 }
-  ).addTo(map.value)
-
-  const bounds=[]
-
-  branches.value.forEach(branch=>{
-
-    if(!branch.lat || !branch.lng) return
-
-    const marker = L.marker([branch.lat, branch.lng])
-      .addTo(map.value)
-      .bindPopup(`
-        <b>${bankName.value}</b><br>
-        ${translateBranchName(branch.name)}<br>
-        📍 ${branch.address || "-"}<br>
-        🕒 ${branch.working_hours || "09:00 - 18:00"}<br>
-        ${branch.phone ? "📞 " + branch.phone : ""}
-      `)
-
-    markers.value.push({
-      id: branch.id,
-      marker
+      await initMap()
     })
 
-    bounds.push([branch.lat, branch.lng])
+  } catch(e){
 
-  })
+    console.error(
+      "Branches load error:",
+      e
+    )
 
-  if(bounds.length){
-    map.value.fitBounds(bounds, { padding:[40,40] })
+    error.value = true
+
+  } finally {
+
+    loading.value = false
   }
-
 }
 
 
 // ==========================================
-// 🎯 FOCUS
+// 🔥 INIT MAP
+// ==========================================
+async function initMap(){
+
+  if (!ymapsRef.value) {
+    return
+  }
+
+  // ==========================================
+  // 🔥 DESTROY OLD
+  // ==========================================
+  destroyMap()
+
+  // ==========================================
+  // 🔥 CREATE MAP
+  // ==========================================
+  map.value = new window.ymaps.Map(
+    ymapsRef.value,
+    {
+      center: [
+        41.3111,
+        69.2797
+      ],
+
+      zoom: 11,
+
+      controls: [
+        "zoomControl"
+      ]
+    },
+    {
+      suppressMapOpenBlock: true
+    }
+  )
+
+  placemarks.value = []
+
+  // ==========================================
+  // 🔥 NO BRANCHES
+  // ==========================================
+  if (!branches.value.length) {
+
+    console.warn(
+      "No valid branches with coordinates"
+    )
+
+    return
+  }
+
+  // ==========================================
+  // 🔥 REMOVE VUE PROXY
+  // ==========================================
+  const plainBranches =
+    JSON.parse(
+      JSON.stringify(branches.value)
+    )
+
+  // ==========================================
+  // 🔥 MARKERS
+  // ==========================================
+  for (const branch of plainBranches) {
+
+    if (mapDestroyed) {
+      return
+    }
+
+    try {
+
+      // ==========================================
+      // 🔥 SAFE COORDS
+      // ==========================================
+      const coords = [
+
+        Number(branch.lat),
+
+        Number(branch.lng)
+      ]
+
+      // ==========================================
+      // 🔥 VALIDATE
+      // ==========================================
+      if (
+
+        !Array.isArray(coords)
+        || coords.length < 2
+
+        || isNaN(coords[0])
+        || isNaN(coords[1])
+
+      ) {
+
+        console.warn(
+          "Invalid coords:",
+          branch
+        )
+
+        continue
+      }
+
+      // ==========================================
+      // 🔥 SIMPLE PLACEMARK
+      // ==========================================
+      const placemark =
+        new window.ymaps.Placemark(
+          coords,
+          {}
+        )
+
+      placemark.branchId =
+        branch.id
+
+      // ==========================================
+      // 🔥 SAVE
+      // ==========================================
+      placemarks.value = [
+        ...placemarks.value,
+        placemark
+      ]
+
+      // ==========================================
+      // 🔥 ADD TO MAP
+      // ==========================================
+      map.value.geoObjects.add(
+        placemark
+      )
+
+    } catch(err){
+
+      console.error(
+        "Placemark error:",
+        branch,
+        err
+      )
+    }
+  }
+
+  // ==========================================
+  // 🔥 AUTO CENTER
+  // ==========================================
+  if (placemarks.value.length) {
+
+    try {
+
+      const first =
+        placemarks.value[0]
+
+      const coords =
+        first
+          ?.geometry
+          ?.getCoordinates?.()
+
+      if (
+        coords
+        && Array.isArray(coords)
+      ) {
+
+        map.value.setCenter(
+          coords
+        )
+      }
+
+    } catch(err){
+
+      console.warn(
+        "Center error:",
+        err
+      )
+    }
+  }
+}
+
+
+// ==========================================
+// 🔥 FOCUS
 // ==========================================
 function focusBranch(branch){
 
-  activeBranch.value = branch.id
+  activeBranch.value =
+    branch.id
 
-  if(!map.value || !branch.lat) return
-
-  map.value.setView(
-    [branch.lat, branch.lng],
-    16,
-    { animate:true }
-  )
-
-  const found = markers.value.find(m => m.id === branch.id)
-
-  if(found){
-    found.marker.openPopup()
+  if (
+    !map.value
+    || !branch.lat
+    || !branch.lng
+  ) {
+    return
   }
 
+  try {
+
+    map.value.setCenter([
+      Number(branch.lat),
+      Number(branch.lng)
+    ])
+
+  } catch(err){
+
+    console.warn(
+      "Focus error:",
+      err
+    )
+  }
 }
 
-onMounted(()=>{
+
+// ==========================================
+// 🔥 INIT
+// ==========================================
+onMounted(() => {
+
+  mapDestroyed = false
+
   loadBranches()
+})
+
+
+// ==========================================
+// 🔥 CLEANUP
+// ==========================================
+onBeforeUnmount(() => {
+
+  mapDestroyed = true
+
+  destroyMap()
 })
 
 </script>
@@ -151,47 +473,110 @@ onMounted(()=>{
 
 <div class="branches-page">
 
-<h1 class="title">
-🏦 {{ bankName }} — {{ t("branches.title") }}
-</h1>
+  <!-- ==========================================
+  🔥 TITLE
+  =========================================== -->
+  <h1 class="title">
 
-<div class="layout">
+    🏦
 
-<!-- LIST -->
-<div class="list">
+    {{ bankName }}
 
-<div
-v-for="branch in branches"
-:key="branch.id"
-class="branch-card"
-:class="{ active: activeBranch === branch.id }"
-@click="focusBranch(branch)"
->
+    —
 
-<h3>
-{{ translateBranchName(branch.name) }}
-</h3>
+    {{ t("branches.title") }}
 
-<p class="address">
-📍 {{ branch.address || "-" }}
-</p>
+  </h1>
 
-<p v-if="branch.working_hours" class="hours">
-🕒 {{ branch.working_hours }}
-</p>
 
-<p v-if="branch.phone" class="phone">
-📞 {{ branch.phone }}
-</p>
+  <!-- ==========================================
+  🔥 STATES
+  =========================================== -->
+  <div
+    v-if="loading"
+    class="state"
+  >
+    Загрузка филиалов...
+  </div>
 
-</div>
+  <div
+    v-else-if="error"
+    class="state error"
+  >
+    Ошибка загрузки филиалов
+  </div>
 
-</div>
 
-<!-- MAP -->
-<div id="map" class="map"></div>
+  <!-- ==========================================
+  🔥 CONTENT
+  =========================================== -->
+  <div
+    v-else
+    class="layout"
+  >
 
-</div>
+    <!-- ==========================================
+    🔥 LIST
+    =========================================== -->
+    <div class="list">
+
+      <div
+        v-for="branch in branches"
+        :key="branch.id"
+        class="branch-card"
+        :class="{
+          active:
+            activeBranch === branch.id
+        }"
+        @click="focusBranch(branch)"
+      >
+
+        <h3>
+          {{
+            translateBranchName(
+              branch.name
+            )
+          }}
+        </h3>
+
+        <p class="address">
+          📍
+          {{
+            branch.address
+            || "-"
+          }}
+        </p>
+
+        <p
+          v-if="branch.working_hours"
+          class="hours"
+        >
+          🕒
+          {{ branch.working_hours }}
+        </p>
+
+        <p
+          v-if="branch.phone"
+          class="phone"
+        >
+          📞
+          {{ branch.phone }}
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- ==========================================
+    🔥 MAP
+    =========================================== -->
+    <div
+      ref="ymapsRef"
+      class="map"
+    ></div>
+
+  </div>
 
 </div>
 
@@ -201,100 +586,228 @@ class="branch-card"
 <style scoped>
 
 .branches-page{
-max-width:1200px;
-margin:auto;
-padding:30px;
+
+  max-width:1400px;
+
+  margin:auto;
+
+  padding:30px;
 }
+
 
 .title{
-font-size:28px;
-font-weight:700;
-margin-bottom:20px;
+
+  font-size:30px;
+
+  font-weight:800;
+
+  margin-bottom:24px;
+
+  color:#111827;
 }
+
 
 .layout{
-display:grid;
-grid-template-columns:320px 1fr;
-gap:20px;
+
+  display:grid;
+
+  grid-template-columns:
+    340px
+    1fr;
+
+  gap:20px;
 }
 
-/* MAP */
+
+/* ==========================================
+🔥 MAP
+========================================== */
 
 .map{
-height:520px;
-width:100%;
-border-radius:14px;
-overflow:hidden;
+
+  width:100%;
+
+  height:620px;
+
+  border-radius:20px;
+
+  overflow:hidden;
+
+  border:1px solid #e5e7eb;
+
+  background:#fff;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.06);
 }
 
-/* LIST */
+
+/* ==========================================
+🔥 LIST
+========================================== */
 
 .list{
-overflow-y:auto;
-max-height:520px;
+
+  overflow-y:auto;
+
+  max-height:620px;
+
+  padding-right:6px;
 }
 
-/* CARD */
+
+/* ==========================================
+🔥 CARD
+========================================== */
 
 .branch-card{
-background:#f3f4f6;
-padding:16px;
-border-radius:12px;
-margin-bottom:12px;
-cursor:pointer;
-transition:.25s;
-border:1px solid #e5e7eb;
+
+  background:#f9fafb;
+
+  padding:18px;
+
+  border-radius:18px;
+
+  margin-bottom:14px;
+
+  cursor:pointer;
+
+  transition:all .2s ease;
+
+  border:1px solid #e5e7eb;
 }
+
 
 .branch-card:hover{
-background:#ffffff;
-transform:translateY(-2px);
-box-shadow:0 6px 16px rgba(0,0,0,0.08);
+
+  background:#ffffff;
+
+  transform:translateY(-2px);
+
+  border-color:#bfdbfe;
+
+  box-shadow:
+    0 8px 20px rgba(37,99,235,0.08);
 }
 
-/* 💣 ACTIVE */
+
+/* ==========================================
+🔥 ACTIVE
+========================================== */
 
 .branch-card.active{
-background:#e0f2fe;
-border-color:#3b82f6;
+
+  background:#eff6ff;
+
+  border-color:#3b82f6;
 }
 
-/* TEXT */
+
+/* ==========================================
+🔥 TEXT
+========================================== */
+
+.branch-card h3{
+
+  font-size:16px;
+
+  font-weight:700;
+
+  margin-bottom:10px;
+
+  color:#111827;
+}
+
 
 .address{
-font-size:14px;
-margin-top:6px;
-color:#374151;
+
+  font-size:14px;
+
+  line-height:1.6;
+
+  color:#374151;
+
+  margin-bottom:8px;
 }
+
 
 .hours{
-font-size:13px;
-margin-top:4px;
-color:#6b7280;
+
+  font-size:13px;
+
+  color:#6b7280;
+
+  margin-bottom:6px;
 }
+
 
 .phone{
-font-size:13px;
-margin-top:4px;
-color:#2563eb;
+
+  font-size:13px;
+
+  color:#2563eb;
 }
 
-/* MOBILE */
 
-@media (max-width:900px){
+/* ==========================================
+🔥 STATES
+========================================== */
 
-.layout{
-grid-template-columns:1fr;
+.state{
+
+  text-align:center;
+
+  padding:60px;
+
+  font-size:15px;
 }
 
-.list{
-max-height:none;
+
+.error{
+
+  color:#ef4444;
 }
 
-.map{
-height:420px;
+
+/* ==========================================
+🔥 MOBILE
+========================================== */
+
+@media (max-width:960px){
+
+  .layout{
+
+    grid-template-columns:1fr;
+  }
+
+  .list{
+
+    max-height:360px;
+  }
+
+  .map{
+
+    height:500px;
+  }
 }
 
+
+@media (max-width:768px){
+
+  .branches-page{
+
+    padding:20px;
+  }
+
+  .title{
+
+    font-size:24px;
+  }
+
+  .map{
+
+    height:420px;
+  }
 }
 
 </style>

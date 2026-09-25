@@ -1,23 +1,41 @@
+import time
 from banks.data_sources import load_all_sources
 
 
 def run_all():
-    """
-    💣 Главный pipeline загрузки данных
+    print("\n" + "=" * 50)
+    print("🚀 UNIFIED DATA PIPELINE START")
+    print("=" * 50)
 
-    Теперь:
-    - не парсим всё подряд
-    - используем единый слой интеграции
-    """
+    start_time = time.time()
 
-    print("🚀 UNIFIED DATA PIPELINE")
+    total = 0
+    status = "OK"
 
     try:
+        print("🔄 Loading all sources...")
         total = load_all_sources()
+
+        print(f"✅ Sources loaded: {total}")
+
     except Exception as e:
-        print("❌ data sources error:", e)
-        total = 0
+        status = "FAILED"
+        print("\n❌ PIPELINE ERROR:", str(e))
 
-    print(f"\n💣 TOTAL CREATED: {total}")
+    duration = round(time.time() - start_time, 2)
 
-    return total
+    print("\n" + "=" * 50)
+    print("📊 PIPELINE SUMMARY")
+    print("=" * 50)
+
+    print(f"🔥 STATUS: {status}")
+    print(f"💣 TOTAL CREATED/UPDATED: {total}")
+    print(f"⏱ EXECUTION TIME: {duration}s")
+
+    print("=" * 50 + "\n")
+
+    return {
+        "status": status,
+        "total": total,
+        "duration": duration
+    }

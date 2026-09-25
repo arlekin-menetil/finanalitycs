@@ -11,69 +11,210 @@ from rest_framework_simplejwt.views import (
 )
 
 from accounts.views import BankAccountViewSet
-from transactions.views import TransferAPIView, TransactionListAPIView
-from credit_analysis.views import UploadCreditReportAPIView
+from transactions.views import (
+    TransferAPIView,
+    TransactionListAPIView,
+)
 from users.views import MeAPIView
 
+from banks.views import (
+    BankProductsAPIView,
+    AggregatedProductsAPIView,
+    BestBankProductsAPIView,
+    BankProductDetailAPIView,
+    ProductsBySourceAPIView,
+)
 
 # ==========================================
-# 🧠 ROUTER
+# ROUTER
 # ==========================================
+
 router = DefaultRouter()
-router.register(r"accounts", BankAccountViewSet, basename="accounts")
 
+router.register(
+    r"accounts",
+    BankAccountViewSet,
+    basename="accounts",
+)
 
 # ==========================================
-# 💣 HEALTH CHECK
+# HEALTH CHECK
 # ==========================================
+
 def health_check(request):
+
     return JsonResponse({
+
         "status": "ok",
         "service": "bankanalytics",
-        "version": "2.0"
+        "version": "2.0",
+
     })
 
 
 # ==========================================
-# 🚀 URLS
+# URLS
 # ==========================================
+
 urlpatterns = [
 
-    # ================= SYSTEM =================
-    path("", health_check),
-    path("admin/", admin.site.urls),
+    # ==========================================
+    # SYSTEM
+    # ==========================================
 
-    # ================= AUTH =================
-    path("api/auth/", include("users.urls")),
-    path("api/auth/me/", MeAPIView.as_view()),
+    path(
+        "",
+        health_check,
+    ),
 
-    # ================= JWT =================
-    path("api/token/", TokenObtainPairView.as_view()),
-    path("api/token/refresh/", TokenRefreshView.as_view()),
+    path(
+        "admin/",
+        admin.site.urls,
+    ),
 
-    # ================= ACCOUNTS =================
-    path("api/accounts/", include(router.urls)),
+    # ==========================================
+    # AUTH
+    # ==========================================
 
-    # ================= TRANSACTIONS =================
-    path("api/transfer/", TransferAPIView.as_view()),
-    path("api/transactions/", TransactionListAPIView.as_view()),
+    path(
+        "api/auth/",
+        include("users.urls"),
+    ),
 
-    # ================= PROFILE =================
-    path("api/profile/", include("profiles.urls")),
+    path(
+        "api/auth/me/",
+        MeAPIView.as_view(),
+    ),
 
-    # ================= SCORING =================
-    path("api/scoring/", include("scoring.urls")),
+    # ==========================================
+    # JWT
+    # ==========================================
 
-    # ================= BANKS =================
-    path("api/banks/", include("banks.urls")),
+    path(
+        "api/token/",
+        TokenObtainPairView.as_view(),
+    ),
 
-    # ================= CREDIT REPORT =================
-    path("api/credit/upload/", UploadCreditReportAPIView.as_view()),
+    path(
+        "api/token/refresh/",
+        TokenRefreshView.as_view(),
+    ),
+
+    # ==========================================
+    # ACCOUNTS
+    # ==========================================
+
+    path(
+        "api/accounts/",
+        include(router.urls),
+    ),
+
+    # ==========================================
+    # TRANSACTIONS
+    # ==========================================
+
+    path(
+        "api/transfer/",
+        TransferAPIView.as_view(),
+    ),
+
+    path(
+        "api/transactions/",
+        TransactionListAPIView.as_view(),
+    ),
+
+    # ==========================================
+    # PROFILE
+    # ==========================================
+
+    path(
+        "api/profile/",
+        include("profiles.urls"),
+    ),
+
+    # ==========================================
+    # SCORING
+    # ==========================================
+
+    path(
+        "api/scoring/",
+        include("scoring.urls"),
+    ),
+
+    # ==========================================
+    # BANKS
+    # ==========================================
+
+    path(
+        "api/banks/",
+        include("banks.urls"),
+    ),
+
+    # ==========================================
+    # REPORTS
+    # ==========================================
+
+    path(
+        "api/reports/",
+        include("reports.urls"),
+    ),
+
+    # ==========================================
+    # CREDIT ANALYSIS
+    # ==========================================
+
+    path(
+        "api/credit-analysis/",
+        include("credit_analysis.urls"),
+    ),
+
+    # ==========================================
+    # PRODUCTS
+    # ==========================================
+
+    path(
+        "api/products/",
+        BankProductsAPIView.as_view(),
+    ),
+
+    path(
+        "api/products/<int:product_id>/",
+        BankProductDetailAPIView.as_view(),
+    ),
+
+    path(
+        "api/products/by-source/",
+        ProductsBySourceAPIView.as_view(),
+    ),
+
+    path(
+        "api/aggregated/",
+        AggregatedProductsAPIView.as_view(),
+    ),
+
+    path(
+        "api/best-products/",
+        BestBankProductsAPIView.as_view(),
+    ),
+
+    # ==========================================
+    # FINANCE CALENDAR
+    # ==========================================
+
+    path(
+        "api/calendar/",
+        include("finance_calendar.urls"),
+    ),
+
 ]
 
+# ==========================================
+# MEDIA
+# ==========================================
 
-# ==========================================
-# 📂 MEDIA (DEV ONLY)
-# ==========================================
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+    urlpatterns += static(
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT,
+    )

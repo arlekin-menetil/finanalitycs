@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 import time
+import re
 
 
 BASE_URL = "https://depozit.uz"
@@ -17,6 +18,20 @@ URLS = [
 ]
 
 
+# =========================
+# UTILS
+# =========================
+
+def extract_rate(text):
+    if not text:
+        return None
+
+    match = re.search(r"(\d+[.,]?\d*)", text.replace(" ", ""))
+    if match:
+        return float(match.group(1).replace(",", "."))
+    return None
+
+
 def get_soup(url):
     headers = {"User-Agent": "Mozilla/5.0"}
     try:
@@ -27,6 +42,10 @@ def get_soup(url):
         print(f"❌ Ошибка: {url} -> {e}")
         return None
 
+
+# =========================
+# LIST
+# =========================
 
 def parse_list(url):
     soup = get_soup(url)
@@ -53,6 +72,10 @@ def parse_list(url):
     return results
 
 
+# =========================
+# DETAIL
+# =========================
+
 def parse_detail(url):
     soup = get_soup(url)
     if not soup:
@@ -78,8 +101,12 @@ def parse_detail(url):
     return data
 
 
-def parse_depozit():
-    print("🚀 FULL parsing depozit 💣")
+# =========================
+# MAIN (ETL 💣)
+# =========================
+
+def load_depozit_data():
+    print("🚀 FULL parsing depozit (ETL) 💣")
 
     all_credits = []
     seen_links = set()
@@ -110,13 +137,20 @@ def parse_depozit():
 
         detail = parse_detail(credit["link"])
 
+        rate = extract_rate(detail.get("ставка"))
+
         result = {
+            "bank": "Unknown",  # depozit не всегда даёт банк
             "name": credit["name"],
-            "link": credit["link"],
-            "rate": detail.get("ставка"),
+            "rate": rate,
             "amount": detail.get("сумма кредита"),
             "term": detail.get("срок"),
+            "source": "depozit",
+            "url": credit["link"],
         }
+
+        if not result["name"]:
+            continue
 
         final_results.append(result)
 

@@ -1,4 +1,5 @@
 from decimal import Decimal, ROUND_HALF_UP
+
 from django.db import transaction
 from django.db.models import Sum
 from django.utils import timezone
@@ -7,66 +8,172 @@ from profiles.models import (
     FinancialProfile,
     FinancialProfileHistory,
     Income,
-    Obligation
+    Obligation,
 )
+
+from credit_analysis.models import CreditReport
 
 
 @transaction.atomic
 def recalculate_profile(profile: FinancialProfile):
     """
-    Полный пересчёт финансового профиля.
-    Создаёт snapshot перед обновлением.
+    Пересчет финансового профиля.
+
+    Источник доходов:
+
+    1. Income
+    2. Infokredit (если Income отсутствует)
+    3. Поле profile.income
+
+    Источник обязательств:
+
+    1. Obligation
+    2. Поле profile.expenses
     """
 
-    # === 1. Считаем суммы через SQL ===
-    income_agg = Income.objects.filter(profile=profile).aggregate(
-        total=Sum("amount")
+    # =====================================================
+    # CREDIT REPORT
+    # =====================================================
+
+    credit_report = (
+        CreditReport.objects.filter(
+            user=profile.user,
+            parsed=True,
+        )
+        .order_by("-created_at")
+        .first()
     )
 
-    obligation_agg = Obligation.objects.filter(profile=profile).aggregate(
-        total=Sum("monthly_payment")
+    # =====================================================
+    # ДОХОДЫ
+    # =====================================================
+
+    income_total = (
+        Income.objects.filter(
+            profile=profile
+        ).aggregate(
+            total=Sum("amount")
+        )["total"]
     )
 
-    total_income = income_agg["total"] or Decimal("0.00")
-    total_obligations = obligation_agg["total"] or Decimal("0.00")
+    if income_total is None:
 
-    # === 2. Net balance ===
-    net_balance = total_income - total_obligations
+        if (
+            credit_report
+            and credit_report.extracted_income > 0
+        ):
 
-    # === 3. DTI calculation ===
-    if total_income == Decimal("0.00"):
-        dti = Decimal("0.00")
-    else:
-        dti = (
-            (total_obligations / total_income) * Decimal("100")
-        ).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+            income_total = Decimal(
+                credit_report.extracted_income
+            )
 
-    # === 4. Snapshot (только если это не первый расчёт) ===
-    if profile.calculated_at is not None:
-        FinancialProfileHistory.objects.create(
-            profile=profile,
-            monthly_income_total=profile.monthly_income_total,
-            monthly_obligations_total=profile.monthly_obligations_total,
-            net_balance=profile.net_balance,
-            dti_ratio=profile.dti_ratio,
-            version=profile.profile_version,
-            calculated_at=profile.calculated_at,
+        else:
+
+            income_total = Decimal(
+                profile.income or 0
+            )
+
+    income_total = max(
+        Decimal("0"),
+        income_total,
+    )
+
+    # =====================================================
+    # ОБЯЗАТЕЛЬСТВА
+    # =====================================================
+
+    obligation_total = (
+        Obligation.objects.filter(
+            profile=profile
+        ).aggregate(
+            total=Sum("monthly_payment")
+        )["total"]
+    )
+
+    if obligation_total is None:
+
+        obligation_total = Decimal(
+            profile.expenses or 0
         )
 
-    # === 5. Обновляем профиль ===
-    profile.monthly_income_total = total_income
-    profile.monthly_obligations_total = total_obligations
+    obligation_total = max(
+        Decimal("0"),
+        obligation_total,
+    )
+
+    # =====================================================
+    # NET BALANCE
+    # =====================================================
+
+    net_balance = income_total - obligation_total
+
+    # =====================================================
+    # DTI
+    # =====================================================
+
+    if income_total > 0:
+
+        dti = (
+            obligation_total
+            / income_total
+            * Decimal("100")
+        ).quantize(
+            Decimal("0.01"),
+            rounding=ROUND_HALF_UP,
+        )
+
+    else:
+
+        dti = Decimal("0.00")
+
+    # =====================================================
+    # HISTORY SNAPSHOT
+    # =====================================================
+
+    if profile.calculated_at:
+
+        FinancialProfileHistory.objects.create(
+
+            profile=profile,
+
+            monthly_income_total=profile.monthly_income_total,
+
+            monthly_obligations_total=profile.monthly_obligations_total,
+
+            net_balance=profile.net_balance,
+
+            dti_ratio=profile.dti_ratio,
+
+            version=profile.profile_version,
+
+            calculated_at=profile.calculated_at,
+
+        )
+
+    # =====================================================
+    # UPDATE PROFILE
+    # =====================================================
+
+    profile.monthly_income_total = income_total
+
+    profile.monthly_obligations_total = obligation_total
+
     profile.net_balance = net_balance
+
     profile.dti_ratio = dti
+
     profile.profile_version += 1
+
     profile.calculated_at = timezone.now()
 
-    profile.save(update_fields=[
-        "monthly_income_total",
-        "monthly_obligations_total",
-        "net_balance",
-        "dti_ratio",
-        "profile_version",
-        "calculated_at",
-        "updated_at"
-    ])
+    profile.save(
+        update_fields=[
+            "monthly_income_total",
+            "monthly_obligations_total",
+            "net_balance",
+            "dti_ratio",
+            "profile_version",
+            "calculated_at",
+            "updated_at",
+        ]
+    )
