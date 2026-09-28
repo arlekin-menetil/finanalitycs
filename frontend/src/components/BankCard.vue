@@ -66,7 +66,7 @@
         v-if="bank.is_online"
         class="tag online"
       >
-        ⚡ Онлайн
+        ⚡ {{ t("recommendations.online") }}
       </span>
 
       <span class="tag type">
@@ -91,7 +91,7 @@
 
       <div class="rate-label">
 
-        Процентная ставка
+        {{ t("recommendations.interest") }}
 
       </div>
 
@@ -106,7 +106,7 @@
       <div class="stat">
 
         <span>
-          Одобрение
+          {{ t("recommendations.approval") }}
         </span>
 
         <strong>
@@ -118,7 +118,7 @@
       <div class="stat">
 
         <span>
-          Сумма
+          {{ t("recommendations.loanLimit") }}
         </span>
 
         <strong>
@@ -130,7 +130,7 @@
       <div class="stat">
 
         <span>
-          Срок
+          {{ t("recommendations.term") }}
         </span>
 
         <strong>
@@ -177,14 +177,14 @@
         class="apply-btn"
         @click="handleApply"
       >
-        Оформить
+        {{ t("recommendations.applyOnline") }}
       </button>
 
       <button
         class="details-btn"
         @click="openDetails"
       >
-        Подробнее
+        {{ t("recommendations.details") }}
       </button>
 
     </div>
@@ -204,8 +204,20 @@ import {
 } from "vue-router"
 
 import {
+  useI18n
+} from "vue-i18n"
+
+import {
   useRecommendationsStore
 } from "@/stores/recommendations"
+
+// ==========================================
+// 💣 I18N
+// ==========================================
+const {
+  t,
+  locale
+} = useI18n()
 
 // ==========================================
 // 💣 PROPS
@@ -237,7 +249,7 @@ const bankName = computed(() => {
 
     props.bank.bank ||
 
-    "Банк"
+    t("common.bank")
   )
 })
 
@@ -252,7 +264,7 @@ const productName = computed(() => {
 
     props.bank.name ||
 
-    "Кредитный продукт"
+    t("recommendations.product")
   )
 })
 
@@ -327,9 +339,15 @@ const formattedLimit = computed(() => {
     return "—"
   }
 
+  const localeMap = {
+    ru: "ru-RU",
+    en: "en-US",
+    uz: "uz-UZ",
+  }
+
   return new Intl.NumberFormat(
 
-    "ru-RU"
+    localeMap[locale.value] || "ru-RU"
 
   ).format(value)
 })
@@ -363,25 +381,28 @@ const productTypeLabel = computed(() => {
 
   if (type === "mortgage") {
 
-    return "🏠 Ипотека"
+    return `🏠 ${t("recommendations.filters.mortgage")}`
   }
 
   if (type === "micro") {
 
-    return "💸 Микрозайм"
+    return `💸 ${t("recommendations.filters.micro")}`
   }
 
   if (type === "auto") {
 
-    return "🚗 Автокредит"
+    return `🚗 ${t("recommendations.filters.auto")}`
   }
 
-  if (type === "business") {
+  if (
+    type === "business" ||
+    type === "business_credit"
+  ) {
 
-    return "🏢 Бизнес"
+    return `🏢 ${t("recommendations.filters.businessCredit")}`
   }
 
-  return "💳 Кредит"
+  return `💳 ${t("recommendations.filters.loans")}`
 })
 
 // ==========================================

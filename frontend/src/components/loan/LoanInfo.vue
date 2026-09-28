@@ -1,5 +1,7 @@
 <script setup>
 
+import { useI18n } from "vue-i18n"
+
 defineProps({
   product: {
     type: Object,
@@ -7,23 +9,39 @@ defineProps({
   }
 })
 
+const { t, locale } = useI18n()
+
+// ==========================================
+// LOAN TYPE
+// ==========================================
+
 function getLoanType(type) {
 
   const map = {
-    micro: "Микрозайм",
-    consumer: "Потребительский кредит",
-    mortgage: "Ипотека",
-    auto: "Автокредит",
-    business: "Бизнес-кредит",
-    education: "Образовательный кредит",
-    green: "Зелёный кредит",
-    overdraft: "Овердрафт",
-    loan: "Кредит"
+    micro: "micro",
+    consumer: "consumer",
+    mortgage: "mortgage",
+    auto: "auto",
+    business: "business",
+    business_credit: "business",
+    education: "education",
+    green: "green",
+    overdraft: "overdraft",
+    loan: "loan"
   }
 
-  return map[type] || type || "Не указан"
+  const key = map[type]
 
+  if (!key) {
+    return type || t("loanInfo.notSpecified")
+  }
+
+  return t(`loanInfo.loanTypes.${key}`)
 }
+
+// ==========================================
+// FORMAT AMOUNT
+// ==========================================
 
 function formatAmount(value) {
 
@@ -33,17 +51,29 @@ function formatAmount(value) {
     !amount ||
     amount <= 0
   ) {
-    return "Не указана"
+    return t("loanInfo.amountNotSpecified")
   }
+
+  const localeMap = {
+    ru: "ru-RU",
+    en: "en-US",
+    uz: "uz-UZ"
+  }
+
+  const currentLocale =
+    localeMap[locale.value] || "ru-RU"
 
   return (
     new Intl.NumberFormat(
-      "ru-RU"
+      currentLocale
     ).format(amount)
     + " UZS"
   )
-
 }
+
+// ==========================================
+// FORMAT TERM
+// ==========================================
 
 function formatTerm(term) {
 
@@ -52,7 +82,7 @@ function formatTerm(term) {
     term === undefined ||
     term === ""
   ) {
-    return "Не указан"
+    return t("loanInfo.notSpecified")
   }
 
   const months = Number(term)
@@ -64,7 +94,7 @@ function formatTerm(term) {
   }
 
   if (months < 12) {
-    return `${months} мес.`
+    return `${months} ${t("loanInfo.months")}`
   }
 
   if (months % 12 === 0) {
@@ -72,19 +102,13 @@ function formatTerm(term) {
     const years = months / 12
 
     if (years === 1) {
-      return "1 год"
+      return `1 ${t("loanInfo.year")}`
     }
 
-    if (years >= 2 && years <= 4) {
-      return `${years} года`
-    }
-
-    return `${years} лет`
-
+    return `${years} ${t("loanInfo.years")}`
   }
 
-  return `${months} мес.`
-
+  return `${months} ${t("loanInfo.months")}`
 }
 
 </script>
@@ -94,10 +118,14 @@ function formatTerm(term) {
 <div class="card">
 
   <h3>
-    📋 Основные параметры
+    📋 {{ t("loanInfo.title") }}
   </h3>
 
   <div class="grid">
+
+    <!-- ======================================
+         LOAN TYPE
+    ======================================= -->
 
     <div class="item">
 
@@ -106,14 +134,22 @@ function formatTerm(term) {
       </div>
 
       <div class="label">
-        Тип кредита
+        {{ t("loanInfo.loanType") }}
       </div>
 
       <div class="value">
-        {{ getLoanType(product?.loan_type) }}
+        {{
+          getLoanType(
+            product?.loan_type
+          )
+        }}
       </div>
 
     </div>
+
+    <!-- ======================================
+         BANK
+    ======================================= -->
 
     <div class="item">
 
@@ -122,18 +158,22 @@ function formatTerm(term) {
       </div>
 
       <div class="label">
-        Банк
+        {{ t("loanInfo.bank") }}
       </div>
 
       <div class="value">
         {{
           product?.bank?.name ||
           product?.bank_name ||
-          "Не указан"
+          t("loanInfo.notSpecified")
         }}
       </div>
 
     </div>
+
+    <!-- ======================================
+         MAXIMUM AMOUNT
+    ======================================= -->
 
     <div class="item">
 
@@ -142,7 +182,7 @@ function formatTerm(term) {
       </div>
 
       <div class="label">
-        Максимальная сумма
+        {{ t("loanInfo.maxAmount") }}
       </div>
 
       <div class="value">
@@ -156,6 +196,10 @@ function formatTerm(term) {
 
     </div>
 
+    <!-- ======================================
+         SOURCE
+    ======================================= -->
+
     <div class="item">
 
       <div class="icon">
@@ -163,13 +207,13 @@ function formatTerm(term) {
       </div>
 
       <div class="label">
-        Источник
+        {{ t("loanInfo.source") }}
       </div>
 
       <div class="value">
         {{
           product?.source_name ||
-          "Не указан"
+          t("loanInfo.notSpecified")
         }}
       </div>
 

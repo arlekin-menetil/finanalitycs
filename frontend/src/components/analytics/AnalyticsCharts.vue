@@ -1,11 +1,14 @@
 <script setup>
 import {
   Bar,
-  Line
+  Line,
 } from "vue-chartjs"
+
+import { useI18n } from "vue-i18n"
 
 import "chart.js/auto"
 
+const { t } = useI18n()
 
 // =====================================================
 // PROPS
@@ -19,9 +22,8 @@ defineProps({
 
   interestData: {
     type: Object,
-    required: true
+    required: true,
   },
-
 
   // ---------------------------------------------------
   // Кредитные лимиты
@@ -29,9 +31,8 @@ defineProps({
 
   loanData: {
     type: Object,
-    required: true
+    required: true,
   },
-
 
   // ---------------------------------------------------
   // AI-рейтинг
@@ -39,9 +40,8 @@ defineProps({
 
   scoreData: {
     type: Object,
-    required: true
+    required: true,
   },
-
 
   // ---------------------------------------------------
   // Количество продуктов
@@ -49,9 +49,8 @@ defineProps({
 
   productCountData: {
     type: Object,
-    required: true
+    required: true,
   },
-
 
   // ---------------------------------------------------
   // Способы оформления
@@ -59,9 +58,8 @@ defineProps({
 
   openingMethodsData: {
     type: Object,
-    required: true
+    required: true,
   },
-
 
   // ---------------------------------------------------
   // Общие настройки
@@ -69,8 +67,8 @@ defineProps({
 
   chartOptions: {
     type: Object,
-    required: true
-  }
+    required: true,
+  },
 
 })
 </script>
@@ -94,14 +92,15 @@ defineProps({
         </div>
 
         <div>
+
           <h2>
-            Процентные ставки
+            {{ t("analytics.charts.interestTitle") }}
           </h2>
 
           <p>
-            Сравнение процентных ставок
-            банковских продуктов
+            {{ t("analytics.charts.interestDescription") }}
           </p>
+
         </div>
 
       </div>
@@ -132,13 +131,13 @@ defineProps({
         </div>
 
         <div>
+
           <h2>
-            Кредитные лимиты
+            {{ t("analytics.charts.limitsTitle") }}
           </h2>
 
           <p>
-            Максимальные суммы
-            финансирования
+            {{ t("analytics.charts.limitsDescription") }}
           </p>
 
         </div>
@@ -171,13 +170,13 @@ defineProps({
         </div>
 
         <div>
+
           <h2>
-            AI-рейтинг продуктов
+            {{ t("analytics.charts.aiTitle") }}
           </h2>
 
           <p>
-            Средний ranking score
-            Recommendation Engine
+            {{ t("analytics.charts.aiDescription") }}
           </p>
 
         </div>
@@ -210,13 +209,13 @@ defineProps({
         </div>
 
         <div>
+
           <h2>
-            Банковские продукты
+            {{ t("analytics.charts.productsTitle") }}
           </h2>
 
           <p>
-            Количество доступных
-            продуктов по банкам
+            {{ t("analytics.charts.productsDescription") }}
           </p>
 
         </div>
@@ -249,13 +248,13 @@ defineProps({
         </div>
 
         <div>
+
           <h2>
-            Способы оформления
+            {{ t("analytics.charts.openingTitle") }}
           </h2>
 
           <p>
-            Онлайн, отделение
-            или оба варианта
+            {{ t("analytics.charts.openingDescription") }}
           </p>
 
         </div>

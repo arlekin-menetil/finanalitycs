@@ -1,6 +1,7 @@
 <script setup>
 
 import { computed } from "vue"
+import { useI18n } from "vue-i18n"
 
 const props = defineProps({
   product: {
@@ -8,6 +9,8 @@ const props = defineProps({
     default: () => ({})
   }
 })
+
+const { t } = useI18n()
 
 // ==========================================
 // 📄 CLEAN DESCRIPTION
@@ -204,13 +207,78 @@ const fields = computed(() => {
 })
 
 // ==========================================
+// 📄 TRANSLATED LABELS
+// ==========================================
+
+const translatedFields = computed(() => {
+
+  return fields.value.map(item => {
+
+    const labelMap = {
+
+      "Последнее обновление информации":
+        "lastUpdate",
+
+      "Процентная ставка (%)":
+        "interestRate",
+
+      "Сумма":
+        "amount",
+
+      "Срок":
+        "term",
+
+      "Уплата процентов":
+        "interestPayment",
+
+      "Валюта":
+        "currency",
+
+      "Льготный период":
+        "gracePeriod",
+
+      "Первоначальный взнос":
+        "downPayment",
+
+      "Открытие":
+        "opening",
+
+      "Обеспечение по кредиту":
+        "collateral",
+
+      "Возможные формы обеспечения":
+        "collateralTypes",
+
+      "Необходимые документы":
+        "requiredDocuments",
+
+    }
+
+    const key =
+      labelMap[item.label]
+
+    return {
+
+      ...item,
+
+      label: key
+        ? t(`loanDescription.fields.${key}`)
+        : item.label,
+
+    }
+
+  })
+
+})
+
+// ==========================================
 // 📄 HELPERS
 // ==========================================
 
 const hasFields = computed(() => {
 
   return (
-    fields.value.length > 0
+    translatedFields.value.length > 0
   )
 
 })
@@ -245,7 +313,7 @@ const shortDescription = computed(() => {
 <div class="card">
 
   <h3>
-    📋 Условия кредита
+    📋 {{ t("loanDescription.title") }}
   </h3>
 
   <div
@@ -254,7 +322,7 @@ const shortDescription = computed(() => {
   >
 
     <div
-      v-for="item in fields"
+      v-for="item in translatedFields"
       :key="item.label"
       class="detail-item"
     >
@@ -285,7 +353,7 @@ const shortDescription = computed(() => {
     class="empty-description"
   >
 
-    Описание продукта пока не загружено
+    {{ t("loanDescription.empty") }}
 
   </div>
 

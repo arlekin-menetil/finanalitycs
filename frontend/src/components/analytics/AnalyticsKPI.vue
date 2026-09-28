@@ -1,40 +1,83 @@
 <script setup>
 
 import { computed } from "vue"
+import { useI18n } from "vue-i18n"
+
+const { t, locale } = useI18n()
 
 const props = defineProps({
 
   productsLabel: {
     type: String,
-    default: "Всего продуктов"
+    default: "",
   },
 
   totalProducts: {
     type: Number,
-    default: 0
+    default: 0,
   },
 
   avgInterest: {
     type: [Number, String],
-    default: 0
+    default: 0,
   },
 
   bestBank: {
     type: String,
-    default: "Все банки"
+    default: "",
   },
 
   totalLoanVolume: {
     type: Number,
-    default: 0
+    default: 0,
   },
 
   featuredBanks: {
     type: Array,
-    default: () => []
-  }
+    default: () => [],
+  },
 
 })
+
+
+// =====================================================
+// ALL BANKS
+// =====================================================
+
+const allBanksLabel = computed(() => {
+  return t("analytics.allBanks")
+})
+
+
+// =====================================================
+// PRODUCTS LABEL
+// =====================================================
+
+const productsTitle = computed(() => {
+  return props.productsLabel || t("analytics.kpi.totalProducts")
+})
+
+
+// =====================================================
+// LOCALE
+// =====================================================
+
+const numberLocale = computed(() => {
+
+  const locales = {
+    ru: "ru-RU",
+    en: "en-US",
+    uz: "uz-UZ",
+  }
+
+  return locales[locale.value] || "ru-RU"
+
+})
+
+
+// =====================================================
+// FORMATTED LIMIT
+// =====================================================
 
 const formattedLimit = computed(() => {
 
@@ -45,46 +88,55 @@ const formattedLimit = computed(() => {
     return "0"
   }
 
+
   if (value >= 1000000000) {
 
     const billions =
       value / 1000000000
 
-    return Number.isInteger(
-      billions
-    )
-      ? `${billions} млрд`
-      : `${billions.toFixed(1)} млрд`
+    return Number.isInteger(billions)
+      ? `${billions} ${t("analytics.units.billion")}`
+      : `${billions.toFixed(1)} ${t("analytics.units.billion")}`
 
   }
 
+
   return `${Math.round(
     value / 1000000
-  )} млн`
+  )} ${t("analytics.units.million")}`
 
 })
+
+
+// =====================================================
+// ALL BANKS CHECK
+// =====================================================
 
 const isAllBanks = computed(() => {
 
   return (
-    props.bestBank === "Все банки" ||
-    !props.bestBank
+    !props.bestBank ||
+    props.bestBank === allBanksLabel.value
   )
 
 })
 
 </script>
 
+
 <template>
 
   <div class="kpi-grid">
 
-    <!-- Продукты -->
+
+    <!-- ================================================= -->
+    <!-- ПРОДУКТЫ -->
+    <!-- ================================================= -->
 
     <div class="kpi">
 
       <h4>
-        {{ productsLabel }}
+        {{ productsTitle }}
       </h4>
 
       <p>
@@ -93,12 +145,15 @@ const isAllBanks = computed(() => {
 
     </div>
 
-    <!-- Средняя ставка -->
+
+    <!-- ================================================= -->
+    <!-- СРЕДНЯЯ СТАВКА -->
+    <!-- ================================================= -->
 
     <div class="kpi">
 
       <h4>
-        Средняя ставка
+        {{ t("analytics.kpi.averageRate") }}
       </h4>
 
       <p>
@@ -107,7 +162,10 @@ const isAllBanks = computed(() => {
 
     </div>
 
-    <!-- Рекомендуемые банки -->
+
+    <!-- ================================================= -->
+    <!-- РЕКОМЕНДУЕМЫЕ БАНКИ -->
+    <!-- ================================================= -->
 
     <div class="kpi">
 
@@ -115,11 +173,12 @@ const isAllBanks = computed(() => {
 
         {{
           isAllBanks
-            ? "Рекомендуемые банки"
-            : "Рекомендуемый банк"
+            ? t("analytics.kpi.recommendedBanks")
+            : t("analytics.kpi.recommendedBank")
         }}
 
       </h4>
+
 
       <div class="featured-banks">
 
@@ -130,15 +189,16 @@ const isAllBanks = computed(() => {
             :key="bank"
             class="bank-badge"
           >
-             {{ bank }}
+            {{ bank }}
           </span>
 
         </template>
 
+
         <template v-else>
 
           <span class="bank-badge">
-             {{ bestBank }}
+            {{ bestBank }}
           </span>
 
         </template>
@@ -147,12 +207,15 @@ const isAllBanks = computed(() => {
 
     </div>
 
-    <!-- Максимальный лимит -->
+
+    <!-- ================================================= -->
+    <!-- МАКСИМАЛЬНЫЙ ЛИМИТ -->
+    <!-- ================================================= -->
 
     <div class="kpi">
 
       <h4>
-        Максимальный лимит
+        {{ t("analytics.kpi.maximumLimit") }}
       </h4>
 
       <p>
@@ -161,9 +224,11 @@ const isAllBanks = computed(() => {
 
     </div>
 
+
   </div>
 
 </template>
+
 
 <style scoped>
 
@@ -185,6 +250,7 @@ const isAllBanks = computed(() => {
   margin-bottom: 24px;
 
 }
+
 
 .kpi {
 
@@ -209,6 +275,7 @@ const isAllBanks = computed(() => {
 
 }
 
+
 .kpi:hover {
 
   transform:
@@ -225,6 +292,7 @@ const isAllBanks = computed(() => {
 
 }
 
+
 .kpi h4 {
 
   margin: 0 0 10px;
@@ -236,6 +304,7 @@ const isAllBanks = computed(() => {
   font-weight: 600;
 
 }
+
 
 .kpi p {
 
@@ -251,6 +320,7 @@ const isAllBanks = computed(() => {
 
 }
 
+
 .featured-banks {
 
   display: flex;
@@ -262,6 +332,7 @@ const isAllBanks = computed(() => {
   margin-top: 8px;
 
 }
+
 
 .bank-badge {
 
@@ -289,6 +360,7 @@ const isAllBanks = computed(() => {
 
 }
 
+
 @media (max-width: 768px) {
 
   .kpi-grid {
@@ -296,6 +368,7 @@ const isAllBanks = computed(() => {
     grid-template-columns: 1fr;
 
   }
+
 
   .kpi p {
 

@@ -1,6 +1,10 @@
 <script setup>
+
 import { computed } from "vue"
 import { useRouter } from "vue-router"
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
 
 const props = defineProps({
   item: {
@@ -11,9 +15,11 @@ const props = defineProps({
 
 const router = useRouter()
 
+
 // ==========================================
 // 💣 OPEN DEPOSIT
 // ==========================================
+
 function openProduct() {
 
   if (!props.item?.id) {
@@ -30,33 +36,41 @@ function openProduct() {
   )
 }
 
+
 // ==========================================
 // 💣 BANK NAME
 // ==========================================
+
 const bankName = computed(() => {
 
   return (
     props.item.bank_name ||
     props.item.bank?.name ||
-    "Банк"
+    t("common.bank")
   )
+
 })
+
 
 // ==========================================
 // 💣 PRODUCT NAME
 // ==========================================
+
 const productName = computed(() => {
 
   return (
     props.item.product_name ||
     props.item.name ||
-    "Вклад"
+    t("deposits.product")
   )
+
 })
+
 
 // ==========================================
 // 💣 BANK LOGO
 // ==========================================
+
 const logo = computed(() => {
 
   const bank = (
@@ -68,11 +82,14 @@ const logo = computed(() => {
     .replace(/\s+/g, "")
 
   return `/banks/${bank}.png`
+
 })
+
 
 // ==========================================
 // 💣 RATE
 // ==========================================
+
 const rate = computed(() => {
 
   const value =
@@ -86,11 +103,14 @@ const rate = computed(() => {
   }
 
   return `${value}%`
+
 })
+
 
 // ==========================================
 // 💣 TERM
 // ==========================================
+
 const term = computed(() => {
 
   const value = Number(
@@ -104,25 +124,21 @@ const term = computed(() => {
     return "—"
   }
 
+
   if (value < 12) {
 
     if (value === 1) {
-      return "1 месяц"
+      return `1 ${t("deposits.month")}`
     }
 
-    if (
-      value >= 2 &&
-      value <= 4
-    ) {
-      return `${value} месяца`
-    }
-
-    return `${value} месяцев`
+    return `${value} ${t("deposits.months")}`
   }
+
 
   if (value === 12) {
-    return "1 год"
+    return `1 ${t("deposits.year")}`
   }
+
 
   const years = Math.floor(
     value / 12
@@ -131,53 +147,57 @@ const term = computed(() => {
   const months =
     value % 12
 
+
   let yearsText = ""
 
   if (years === 1) {
-    yearsText = "1 год"
-  } else if (
-    years >= 2 &&
-    years <= 4
-  ) {
-    yearsText = `${years} года`
+
+    yearsText =
+      `1 ${t("deposits.year")}`
+
   } else {
-    yearsText = `${years} лет`
+
+    yearsText =
+      `${years} ${t("deposits.years")}`
+
   }
+
 
   if (!months) {
     return yearsText
   }
 
-  let monthsText = ""
 
-  if (months === 1) {
-    monthsText = "1 месяц"
-  } else if (
-    months >= 2 &&
-    months <= 4
-  ) {
-    monthsText = `${months} месяца`
-  } else {
-    monthsText = `${months} месяцев`
-  }
+  const monthsText =
+    months === 1
+      ? `1 ${t("deposits.month")}`
+      : `${months} ${t("deposits.months")}`
+
 
   return `${yearsText} ${monthsText}`
+
 })
+
 
 // ==========================================
 // 💣 ONLINE
 // ==========================================
+
 const isOnline = computed(() => {
 
   return Boolean(
     props.item.is_online
   )
+
 })
+
 </script>
+
 
 <template>
 
   <div class="card">
+
 
     <!-- ===================================== -->
     <!-- 💣 HEADER -->
@@ -188,8 +208,9 @@ const isOnline = computed(() => {
       <img
         :src="logo"
         class="logo"
-        alt="bank"
+        :alt="bankName"
       />
+
 
       <div class="header-info">
 
@@ -201,6 +222,7 @@ const isOnline = computed(() => {
 
     </div>
 
+
     <!-- ===================================== -->
     <!-- 💣 TITLE -->
     <!-- ===================================== -->
@@ -208,6 +230,7 @@ const isOnline = computed(() => {
     <h3 class="title">
       {{ productName }}
     </h3>
+
 
     <!-- ===================================== -->
     <!-- 💣 TAGS -->
@@ -219,10 +242,11 @@ const isOnline = computed(() => {
     >
 
       <span class="tag online">
-        Онлайн
+        {{ t("deposits.online") }}
       </span>
 
     </div>
+
 
     <!-- ===================================== -->
     <!-- 💣 STATS -->
@@ -230,10 +254,11 @@ const isOnline = computed(() => {
 
     <div class="stats">
 
+
       <div class="stat">
 
         <span>
-          Ставка
+          {{ t("deposits.interest") }}
         </span>
 
         <strong>
@@ -242,10 +267,11 @@ const isOnline = computed(() => {
 
       </div>
 
+
       <div class="stat">
 
         <span>
-          Срок
+          {{ t("deposits.term") }}
         </span>
 
         <strong>
@@ -254,10 +280,11 @@ const isOnline = computed(() => {
 
       </div>
 
+
       <div class="stat">
 
         <span>
-          Валюта
+          {{ t("deposits.currency") }}
         </span>
 
         <strong>
@@ -270,23 +297,26 @@ const isOnline = computed(() => {
 
       </div>
 
+
       <div class="stat">
 
         <span>
-          Оформление
+          {{ t("deposits.applicationMethod") }}
         </span>
 
         <strong>
           {{
             isOnline
-              ? "Онлайн"
-              : "В отделении"
+              ? t("deposits.online")
+              : t("deposits.branch")
           }}
         </strong>
 
       </div>
 
+
     </div>
+
 
     <!-- ===================================== -->
     <!-- 💣 ACTION -->
@@ -298,14 +328,16 @@ const isOnline = computed(() => {
         class="btn"
         @click="openProduct"
       >
-        Подробнее
+        {{ t("deposits.details") }}
       </button>
 
     </div>
 
+
   </div>
 
 </template>
+
 
 <style scoped>
 

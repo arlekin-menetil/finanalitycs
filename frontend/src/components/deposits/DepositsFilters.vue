@@ -1,7 +1,10 @@
 <script setup>
 
 import { computed } from "vue"
+import { useI18n } from "vue-i18n"
 import { useDepositsStore } from "@/stores/deposits"
+
+const { t } = useI18n()
 
 const store = useDepositsStore()
 
@@ -50,7 +53,7 @@ const setBank = (event) => {
       }"
       @click="setCurrency('all')"
     >
-      🔥 Все
+      🔥 {{ t("deposits.filters.all") }}
     </button>
 
     <button
@@ -83,7 +86,7 @@ const setBank = (event) => {
       }"
       @click="setRate('high')"
     >
-      📈 Высокая ставка
+      📈 {{ t("deposits.filters.highRate") }}
     </button>
 
     <select
@@ -92,7 +95,7 @@ const setBank = (event) => {
     >
 
       <option value="all">
-        🏦 Все банки
+        🏦 {{ t("deposits.filters.allBanks") }}
       </option>
 
       <option

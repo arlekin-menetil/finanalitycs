@@ -5,6 +5,7 @@
     <!-- ===================================== -->
     <!-- 💣 EMPTY -->
     <!-- ===================================== -->
+
     <div
       v-if="!hasScore"
       class="empty-state"
@@ -15,13 +16,11 @@
       </div>
 
       <h3>
-        Скоринг пока недоступен
+        {{ t("scoring.card.empty.title") }}
       </h3>
 
       <p>
-        Заполните профиль и выполните
-        анализ, чтобы получить
-        персональный кредитный рейтинг
+        {{ t("scoring.card.empty.description") }}
       </p>
 
     </div>
@@ -30,31 +29,27 @@
     <!-- ===================================== -->
     <!-- 💣 CONTENT -->
     <!-- ===================================== -->
+
     <template v-else>
 
       <!-- =================================== -->
       <!-- 💣 HEADER -->
       <!-- =================================== -->
+
       <div class="score-header">
 
         <div class="score-info">
 
           <span class="score-label">
-
-            {{ $t("dashboard.score") }}
-
+            {{ t("dashboard.score") }}
           </span>
 
           <div class="score-value">
-
             {{ normalizedScore }}
-
           </div>
 
           <div class="score-subtitle">
-
-            из 850 возможных
-
+            {{ t("scoring.card.outOf") }}
           </div>
 
         </div>
@@ -63,6 +58,7 @@
         <!-- ================================= -->
         <!-- 💣 RISK -->
         <!-- ================================= -->
+
         <div
           :class="[
             'risk-badge',
@@ -82,12 +78,13 @@
       <!-- =================================== -->
       <!-- 💣 PROGRESS -->
       <!-- =================================== -->
+
       <div class="progress-section">
 
         <div class="progress-top">
 
           <span>
-            Кредитный рейтинг
+            {{ t("scoring.card.creditRating") }}
           </span>
 
           <span>
@@ -114,11 +111,13 @@
       <!-- =================================== -->
       <!-- 💣 STATS -->
       <!-- =================================== -->
+
       <div class="stats-grid">
 
         <!-- =============================== -->
         <!-- 💣 APPROVAL -->
         <!-- =============================== -->
+
         <div class="stat-card">
 
           <div class="stat-icon success">
@@ -128,7 +127,7 @@
           <div class="stat-content">
 
             <span class="stat-label">
-              Одобрение
+              {{ t("scoring.card.approval") }}
             </span>
 
             <strong class="stat-value">
@@ -143,6 +142,7 @@
         <!-- =============================== -->
         <!-- 💣 RISK -->
         <!-- =============================== -->
+
         <div class="stat-card">
 
           <div class="stat-icon warning">
@@ -152,7 +152,7 @@
           <div class="stat-content">
 
             <span class="stat-label">
-              Риск
+              {{ t("scoring.card.risk") }}
             </span>
 
             <strong class="stat-value">
@@ -167,6 +167,7 @@
         <!-- =============================== -->
         <!-- 💣 SCORE -->
         <!-- =============================== -->
+
         <div class="stat-card">
 
           <div class="stat-icon info">
@@ -176,7 +177,7 @@
           <div class="stat-content">
 
             <span class="stat-label">
-              Уровень
+              {{ t("scoring.card.level") }}
             </span>
 
             <strong class="stat-value">
@@ -193,11 +194,12 @@
       <!-- =================================== -->
       <!-- 💣 EXPLANATION -->
       <!-- =================================== -->
+
       <div class="explanation-card">
 
         <div class="explanation-title">
 
-          AI Анализ
+          {{ t("scoring.card.aiAnalysis") }}
 
         </div>
 
@@ -213,6 +215,7 @@
       <!-- =================================== -->
       <!-- 💣 RECOMMENDATION -->
       <!-- =================================== -->
+
       <div
         v-if="recommendationText"
         class="recommendation-box"
@@ -220,7 +223,7 @@
 
         <div class="recommendation-title">
 
-          Рекомендация
+          {{ t("scoring.card.recommendation") }}
 
         </div>
 
@@ -238,34 +241,56 @@
 
 </template>
 
+
 <script setup>
 
 import {
-  computed
+  computed,
 } from "vue"
+
+import {
+  useI18n,
+} from "vue-i18n"
+
+
+// ==========================================
+// 💣 I18N
+// ==========================================
+
+const {
+  t,
+} = useI18n()
+
 
 // ==========================================
 // 💣 PROPS
 // ==========================================
+
 const props = defineProps({
 
   score: {
     type: Object,
     default: null,
   },
+
 })
+
 
 // ==========================================
 // 💣 HAS SCORE
 // ==========================================
+
 const hasScore = computed(() => {
 
   return !!props.score
+
 })
+
 
 // ==========================================
 // 💣 SCORE
 // ==========================================
+
 const normalizedScore = computed(() => {
 
   return Number(
@@ -275,12 +300,16 @@ const normalizedScore = computed(() => {
     props.score?.score ||
 
     0
+
   )
+
 })
+
 
 // ==========================================
 // 💣 RISK CLASS
 // ==========================================
+
 const riskClass = computed(() => {
 
   const risk = (
@@ -288,28 +317,38 @@ const riskClass = computed(() => {
     props.score?.risk_category ||
 
     "medium"
-  )
 
+  )
     .toLowerCase()
+
 
   if (
     risk.includes("low")
   ) {
+
     return "low"
+
   }
+
 
   if (
     risk.includes("high")
   ) {
+
     return "high"
+
   }
 
+
   return "medium"
+
 })
+
 
 // ==========================================
 // 💣 RISK LABEL
 // ==========================================
+
 const riskLabel = computed(() => {
 
   const risk = (
@@ -317,26 +356,44 @@ const riskLabel = computed(() => {
     props.score?.risk_category ||
 
     ""
-  ).toLowerCase()
+
+  )
+    .toLowerCase()
+
 
   if (
     risk.includes("low")
   ) {
-    return "Низкий"
+
+    return t(
+      "scoring.card.riskLevels.low"
+    )
+
   }
+
 
   if (
     risk.includes("high")
   ) {
-    return "Высокий"
+
+    return t(
+      "scoring.card.riskLevels.high"
+    )
+
   }
 
-  return "Средний"
+
+  return t(
+    "scoring.card.riskLevels.medium"
+  )
+
 })
+
 
 // ==========================================
 // 💣 APPROVAL
 // ==========================================
+
 const approvalPercent = computed(() => {
 
   const raw = Number(
@@ -344,136 +401,175 @@ const approvalPercent = computed(() => {
     props.score?.approval_probability ||
 
     0
+
   )
+
 
   if (raw <= 1) {
 
-    return Math.round(raw * 100)
+    return Math.round(
+      raw * 100
+    )
+
   }
 
+
   return Math.round(raw)
+
 })
+
 
 // ==========================================
 // 💣 PERCENT
 // ==========================================
+
 const scorePercent = computed(() => {
 
   const value = (
 
     normalizedScore.value / 850
+
   ) * 100
 
+
   return Math.min(
+
     100,
-    Math.max(0, value)
+
+    Math.max(
+      0,
+      value
+    )
+
   )
+
 })
+
 
 // ==========================================
 // 💣 SCORE LEVEL
 // ==========================================
+
 const scoreLevel = computed(() => {
 
-  const s = normalizedScore.value
+  const s =
+    normalizedScore.value
+
 
   if (s >= 800) {
 
-    return "Отличный"
+    return t(
+      "scoring.card.levels.excellent"
+    )
+
   }
+
 
   if (s >= 700) {
 
-    return "Хороший"
+    return t(
+      "scoring.card.levels.good"
+    )
+
   }
+
 
   if (s >= 600) {
 
-    return "Средний"
+    return t(
+      "scoring.card.levels.medium"
+    )
+
   }
 
-  return "Низкий"
+
+  return t(
+    "scoring.card.levels.low"
+  )
+
 })
+
 
 // ==========================================
 // 💣 EXPLANATION
 // ==========================================
+
 const scoreExplanation = computed(() => {
 
-  const s = normalizedScore.value
+  const s =
+    normalizedScore.value
+
 
   if (s >= 800) {
 
-    return `
-      У вас очень высокий кредитный рейтинг.
-      Банки с высокой вероятностью
-      предложат лучшие процентные ставки,
-      увеличенные лимиты и быстрое одобрение.
-    `
+    return t(
+      "scoring.card.explanations.excellent"
+    )
+
   }
+
 
   if (s >= 700) {
 
-    return `
-      Ваш профиль выглядит надёжным.
-      Большинство банков готовы
-      одобрить кредит на хороших условиях.
-    `
+    return t(
+      "scoring.card.explanations.good"
+    )
+
   }
+
 
   if (s >= 600) {
 
-    return `
-      Ваш рейтинг находится
-      на среднем уровне.
-      Некоторые банки могут
-      запросить дополнительные данные.
-    `
+    return t(
+      "scoring.card.explanations.medium"
+    )
+
   }
 
-  return `
-    Ваш рейтинг пока низкий.
-    Рекомендуется улучшить
-    финансовую нагрузку,
-    снизить обязательства
-    и увеличить стабильность дохода.
-  `
+
+  return t(
+    "scoring.card.explanations.low"
+  )
+
 })
+
 
 // ==========================================
 // 💣 RECOMMENDATION
 // ==========================================
+
 const recommendationText = computed(() => {
 
-  const s = normalizedScore.value
+  const s =
+    normalizedScore.value
+
 
   if (s >= 750) {
 
-    return `
-      Вам доступны ипотека,
-      автокредиты и premium-продукты
-      с минимальными ставками.
-    `
+    return t(
+      "scoring.card.recommendations.high"
+    )
+
   }
+
 
   if (s >= 650) {
 
-    return `
-      Рекомендуются потребительские
-      кредиты и микрозаймы
-      со средней финансовой нагрузкой.
-    `
+    return t(
+      "scoring.card.recommendations.medium"
+    )
+
   }
 
-  return `
-    Лучше начать с небольших
-    микрозаймов и онлайн-кредитов,
-    чтобы постепенно улучшить
-    кредитную историю.
-  `
+
+  return t(
+    "scoring.card.recommendations.low"
+  )
+
 })
 
 </script>
+
 
 <style scoped>
 
@@ -500,11 +596,12 @@ const recommendationText = computed(() => {
 
   box-shadow:
     0 10px 40px rgba(0,0,0,.12);
+
 }
 
 
 /* ==========================================
-💣 EMPTY
+   💣 EMPTY
 ========================================== */
 
 .empty-state{
@@ -512,6 +609,7 @@ const recommendationText = computed(() => {
   text-align:center;
 
   padding:50px 20px;
+
 }
 
 .empty-icon{
@@ -519,6 +617,7 @@ const recommendationText = computed(() => {
   font-size:72px;
 
   margin-bottom:18px;
+
 }
 
 .empty-state h3{
@@ -528,6 +627,7 @@ const recommendationText = computed(() => {
   font-size:28px;
 
   font-weight:800;
+
 }
 
 .empty-state p{
@@ -541,11 +641,12 @@ const recommendationText = computed(() => {
   max-width:520px;
 
   margin-inline:auto;
+
 }
 
 
 /* ==========================================
-💣 HEADER
+   💣 HEADER
 ========================================== */
 
 .score-header{
@@ -557,6 +658,7 @@ const recommendationText = computed(() => {
   align-items:flex-start;
 
   gap:24px;
+
 }
 
 .score-label{
@@ -568,6 +670,7 @@ const recommendationText = computed(() => {
   letter-spacing:.08em;
 
   color:#94a3b8;
+
 }
 
 .score-value{
@@ -579,6 +682,7 @@ const recommendationText = computed(() => {
   line-height:1;
 
   margin-top:12px;
+
 }
 
 .score-subtitle{
@@ -588,11 +692,12 @@ const recommendationText = computed(() => {
   color:#94a3b8;
 
   font-size:14px;
+
 }
 
 
 /* ==========================================
-💣 RISK
+   💣 RISK
 ========================================== */
 
 .risk-badge{
@@ -612,6 +717,7 @@ const recommendationText = computed(() => {
   font-size:14px;
 
   text-transform:uppercase;
+
 }
 
 .risk-dot{
@@ -621,6 +727,7 @@ const recommendationText = computed(() => {
   height:10px;
 
   border-radius:50%;
+
 }
 
 .low{
@@ -629,11 +736,13 @@ const recommendationText = computed(() => {
     rgba(16,185,129,.15);
 
   color:#10b981;
+
 }
 
 .low .risk-dot{
 
   background:#10b981;
+
 }
 
 .medium{
@@ -642,11 +751,13 @@ const recommendationText = computed(() => {
     rgba(245,158,11,.15);
 
   color:#f59e0b;
+
 }
 
 .medium .risk-dot{
 
   background:#f59e0b;
+
 }
 
 .high{
@@ -655,21 +766,24 @@ const recommendationText = computed(() => {
     rgba(239,68,68,.15);
 
   color:#ef4444;
+
 }
 
 .high .risk-dot{
 
   background:#ef4444;
+
 }
 
 
 /* ==========================================
-💣 PROGRESS
+   💣 PROGRESS
 ========================================== */
 
 .progress-section{
 
   margin-top:34px;
+
 }
 
 .progress-top{
@@ -683,6 +797,7 @@ const recommendationText = computed(() => {
   font-size:14px;
 
   color:#cbd5e1;
+
 }
 
 .progress-track{
@@ -697,6 +812,7 @@ const recommendationText = computed(() => {
   border-radius:999px;
 
   overflow:hidden;
+
 }
 
 .progress-fill{
@@ -713,11 +829,12 @@ const recommendationText = computed(() => {
     );
 
   transition:.4s ease;
+
 }
 
 
 /* ==========================================
-💣 STATS
+   💣 STATS
 ========================================== */
 
 .stats-grid{
@@ -730,6 +847,7 @@ const recommendationText = computed(() => {
   gap:18px;
 
   margin-top:34px;
+
 }
 
 .stat-card{
@@ -748,6 +866,7 @@ const recommendationText = computed(() => {
     rgba(255,255,255,.04);
 
   border:1px solid rgba(255,255,255,.05);
+
 }
 
 .stat-icon{
@@ -767,6 +886,7 @@ const recommendationText = computed(() => {
   font-size:20px;
 
   font-weight:700;
+
 }
 
 .stat-icon.success{
@@ -775,6 +895,7 @@ const recommendationText = computed(() => {
     rgba(16,185,129,.15);
 
   color:#10b981;
+
 }
 
 .stat-icon.warning{
@@ -783,6 +904,7 @@ const recommendationText = computed(() => {
     rgba(245,158,11,.15);
 
   color:#f59e0b;
+
 }
 
 .stat-icon.info{
@@ -791,6 +913,7 @@ const recommendationText = computed(() => {
     rgba(59,130,246,.15);
 
   color:#3b82f6;
+
 }
 
 .stat-content{
@@ -798,6 +921,7 @@ const recommendationText = computed(() => {
   display:flex;
 
   flex-direction:column;
+
 }
 
 .stat-label{
@@ -805,6 +929,7 @@ const recommendationText = computed(() => {
   font-size:13px;
 
   color:#94a3b8;
+
 }
 
 .stat-value{
@@ -814,11 +939,12 @@ const recommendationText = computed(() => {
   font-size:18px;
 
   font-weight:800;
+
 }
 
 
 /* ==========================================
-💣 EXPLANATION
+   💣 EXPLANATION
 ========================================== */
 
 .explanation-card{
@@ -833,6 +959,7 @@ const recommendationText = computed(() => {
     rgba(255,255,255,.04);
 
   border:1px solid rgba(255,255,255,.05);
+
 }
 
 .explanation-title{
@@ -842,6 +969,7 @@ const recommendationText = computed(() => {
   font-weight:800;
 
   margin-bottom:14px;
+
 }
 
 .explanation-text{
@@ -849,11 +977,12 @@ const recommendationText = computed(() => {
   line-height:1.8;
 
   color:#cbd5e1;
+
 }
 
 
 /* ==========================================
-💣 RECOMMENDATION
+   💣 RECOMMENDATION
 ========================================== */
 
 .recommendation-box{
@@ -872,6 +1001,7 @@ const recommendationText = computed(() => {
     );
 
   border:1px solid rgba(59,130,246,.18);
+
 }
 
 .recommendation-title{
@@ -881,6 +1011,7 @@ const recommendationText = computed(() => {
   font-weight:800;
 
   margin-bottom:10px;
+
 }
 
 .recommendation-box p{
@@ -890,11 +1021,12 @@ const recommendationText = computed(() => {
   line-height:1.7;
 
   color:#dbeafe;
+
 }
 
 
 /* ==========================================
-💣 MOBILE
+   💣 MOBILE
 ========================================== */
 
 @media(max-width:900px){
@@ -902,22 +1034,27 @@ const recommendationText = computed(() => {
   .score-card{
 
     padding:24px;
+
   }
 
   .score-header{
 
     flex-direction:column;
+
   }
 
   .score-value{
 
     font-size:54px;
+
   }
 
   .stats-grid{
 
     grid-template-columns:1fr;
+
   }
+
 }
 
 </style>

@@ -3,21 +3,11 @@
 </template>
 
 <script setup>
-
-import { onMounted } from "vue"
-import { useAuthStore } from "@/stores/auth"
-
-// 💣 INIT AUTH (очень важно)
-const auth = useAuthStore()
-
-onMounted(async () => {
-  await auth.init()
-})
-
+// Инициализация приложения выполняется в main.js
+// Здесь ничего вызывать не нужно.
 </script>
 
 <style>
-
 /* RESET */
 html,
 body {
@@ -50,5 +40,4 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #9ca3af;
 }
-
 </style>

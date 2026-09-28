@@ -2,75 +2,88 @@
 
 import {
   Bar,
-  Line
+  Line,
 } from "vue-chartjs"
+
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
 
 defineProps({
 
   installsData: {
     type: Object,
-    required: true
+    required: true,
   },
 
   ratingData: {
     type: Object,
-    required: true
+    required: true,
   },
 
   chartOptions: {
     type: Object,
-    required: true
-  }
+    required: true,
+  },
 
 })
 
 </script>
 
+
 <template>
 
-<div class="grid">
+  <div class="grid">
 
-  <!-- СКАЧИВАНИЯ -->
 
-  <div class="card">
+    <!-- ================================================= -->
+    <!-- СКАЧИВАНИЯ -->
+    <!-- ================================================= -->
 
-    <h3>
-      📱 Скачивания мобильных приложений
-    </h3>
+    <div class="card">
 
-    <div class="chart-container">
+      <h3>
+        📱 {{ t("analytics.mobileDownloads") }}
+      </h3>
 
-      <Bar
-        :data="installsData"
-        :options="chartOptions"
-      />
+      <div class="chart-container">
 
-    </div>
+        <Bar
+          :data="installsData"
+          :options="chartOptions"
+        />
 
-  </div>
-
-  <!-- РЕЙТИНГ -->
-
-  <div class="card">
-
-    <h3>
-      ⭐ Рейтинг мобильных приложений
-    </h3>
-
-    <div class="chart-container">
-
-      <Line
-        :data="ratingData"
-        :options="chartOptions"
-      />
+      </div>
 
     </div>
 
-  </div>
 
-</div>
+    <!-- ================================================= -->
+    <!-- РЕЙТИНГ -->
+    <!-- ================================================= -->
+
+    <div class="card">
+
+      <h3>
+        ⭐ {{ t("analytics.mobileRatings") }}
+      </h3>
+
+      <div class="chart-container">
+
+        <Line
+          :data="ratingData"
+          :options="chartOptions"
+        />
+
+      </div>
+
+    </div>
+
+
+  </div>
 
 </template>
+
 
 <style scoped>
 
@@ -92,6 +105,7 @@ defineProps({
   margin-top: 20px;
 
 }
+
 
 .card {
 
@@ -116,6 +130,7 @@ defineProps({
 
 }
 
+
 .chart-container {
 
   position: relative;
@@ -123,6 +138,7 @@ defineProps({
   height: 350px;
 
 }
+
 
 h3 {
 
@@ -135,6 +151,7 @@ h3 {
   color: #0f172a;
 
 }
+
 
 @media (max-width: 900px) {
 

@@ -20,7 +20,7 @@
                     </span>
 
                     <span>
-                        BankAnalytics AI
+                        {{ t("common.ai") }}
                     </span>
 
                 </div>
@@ -230,14 +230,19 @@ const displayName = computed(() => {
     ).trim()
 
 
+    /*
+     * Если имя пользователя отсутствует,
+     * используем локализованный fallback.
+     */
+
     if (!name) {
         return t("common.user")
     }
 
 
     /*
-     * Если backend отдаёт полное ФИО,
-     * стараемся сделать заголовок аккуратнее.
+     * Если backend возвращает полное ФИО,
+     * показываем первые два элемента.
      */
 
     const parts = name
@@ -293,8 +298,12 @@ const formattedDate = computed(() => {
     }
 
 
+    const currentLocale =
+        localeMap[locale.value] || "ru-RU"
+
+
     return date.toLocaleDateString(
-        localeMap[locale.value] || "ru-RU",
+        currentLocale,
         {
             day: "2-digit",
             month: "2-digit",

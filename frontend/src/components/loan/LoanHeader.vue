@@ -1,6 +1,7 @@
 <script setup>
 
 import { computed } from "vue"
+import { useI18n } from "vue-i18n"
 
 const props = defineProps({
   product: {
@@ -12,6 +13,8 @@ const props = defineProps({
 defineEmits([
   "back"
 ])
+
+const { t } = useI18n()
 
 // ==========================================
 // 🏦 LOGO
@@ -44,7 +47,7 @@ const logo = computed(() => {
       class="back-btn"
       @click="$emit('back')"
     >
-      ← Назад
+      ← {{ t("common.back") }}
     </button>
 
   </div>
@@ -59,7 +62,11 @@ const logo = computed(() => {
     <img
       :src="logo"
       class="hero-logo"
-      alt="bank"
+      :alt="
+        product.bank?.name ||
+        product.bank_name ||
+        t('recommendations.bank')
+      "
     />
 
     <div class="hero-content">
@@ -69,7 +76,7 @@ const logo = computed(() => {
         {{
           product.bank?.name ||
           product.bank_name ||
-          "Неизвестный банк"
+          t("common.unknownBank")
         }}
 
       </div>
@@ -78,7 +85,7 @@ const logo = computed(() => {
 
         {{
           product.name ||
-          "Кредитный продукт"
+          t("recommendations.product")
         }}
 
       </h1>
@@ -92,7 +99,7 @@ const logo = computed(() => {
     class="loading"
   >
 
-    Загрузка...
+    {{ t("common.loading") }}
 
   </div>
 

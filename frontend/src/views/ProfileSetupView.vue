@@ -1,156 +1,105 @@
 <script setup>
-
 import {
-    ref,
-    onMounted,
+  ref,
+  onMounted,
 } from "vue"
 
+import { useI18n } from "vue-i18n"
 import api from "@/api/axios"
 
 import ProfileEditForm from "@/components/profile/ProfileEditForm.vue"
 import EmploymentVerificationCard from "@/components/profile/EmploymentVerificationCard.vue"
 
+const { t } = useI18n()
+
 const profile = ref(null)
 
 const loading = ref(true)
 
-async function loadProfile(){
+async function loadProfile() {
+  loading.value = true
 
-    loading.value = true
+  try {
+    const { data } = await api.get("/profile/")
 
-    try{
+    profile.value = data
+  }
 
-        const { data } = await api.get("/profile/")
+  catch (e) {
+    console.error(e)
+  }
 
-        profile.value = data
-
-    }
-
-    catch(e){
-
-        console.error(e)
-
-    }
-
-    finally{
-
-        loading.value = false
-
-    }
-
+  finally {
+    loading.value = false
+  }
 }
 
 onMounted(loadProfile)
-
 </script>
 
 <template>
-
-<div class="profile-setup-page">
-
+  <div class="profile-setup-page">
     <div class="page-header">
+      <h1>
+        👤 {{ t("profileSetup.title") }}
+      </h1>
 
-        <h1>
-
-            👤 Редактирование профиля
-
-        </h1>
-
-        <p>
-
-            Здесь можно изменить персональные данные и сведения о работе.
-
-        </p>
-
+      <p>
+        {{ t("profileSetup.description") }}
+      </p>
     </div>
 
     <div
-        v-if="loading"
-        class="loading"
+      v-if="loading"
+      class="loading"
     >
-
-        Загрузка профиля...
-
+      {{ t("profileSetup.loading") }}
     </div>
 
     <template v-else>
+      <ProfileEditForm
+        :profile="profile"
+        @saved="loadProfile"
+      />
 
-        <ProfileEditForm
-
-            :profile="profile"
-
-            @saved="loadProfile"
-
-        />
-
-        <EmploymentVerificationCard
-
-            v-if="profile"
-
-            :profile="profile"
-
-            @uploaded="loadProfile"
-
-        />
-
+      <EmploymentVerificationCard
+        v-if="profile"
+        :profile="profile"
+        @uploaded="loadProfile"
+      />
     </template>
-
-</div>
-
+  </div>
 </template>
 
 <style scoped>
-
-.profile-setup-page{
-
-max-width:1200px;
-
-margin:auto;
-
-padding:30px;
-
+.profile-setup-page {
+  max-width: 1200px;
+  margin: auto;
+  padding: 30px;
 }
 
-.page-header{
-
-margin-bottom:30px;
-
+.page-header {
+  margin-bottom: 30px;
 }
 
-.page-header h1{
-
-margin:0;
-
-font-size:34px;
-
-font-weight:700;
-
-color:#0f172a;
-
+.page-header h1 {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 700;
+  color: #0f172a;
 }
 
-.page-header p{
-
-margin-top:8px;
-
-color:#64748b;
-
-font-size:15px;
-
+.page-header p {
+  margin-top: 8px;
+  color: #64748b;
+  font-size: 15px;
 }
 
-.loading{
-
-padding:80px;
-
-text-align:center;
-
-font-size:20px;
-
-font-weight:600;
-
-color:#2563eb;
-
+.loading {
+  padding: 80px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+  color: #2563eb;
 }
-
 </style>

@@ -2,6 +2,7 @@
 
 import { computed } from "vue"
 import { useRouter } from "vue-router"
+import { useI18n } from "vue-i18n"
 
 const props = defineProps({
 
@@ -13,6 +14,11 @@ const props = defineProps({
 })
 
 const router = useRouter()
+
+const {
+    t,
+    locale
+} = useI18n()
 
 // ==========================================
 // LOGO
@@ -76,7 +82,9 @@ const rate = computed(() => {
         value === null ||
         value === undefined
     ) {
+
         return "—"
+
     }
 
     return `${value}%`
@@ -97,13 +105,23 @@ const limit = computed(() => {
 
     if (!value) {
 
-        return "Не указано"
+        return "—"
+
+    }
+
+    const localeMap = {
+
+        ru: "ru-RU",
+
+        en: "en-US",
+
+        uz: "uz-UZ",
 
     }
 
     return new Intl.NumberFormat(
 
-        "ru-RU"
+        localeMap[locale.value] || "ru-RU"
 
     ).format(value)
 
@@ -118,6 +136,65 @@ const approval = computed(() =>
     props.item.approval_probability || 0
 
 )
+
+// ==========================================
+// PRODUCT TYPE LABEL
+// ==========================================
+
+const productTypeLabel = computed(() => {
+
+    const type = String(
+
+        props.item.product_type || ""
+
+    )
+
+        .toLowerCase()
+
+        .trim()
+
+    const labels = {
+
+        loan:
+            "recommendations.filters.loans",
+
+        business:
+            "recommendations.filters.businessCredit",
+
+        business_credit:
+            "recommendations.filters.businessCredit",
+
+        micro:
+            "recommendations.filters.micro",
+
+        mortgage:
+            "recommendations.filters.mortgage",
+
+        auto:
+            "recommendations.filters.auto",
+
+        education:
+            "recommendations.filters.education",
+
+        green:
+            "recommendations.filters.green",
+
+        overdraft:
+            "recommendations.filters.overdraft",
+
+    }
+
+    const translationKey = labels[type]
+
+    if (!translationKey) {
+
+        return props.item.product_type || "—"
+
+    }
+
+    return t(translationKey)
+
+})
 
 // ==========================================
 // DETAIL
@@ -194,6 +271,7 @@ function openSource() {
   <!-- ===================================== -->
   <!-- 💣 HEADER -->
   <!-- ===================================== -->
+
   <div class="header">
 
     <img
@@ -220,18 +298,19 @@ function openSource() {
   <!-- ===================================== -->
   <!-- 💣 TAGS -->
   <!-- ===================================== -->
+
   <div class="tags">
 
     <span
       v-if="item.is_online"
       class="tag online"
     >
-      Онлайн
+      {{ t("recommendations.online") }}
     </span>
 
     <span class="tag">
 
-      {{ item.product_type }}
+      {{ productTypeLabel }}
 
     </span>
 
@@ -241,12 +320,13 @@ function openSource() {
   <!-- ===================================== -->
   <!-- 💣 STATS -->
   <!-- ===================================== -->
+
   <div class="stats">
 
     <div class="stat">
 
       <span>
-        Ставка
+        {{ t("recommendations.interest") }}
       </span>
 
       <strong>
@@ -258,7 +338,7 @@ function openSource() {
     <div class="stat">
 
       <span>
-        Сумма
+        {{ t("recommendations.loanLimit") }}
       </span>
 
       <strong>
@@ -270,7 +350,7 @@ function openSource() {
     <div class="stat">
 
       <span>
-        Одобрение
+        {{ t("recommendations.approval") }}
       </span>
 
       <strong>
@@ -285,6 +365,7 @@ function openSource() {
   <!-- ===================================== -->
   <!-- 💣 EXPLANATIONS -->
   <!-- ===================================== -->
+
   <div
     v-if="item.explanations?.length"
     class="explanations"
@@ -311,13 +392,14 @@ function openSource() {
   <!-- ===================================== -->
   <!-- 💣 ACTIONS -->
   <!-- ===================================== -->
+
   <div class="actions">
 
     <button
       class="details-btn"
       @click="openDetail"
     >
-      Подробнее
+      {{ t("recommendations.details") }}
     </button>
 
   </div>

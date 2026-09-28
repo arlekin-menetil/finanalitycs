@@ -4,19 +4,23 @@ import {
   computed,
   ref,
   watch,
-  nextTick
+  nextTick,
 } from "vue"
 
 import { storeToRefs } from "pinia"
+import { useI18n } from "vue-i18n"
 
 import { useCardsStore } from "@/stores/cards"
 import CardCard from "./CardCard.vue"
 
+const { t } = useI18n()
+
 const store = useCardsStore()
 
 const {
-  filteredCards
+  filteredCards,
 } = storeToRefs(store)
+
 
 // ==========================================
 // 🏦 PRIORITY BANKS
@@ -40,6 +44,7 @@ const priorityBanks = [
 
 ]
 
+
 // ==========================================
 // 💳 SORTED CARDS
 // ==========================================
@@ -47,7 +52,7 @@ const priorityBanks = [
 const cards = computed(() => {
 
   const data = [
-    ...filteredCards.value
+    ...filteredCards.value,
   ]
 
   data.sort((a, b) => {
@@ -64,15 +69,17 @@ const cards = computed(() => {
 
     const aPriority =
       priorityBanks.indexOf(
-        aBank
+        aBank,
       )
 
     const bPriority =
       priorityBanks.indexOf(
-        bBank
+        bBank,
       )
 
+
     // оба банка приоритетные
+
     if (
       aPriority !== -1 &&
       bPriority !== -1
@@ -82,30 +89,44 @@ const cards = computed(() => {
         aPriority -
         bPriority
       )
+
     }
 
+
     // только A приоритетный
+
     if (
       aPriority !== -1
     ) {
+
       return -1
+
     }
 
+
     // только B приоритетный
+
     if (
       bPriority !== -1
     ) {
+
       return 1
+
     }
 
+
     // остальные по алфавиту
+
     return aBank.localeCompare(
-      bBank
+      bBank,
     )
+
   })
 
   return data
+
 })
+
 
 // ==========================================
 // 📄 PAGINATION
@@ -123,10 +144,12 @@ const totalPages = computed(() => {
     1,
     Math.ceil(
       cards.value.length /
-      perPage
-    )
+      perPage,
+    ),
   )
+
 })
+
 
 const paginatedCards = computed(() => {
 
@@ -139,9 +162,11 @@ const paginatedCards = computed(() => {
 
   return cards.value.slice(
     start,
-    end
+    end,
   )
+
 })
+
 
 // ==========================================
 // 📄 VISIBLE PAGES
@@ -157,6 +182,7 @@ const visiblePages = computed(() => {
 
   const pages = []
 
+
   if (total <= 7) {
 
     for (
@@ -164,49 +190,67 @@ const visiblePages = computed(() => {
       i <= total;
       i++
     ) {
+
       pages.push(i)
+
     }
 
     return pages
+
   }
+
 
   pages.push(1)
 
+
   if (current > 4) {
+
     pages.push("...")
+
   }
+
 
   const start =
     Math.max(
       2,
-      current - 2
+      current - 2,
     )
+
 
   const end =
     Math.min(
       total - 1,
-      current + 2
+      current + 2,
     )
+
 
   for (
     let i = start;
     i <= end;
     i++
   ) {
+
     pages.push(i)
+
   }
+
 
   if (
     current <
     total - 3
   ) {
+
     pages.push("...")
+
   }
+
 
   pages.push(total)
 
   return pages
+
 })
+
 
 // ==========================================
 // 📄 PAGE INFO
@@ -217,7 +261,9 @@ const startItem = computed(() => {
   if (
     !cards.value.length
   ) {
+
     return 0
+
   }
 
   return (
@@ -227,16 +273,20 @@ const startItem = computed(() => {
       perPage +
     1
   )
+
 })
+
 
 const endItem = computed(() => {
 
   return Math.min(
     currentPage.value *
       perPage,
-    cards.value.length
+    cards.value.length,
   )
+
 })
+
 
 // ==========================================
 // 🔝 SCROLL TO GRID
@@ -253,7 +303,9 @@ async function scrollToGrid() {
     block: "start",
 
   })
+
 }
+
 
 // ==========================================
 // 📄 PAGE CHANGE
@@ -265,13 +317,17 @@ async function goToPage(page) {
     page < 1 ||
     page > totalPages.value
   ) {
+
     return
+
   }
 
   currentPage.value = page
 
   await scrollToGrid()
+
 }
+
 
 // ==========================================
 // 🔄 RESET PAGE
@@ -288,18 +344,21 @@ watch(
 
     store.filters.bank,
 
-    store.sort
+    store.sort,
 
   ],
+
   async () => {
 
     currentPage.value = 1
 
     await scrollToGrid()
-  }
+
+  },
 )
 
 </script>
+
 
 <template>
 
@@ -320,6 +379,7 @@ watch(
 
     </div>
 
+
     <!-- PAGINATION -->
 
     <div
@@ -327,17 +387,28 @@ watch(
       class="pagination-wrapper"
     >
 
+      <!-- PAGINATION INFO -->
+
       <div class="pagination-info">
 
-        Показано
+        {{ t("cards.pagination.showing") }}
+
         {{ startItem }}
+
         –
+
         {{ endItem }}
-        из
+
+        {{ t("cards.pagination.of") }}
+
         {{ cards.length }}
-        карт
+
+        {{ t("cards.pagination.cards") }}
 
       </div>
+
+
+      <!-- PAGINATION BUTTONS -->
 
       <div class="pagination">
 
@@ -346,8 +417,11 @@ watch(
           :disabled="currentPage === 1"
           @click="goToPage(currentPage - 1)"
         >
+
           ←
+
         </button>
+
 
         <template
           v-for="page in visiblePages"
@@ -358,22 +432,28 @@ watch(
             v-if="page === '...'"
             class="dots"
           >
+
             ...
+
           </span>
+
 
           <button
             v-else
             class="page-btn"
             :class="{
               active:
-                page === currentPage
+                page === currentPage,
             }"
             @click="goToPage(page)"
           >
+
             {{ page }}
+
           </button>
 
         </template>
+
 
         <button
           class="page-btn"
@@ -382,7 +462,9 @@ watch(
           "
           @click="goToPage(currentPage + 1)"
         >
+
           →
+
         </button>
 
       </div>
@@ -392,6 +474,7 @@ watch(
   </div>
 
 </template>
+
 
 <style scoped>
 
@@ -406,11 +489,47 @@ watch(
       auto-fill,
       minmax(350px, 1fr)
     );
+
 }
+
 
 /* ==========================================
 📄 PAGINATION
 ========================================== */
+
+.pagination-wrapper {
+
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  margin-top: 40px;
+
+}
+
+
+.pagination-info {
+
+  width: 100%;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  text-align: center;
+
+  margin-bottom: 20px;
+
+}
+
 
 .pagination {
 
@@ -422,10 +541,12 @@ watch(
 
   gap: 10px;
 
-  margin-top: 40px;
+  width: 100%;
 
   flex-wrap: wrap;
+
 }
+
 
 .page-btn {
 
@@ -446,14 +567,18 @@ watch(
   font-weight: 600;
 
   transition: .2s;
+
 }
+
 
 .page-btn:hover {
 
   border-color: #2563eb;
 
   color: #2563eb;
+
 }
+
 
 .page-btn.active {
 
@@ -462,13 +587,16 @@ watch(
   border-color: #2563eb;
 
   color: white;
+
 }
+
 
 .page-btn:disabled {
 
   opacity: .4;
 
   cursor: not-allowed;
+
 }
 
 </style>

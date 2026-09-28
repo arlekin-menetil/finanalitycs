@@ -1,16 +1,42 @@
 <script setup>
-defineProps({
+
+import { computed } from "vue"
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
+
+const props = defineProps({
+
   title: {
     type: String,
-    default: "Вклады не найдены",
+    default: "",
   },
 
   description: {
     type: String,
-    default:
-      "Попробуйте изменить параметры фильтрации или очистить поиск.",
+    default: "",
   },
+
 })
+
+const titleText = computed(() => {
+
+  return (
+    props.title ||
+    t("deposits.empty.title")
+  )
+
+})
+
+const descriptionText = computed(() => {
+
+  return (
+    props.description ||
+    t("deposits.empty.description")
+  )
+
+})
+
 </script>
 
 <template>
@@ -22,11 +48,11 @@ defineProps({
     </div>
 
     <h2>
-      {{ title }}
+      {{ titleText }}
     </h2>
 
     <p>
-      {{ description }}
+      {{ descriptionText }}
     </p>
 
   </div>
@@ -51,6 +77,7 @@ defineProps({
   background: white;
 
   border: 1px solid #e2e8f0;
+
 }
 
 .icon {
@@ -69,6 +96,7 @@ defineProps({
   background: #eff6ff;
 
   margin-bottom: 24px;
+
 }
 
 h2 {
@@ -79,6 +107,7 @@ h2 {
   font-weight: 700;
 
   color: #0f172a;
+
 }
 
 p {
@@ -90,6 +119,7 @@ p {
   color: #64748b;
 
   line-height: 1.6;
+
 }
 
 @media (max-width: 768px) {
@@ -97,6 +127,7 @@ p {
   .empty-state {
 
     padding: 60px 20px;
+
   }
 
   .icon {
@@ -105,12 +136,15 @@ p {
     height: 80px;
 
     font-size: 40px;
+
   }
 
   h2 {
 
     font-size: 20px;
+
   }
+
 }
 
 </style>

@@ -2,9 +2,11 @@
 
 import { computed } from "vue"
 import { storeToRefs } from "pinia"
+import { useI18n } from "vue-i18n"
 
-import { useCardsStore }
-from "@/stores/cards"
+import { useCardsStore } from "@/stores/cards"
+
+const { t } = useI18n()
 
 const store = useCardsStore()
 
@@ -113,7 +115,7 @@ const topBanks = computed(() => {
     <div class="section">
 
       <h2 class="section-title">
-        🏦 Популярные банки
+        🏦 {{ t("cards.popularBanks") }}
       </h2>
 
       <div class="banks">
@@ -129,7 +131,7 @@ const topBanks = computed(() => {
           </strong>
 
           <div class="bank-count">
-            {{ bank.count }} карт
+            {{ bank.count }} {{ t("cards.cardsCount") }}
           </div>
 
         </div>
@@ -141,6 +143,7 @@ const topBanks = computed(() => {
   </div>
 
 </template>
+
 <style scoped>
 
 .banks-wrapper {

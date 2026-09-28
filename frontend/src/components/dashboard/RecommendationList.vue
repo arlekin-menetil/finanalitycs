@@ -12,19 +12,18 @@
 
                 <h2 class="recommendations-title">
 
-                    AI-рекомендации
+                    {{ t("recommendations.title") }}
 
                 </h2>
 
                 <p class="recommendations-description">
 
-                    Лучшие банковские продукты,
-                    подобранные на основании вашего
-                    финансового профиля и AI-скоринга.
+                    {{ t("recommendations.subtitle") }}
 
                 </p>
 
             </div>
+
 
             <div class="recommendations-counter">
 
@@ -32,13 +31,14 @@
 
                 <span>
 
-                    предложений
+                    {{ t("recommendations.offers") }}
 
                 </span>
 
             </div>
 
         </div>
+
 
         <!-- ================================= -->
         <!-- PRODUCTS -->
@@ -61,6 +61,7 @@
 
         </div>
 
+
         <!-- ================================= -->
         <!-- EMPTY -->
         <!-- ================================= -->
@@ -76,20 +77,17 @@
 
             </div>
 
+
             <h3>
 
-                Рекомендации пока недоступны
+                {{ t("recommendations.empty") }}
 
             </h3>
 
+
             <p>
 
-                Заполните финансовый профиль
-                и выполните AI-анализ.
-
-                После этого система автоматически
-                подберёт наиболее подходящие
-                кредитные продукты.
+                {{ t("recommendations.emptyDescription") }}
 
             </p>
 
@@ -99,9 +97,16 @@
 
 </template>
 
+
 <script setup>
 
+import { useI18n } from "vue-i18n"
+
 import RecommendationCard from "./RecommendationCard.vue"
+
+
+const { t } = useI18n()
+
 
 defineProps({
 
@@ -116,6 +121,7 @@ defineProps({
 })
 
 </script>
+
 
 <style scoped>
 
@@ -132,6 +138,7 @@ defineProps({
     gap:30px;
 
 }
+
 
 /* ==========================================================
    HEADER
@@ -151,6 +158,7 @@ defineProps({
 
 }
 
+
 .recommendations-title{
 
     margin:0;
@@ -162,6 +170,7 @@ defineProps({
     color:#0f172a;
 
 }
+
 
 .recommendations-description{
 
@@ -176,6 +185,7 @@ defineProps({
     font-size:15px;
 
 }
+
 
 /* ==========================================================
    COUNTER
@@ -211,6 +221,7 @@ defineProps({
 
 }
 
+
 .recommendations-counter span{
 
     margin-top:4px;
@@ -222,6 +233,7 @@ defineProps({
     color:#64748b;
 
 }
+
 
 /* ==========================================================
    GRID
@@ -236,6 +248,7 @@ defineProps({
     gap:24px;
 
 }
+
 
 /* ==========================================================
    EMPTY
@@ -255,6 +268,7 @@ defineProps({
 
 }
 
+
 .empty-icon{
 
     font-size:64px;
@@ -262,6 +276,7 @@ defineProps({
     margin-bottom:22px;
 
 }
+
 
 .recommendations-empty h3{
 
@@ -275,6 +290,7 @@ defineProps({
 
 }
 
+
 .recommendations-empty p{
 
     margin:18px auto 0;
@@ -287,6 +303,7 @@ defineProps({
 
 }
 
+
 /* ==========================================================
    DARK
 ========================================================== */
@@ -297,11 +314,13 @@ defineProps({
 
 }
 
+
 .dark .recommendations-description{
 
     color:#94a3b8;
 
 }
+
 
 .dark .recommendations-counter{
 
@@ -313,11 +332,13 @@ defineProps({
 
 }
 
+
 .dark .recommendations-counter span{
 
     color:#94a3b8;
 
 }
+
 
 .dark .recommendations-empty{
 
@@ -327,17 +348,20 @@ defineProps({
 
 }
 
+
 .dark .recommendations-empty h3{
 
     color:white;
 
 }
 
+
 .dark .recommendations-empty p{
 
     color:#94a3b8;
 
 }
+
 
 /* ==========================================================
    RESPONSIVE
@@ -353,6 +377,7 @@ defineProps({
 
 }
 
+
 @media (max-width:768px){
 
     .recommendations-header{
@@ -363,6 +388,7 @@ defineProps({
 
     }
 
+
     .recommendations-counter{
 
         width:100%;
@@ -370,6 +396,7 @@ defineProps({
     }
 
 }
+
 
 @media (max-width:600px){
 
@@ -379,11 +406,13 @@ defineProps({
 
     }
 
+
     .recommendations-empty{
 
         padding:36px 24px;
 
     }
+
 
     .empty-icon{
 

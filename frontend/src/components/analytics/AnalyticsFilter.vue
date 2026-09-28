@@ -1,32 +1,32 @@
 <script setup>
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
 
 defineProps({
-
   selectedBank: {
     type: String,
-    default: "Все банки"
+    default: "Все банки",
   },
 
   uniqueBanks: {
     type: Array,
-    default: () => []
-  }
-
+    default: () => [],
+  },
 })
 
 defineEmits([
-  "update:selectedBank"
+  "update:selectedBank",
 ])
-
 </script>
 
 <template>
 
 <div class="filter">
 
-  <label class="filter-label">
-    Выберите банк
-  </label>
+<label class="filter-label">
+  {{ t("analytics.selectBank") }}
+</label>
 
   <div class="select-wrapper">
 

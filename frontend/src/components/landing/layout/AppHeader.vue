@@ -1,66 +1,77 @@
 <script setup>
-import {
-  computed
-} from "vue"
 
-import {
-  useI18n
-} from "vue-i18n"
+import { computed } from "vue"
+import { useI18n } from "vue-i18n"
+import { useRouter } from "vue-router"
 
-import {
-  useRouter
-} from "vue-router"
-
-const {
-  t,
-  locale
-} = useI18n()
-
+const { t, locale } = useI18n()
 const router = useRouter()
 
-
 // ==========================================
-// 👤 PROFILE
+// PROFILE
 // ==========================================
 
 const goToProfile = () => {
   router.push("/app/profile")
 }
 
-
 // ==========================================
-// 🌍 LANGUAGE
+// LANGUAGE
 // ==========================================
 
 const changeLang = (lang) => {
+
   locale.value = lang
 
   localStorage.setItem(
     "lang",
     lang
   )
+
 }
 
-
 // ==========================================
-// 🏠 LANDING
+// LANDING
 // ==========================================
 
 const isLanding = computed(() => {
+
   return (
     router.currentRoute.value.path === "/"
   )
+
 })
 
-
 // ==========================================
-// 🔗 LANDING NAVIGATION
+// SCROLL
 // ==========================================
 
 const scrollToSection = (id) => {
 
   if (!isLanding.value) {
+
+    router.push("/")
+
+    setTimeout(() => {
+
+      const element =
+        document.getElementById(id)
+
+      if (element) {
+
+        element.scrollIntoView({
+
+          behavior: "smooth",
+          block: "start"
+
+        })
+
+      }
+
+    }, 300)
+
     return
+
   }
 
   const element =
@@ -71,14 +82,16 @@ const scrollToSection = (id) => {
   }
 
   element.scrollIntoView({
+
     behavior: "smooth",
     block: "start"
+
   })
+
 }
 
-
 // ==========================================
-// 📝 NAVIGATION TEXT
+// NAVIGATION TEXT
 // ==========================================
 
 const navText = (
@@ -91,6 +104,7 @@ const navText = (
   return value === key
     ? fallback
     : value
+
 }
 
 </script>
@@ -98,228 +112,128 @@ const navText = (
 
 <template>
 
-  <header class="header">
+<header class="header">
 
-    <!-- ==================================
-         LOGO
-    ================================== -->
+  <!-- ==========================================
+       LOGO
+  =========================================== -->
 
-    <div
-      class="logo"
-      @click="
-        router.push('/')
-      "
+  <div
+    class="logo"
+    @click="router.push('/')"
+  >
+
+    <img
+      src="/logo.png"
+      alt="FinAnalytics"
+      class="logo__image"
+    />
+
+  </div>
+
+  <!-- ==========================================
+       NAVIGATION
+  =========================================== -->
+
+  <nav
+    v-if="isLanding"
+    class="navigation"
+  >
+
+    <button
+      class="navigation__item"
+      type="button"
+      @click="scrollToSection('integrations')"
     >
+      {{ t("landingNav.integrations") }}
+    </button>
 
-      <img
-        src="/logo.png"
-        alt="FinAnalytics"
-        class="logo__image"
-      />
-
-    </div>
-
-
-    <!-- ==================================
-         LANDING NAVIGATION
-    ================================== -->
-
-    <nav
-      v-if="isLanding"
-      class="navigation"
+    <button
+      class="navigation__item"
+      type="button"
+      @click="scrollToSection('monitoring')"
     >
+      {{ t("landingNav.monitoring") }}
+    </button>
 
-      <!-- INTEGRATIONS -->
+    <button
+      class="navigation__item"
+      type="button"
+      @click="scrollToSection('mobile-apps')"
+    >
+      {{ t("landingNav.mobile") }}
+    </button>
+
+    <button
+      class="navigation__item"
+      type="button"
+      @click="scrollToSection('currency')"
+    >
+      {{ t("landingNav.currency") }}
+    </button>
+
+  </nav>
+
+  <!-- ==========================================
+       RIGHT SIDE
+  =========================================== -->
+
+  <div class="header-right">
+
+    <!-- LANGUAGE -->
+
+    <div class="langs">
 
       <button
+        class="lang"
+        :class="{ active: locale === 'ru' }"
         type="button"
-        class="navigation__item"
-        @click="
-          scrollToSection(
-            'integrations'
-          )
-        "
+        @click="changeLang('ru')"
       >
-
-        {{
-          navText(
-            "landingNav.integrations",
-            "Интеграции"
-          )
-        }}
-
+        🇷🇺
       </button>
 
-
-      <!-- MONITORING -->
-
       <button
+        class="lang"
+        :class="{ active: locale === 'en' }"
         type="button"
-        class="navigation__item"
-        @click="
-          scrollToSection(
-            'monitoring'
-          )
-        "
+        @click="changeLang('en')"
       >
-
-        {{
-          navText(
-            "landingNav.monitoring",
-            "Мониторинг"
-          )
-        }}
-
+        🇬🇧
       </button>
 
-
-      <!-- MOBILE APPS -->
-
       <button
+        class="lang"
+        :class="{ active: locale === 'uz' }"
         type="button"
-        class="navigation__item"
-        @click="
-          scrollToSection(
-            'mobile-apps'
-          )
-        "
+        @click="changeLang('uz')"
       >
-
-        {{
-          navText(
-            "landingNav.mobile",
-            "Мобильные приложения"
-          )
-        }}
-
-      </button>
-
-
-      <!-- CURRENCY -->
-
-      <button
-        type="button"
-        class="navigation__item"
-        @click="
-          scrollToSection(
-            'currency'
-          )
-        "
-      >
-
-        {{
-          navText(
-            "landingNav.currency",
-            "Курс валют"
-          )
-        }}
-
-      </button>
-
-    </nav>
-
-
-    <!-- ==================================
-         RIGHT
-    ================================== -->
-
-    <div class="header-right">
-
-      <!-- LANGUAGES -->
-
-      <div class="langs">
-
-        <button
-          type="button"
-
-          :class="[
-            'lang',
-            {
-              active:
-                locale === 'ru'
-            }
-          ]"
-
-          @click="
-            changeLang('ru')
-          "
-        >
-
-          🇷🇺
-
-        </button>
-
-
-        <button
-          type="button"
-
-          :class="[
-            'lang',
-            {
-              active:
-                locale === 'en'
-            }
-          ]"
-
-          @click="
-            changeLang('en')
-          "
-        >
-
-          🇬🇧
-
-        </button>
-
-
-        <button
-          type="button"
-
-          :class="[
-            'lang',
-            {
-              active:
-                locale === 'uz'
-            }
-          ]"
-
-          @click="
-            changeLang('uz')
-          "
-        >
-
-          🇺🇿
-
-        </button>
-
-      </div>
-
-
-      <!-- PROFILE -->
-
-      <button
-        type="button"
-        class="profile-btn"
-        @click="goToProfile"
-      >
-
-        <span class="profile-btn__icon">
-          👤
-        </span>
-
-        {{
-          t(
-            "common.profile"
-          ) || "Профиль"
-        }}
-
+        🇺🇿
       </button>
 
     </div>
 
-  </header>
+    <!-- PROFILE -->
+
+    <button
+      class="profile-btn"
+      type="button"
+      @click="goToProfile"
+    >
+
+      <span class="profile-btn__icon">
+        👤
+      </span>
+
+      {{ t("common.profile") }}
+
+    </button>
+
+  </div>
+
+</header>
 
 </template>
-
 
 <style scoped>
 

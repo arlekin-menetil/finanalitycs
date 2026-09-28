@@ -1,36 +1,31 @@
 <script setup>
 
 import { computed } from "vue"
+import { useI18n } from "vue-i18n"
 import { useCardsStore } from "@/stores/cards"
+
+const { t } = useI18n()
 
 const store = useCardsStore()
 
 const availableBanks = computed(() => {
-
   return store.banks
-
 })
 
 function setCurrency(value) {
-
   store.filters.currency = value
-
 }
 
 function setSystem(value) {
-
   store.filters.system =
     store.filters.system === value
       ? "all"
       : value
-
 }
 
 function toggleOnline() {
-
   store.filters.online =
     !store.filters.online
-
 }
 
 function setBank(event) {
@@ -39,20 +34,21 @@ function setBank(event) {
     event.target.value
 
   store.filters.bank =
-
     value === "all"
       ? null
       : value
-
 }
 
 </script>
+
 
 <template>
 
   <div class="filters">
 
-    <!-- ВАЛЮТА -->
+    <!-- ========================================== -->
+    <!-- 💰 CURRENCY -->
+    <!-- ========================================== -->
 
     <button
       class="chip"
@@ -62,8 +58,9 @@ function setBank(event) {
       }"
       @click="setCurrency('all')"
     >
-      🔥 Все
+      🔥 {{ t("cards.filters.all") }}
     </button>
+
 
     <button
       class="chip"
@@ -76,6 +73,7 @@ function setBank(event) {
       💵 UZS
     </button>
 
+
     <button
       class="chip"
       :class="{
@@ -87,7 +85,10 @@ function setBank(event) {
       💲 USD
     </button>
 
-    <!-- СИСТЕМЫ -->
+
+    <!-- ========================================== -->
+    <!-- 💳 CARD SYSTEMS -->
+    <!-- ========================================== -->
 
     <button
       class="chip"
@@ -100,6 +101,7 @@ function setBank(event) {
       💳 Visa
     </button>
 
+
     <button
       class="chip"
       :class="{
@@ -110,6 +112,7 @@ function setBank(event) {
     >
       💳 MasterCard
     </button>
+
 
     <button
       class="chip"
@@ -122,6 +125,7 @@ function setBank(event) {
       🇺🇿 HUMO
     </button>
 
+
     <button
       class="chip"
       :class="{
@@ -133,7 +137,10 @@ function setBank(event) {
       🇺🇿 UZCARD
     </button>
 
-    <!-- ОНЛАЙН -->
+
+    <!-- ========================================== -->
+    <!-- 🌐 ONLINE -->
+    <!-- ========================================== -->
 
     <button
       class="chip"
@@ -143,149 +150,387 @@ function setBank(event) {
       }"
       @click="toggleOnline"
     >
-      🌐 Онлайн оформление
+      🌐 {{ t("cards.filters.online") }}
     </button>
 
-    <!-- БАНК -->
 
-    <select
-      class="bank-select"
-      @change="setBank"
-    >
+    <!-- ========================================== -->
+    <!-- 🏦 BANK -->
+    <!-- ========================================== -->
 
-      <option value="all">
-        🏦 Все банки
-      </option>
+    <div class="bank-select-wrapper">
 
-      <option
-        v-for="bank in availableBanks"
-        :key="bank.name"
-        :value="bank.name"
+      <span class="bank-icon">
+        🏦
+      </span>
+
+
+      <select
+        class="bank-select"
+        :value="
+          store.filters.bank || 'all'
+        "
+        @change="setBank"
       >
-        {{ bank.name }}
-      </option>
 
-    </select>
+        <option value="all">
+          {{ t("cards.filters.allBanks") }}
+        </option>
+
+
+        <option
+          v-for="bank in availableBanks"
+          :key="bank.name"
+          :value="bank.name"
+        >
+          {{ bank.name }}
+        </option>
+
+      </select>
+
+
+      <!-- CUSTOM ARROW -->
+
+      <span
+        class="select-arrow"
+        aria-hidden="true"
+      >
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+
+          <path
+            d="M6 9L12 15L18 9"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+
+        </svg>
+
+      </span>
+
+    </div>
 
   </div>
 
 </template>
 
+
 <style scoped>
+
+/* ========================================== */
+/* 🎛 FILTERS */
+/* ========================================== */
 
 .filters {
 
-  display:flex;
+  display: flex;
 
-  flex-wrap:wrap;
+  flex-wrap: wrap;
 
-  gap:12px;
+  align-items: center;
 
-  margin:24px 0;
+  gap: 12px;
+
+  margin: 24px 0;
+
 }
+
+
+/* ========================================== */
+/* 🔘 CHIP */
+/* ========================================== */
 
 .chip {
 
-  display:flex;
+  display: flex;
 
-  align-items:center;
+  align-items: center;
 
-  gap:6px;
+  justify-content: center;
 
-  padding:12px 18px;
+  gap: 6px;
 
-  border-radius:999px;
+  min-height: 42px;
 
-  border:1px solid #e5e7eb;
+  padding: 12px 18px;
 
-  background:white;
+  border-radius: 999px;
 
-  color:#334155;
+  border: 1px solid #e5e7eb;
 
-  font-size:14px;
+  background: white;
 
-  font-weight:600;
+  color: #334155;
 
-  cursor:pointer;
+  font-size: 14px;
 
-  transition:all .2s ease;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    border-color .2s ease,
+    color .2s ease,
+    background .2s ease,
+    transform .2s ease,
+    box-shadow .2s ease;
+
 }
+
 
 .chip:hover {
 
-  border-color:#2563eb;
+  border-color: #2563eb;
 
-  color:#2563eb;
+  color: #2563eb;
 
-  transform:translateY(-1px);
+  transform: translateY(-1px);
+
 }
+
 
 .chip.active {
 
-  background:#2563eb;
+  background: #2563eb;
 
-  border-color:#2563eb;
+  border-color: #2563eb;
 
-  color:white;
+  color: white;
+
+  box-shadow:
+    0 4px 12px
+    rgba(37, 99, 235, .16);
+
 }
+
+
+/* ========================================== */
+/* 🏦 BANK SELECT WRAPPER */
+/* ========================================== */
+
+.bank-select-wrapper {
+
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  min-width: 220px;
+
+  height: 42px;
+
+}
+
+
+/* ========================================== */
+/* 🏦 BANK ICON */
+/* ========================================== */
+
+.bank-icon {
+
+  position: absolute;
+
+  left: 17px;
+
+  top: 50%;
+
+  z-index: 2;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  transform: translateY(-50%);
+
+  pointer-events: none;
+
+  font-size: 14px;
+
+}
+
+
+/* ========================================== */
+/* 🏦 BANK SELECT */
+/* ========================================== */
 
 .bank-select {
 
-  padding:12px 18px;
+  width: 100%;
 
-  border-radius:999px;
+  height: 42px;
 
-  border:1px solid #e5e7eb;
+  padding:
+    0 42px
+    0 42px;
 
-  background:white;
+  border: 1px solid #e5e7eb;
 
-  color:#334155;
+  border-radius: 999px;
 
-  font-size:14px;
+  background: white;
 
-  font-weight:600;
+  color: #334155;
 
-  cursor:pointer;
+  font-family: inherit;
 
-  transition:.2s ease;
+  font-size: 14px;
 
-  min-width:220px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  appearance: none;
+
+  -webkit-appearance: none;
+
+  -moz-appearance: none;
+
+  outline: none;
+
+  transition:
+    border-color .2s ease,
+    box-shadow .2s ease,
+    transform .2s ease;
+
 }
+
+
+/* ========================================== */
+/* ✨ HOVER */
+/* ========================================== */
 
 .bank-select:hover {
 
-  border-color:#2563eb;
+  border-color: #2563eb;
+
+  transform: translateY(-1px);
+
 }
+
+
+/* ========================================== */
+/* 🎯 FOCUS */
+/* ========================================== */
 
 .bank-select:focus {
 
-  outline:none;
-
-  border-color:#2563eb;
+  border-color: #2563eb;
 
   box-shadow:
     0 0 0 4px
-    rgba(37,99,235,.12);
+    rgba(37, 99, 235, .12);
+
 }
 
-@media (max-width:768px) {
+
+/* ========================================== */
+/* 🔽 CUSTOM ARROW */
+/* ========================================== */
+
+.select-arrow {
+
+  position: absolute;
+
+  right: 16px;
+
+  top: 50%;
+
+  z-index: 2;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 18px;
+
+  height: 18px;
+
+  transform:
+    translateY(-50%);
+
+  color: #64748b;
+
+  pointer-events: none;
+
+  transition:
+    color .2s ease,
+    transform .2s ease;
+
+}
+
+
+.select-arrow svg {
+
+  width: 17px;
+
+  height: 17px;
+
+}
+
+
+/* ========================================== */
+/* 🔵 HOVER ARROW */
+/* ========================================== */
+
+.bank-select-wrapper:hover
+.select-arrow {
+
+  color: #2563eb;
+
+}
+
+
+/* ========================================== */
+/* 📱 MOBILE */
+/* ========================================== */
+
+@media (max-width: 768px) {
 
   .filters {
 
-    gap:8px;
+    gap: 8px;
+
   }
+
 
   .chip {
 
-    padding:10px 14px;
+    min-height: 40px;
 
-    font-size:13px;
+    padding:
+      10px 14px;
+
+    font-size: 13px;
+
   }
+
+
+  .bank-select-wrapper {
+
+    width: 100%;
+
+    min-width: 0;
+
+  }
+
 
   .bank-select {
 
-    width:100%;
+    width: 100%;
+
   }
+
 }
 
 </style>

@@ -2,8 +2,11 @@
 
 import { computed } from "vue"
 import { storeToRefs } from "pinia"
+import { useI18n } from "vue-i18n"
 
 import { useDepositsStore } from "@/stores/deposits"
+
+const { t } = useI18n()
 
 const store = useDepositsStore()
 
@@ -16,10 +19,6 @@ const {
 // ==========================================
 // 🏦 SORTED BANKS
 // ==========================================
-// Популярные банки теперь определяются
-// только по реальному количеству вкладов.
-// Никаких захардкоженных банков.
-// ==========================================
 
 const sortedBanks = computed(() => {
 
@@ -27,7 +26,6 @@ const sortedBanks = computed(() => {
 
   result.sort((a, b) => {
 
-    // Сначала количество вкладов
     if (
       Number(b.count || 0) !==
       Number(a.count || 0)
@@ -37,10 +35,9 @@ const sortedBanks = computed(() => {
         Number(b.count || 0) -
         Number(a.count || 0)
       )
+
     }
 
-    // Если количество одинаковое —
-    // сортируем по названию
     return String(
       a.name || ""
     ).localeCompare(
@@ -48,9 +45,11 @@ const sortedBanks = computed(() => {
         b.name || ""
       )
     )
+
   })
 
   return result
+
 })
 
 
@@ -64,6 +63,7 @@ const topBanks = computed(() => {
     0,
     10
   )
+
 })
 
 </script>
@@ -83,7 +83,7 @@ const topBanks = computed(() => {
     >
 
       <h2 class="section-title">
-        Рекомендуемые банки
+        {{ t("deposits.banks.recommended") }}
       </h2>
 
       <div class="banks">
@@ -100,7 +100,7 @@ const topBanks = computed(() => {
 
           <div class="bank-score">
 
-            Совпадение
+            {{ t("deposits.banks.match") }}
             {{ bank.score }}%
 
           </div>
@@ -110,7 +110,7 @@ const topBanks = computed(() => {
             class="bank-rate"
           >
 
-            Ставка до
+            {{ t("deposits.banks.rateTo") }}
             {{ bank.best_rate }}%
 
           </div>
@@ -118,7 +118,7 @@ const topBanks = computed(() => {
           <div class="bank-count">
 
             {{ bank.count }}
-            вкладов
+            {{ t("deposits.banks.deposits") }}
 
           </div>
 
@@ -139,7 +139,7 @@ const topBanks = computed(() => {
     >
 
       <h2 class="section-title">
-        Популярные банки
+        {{ t("deposits.banks.popular") }}
       </h2>
 
       <div class="banks">
@@ -160,7 +160,7 @@ const topBanks = computed(() => {
           >
 
             {{ bank.count }}
-            вкладов
+            {{ t("deposits.banks.deposits") }}
 
           </div>
 

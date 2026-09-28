@@ -1,179 +1,228 @@
 import axios from "axios"
 
-// 💣 baseURL через env (ВАЖНО)
+// ==========================================
+// API CONFIG
+// ==========================================
+
+const API_URL =
+  import.meta.env.VITE_API_URL || "/api"
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:8000/api",
+  baseURL: API_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
 })
 
 // ==========================================
-// 🧠 REQUEST INTERCEPTOR
+// REQUEST INTERCEPTOR
 // ==========================================
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access")
 
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
-  }
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("access")
 
-  return config
-})
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
 
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  },
+)
 
 // ==========================================
-// 💣 REFRESH LOGIC
+// TOKEN REFRESH
 // ==========================================
+
 let isRefreshing = false
 let failedQueue = []
 
-const processQueue = (error, token = null) => {
-  failedQueue.forEach((prom) => {
-    if (error) {
-      prom.reject(error)
-    } else {
-      prom.resolve(token)
-    }
-  })
+function processQueue(error, token = null) {
+  failedQueue.forEach(
+    ({ resolve, reject }) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(token)
+      }
+    },
+  )
 
   failedQueue = []
 }
 
+// ==========================================
+// RESPONSE INTERCEPTOR
+// ==========================================
 
-// ==========================================
-// 🧠 RESPONSE INTERCEPTOR
-// ==========================================
 api.interceptors.response.use(
-  (response) => response,
-  async (error) => {
+  (response) => {
+    return response
+  },
 
+  async (error) => {
     const originalRequest = error.config
 
+    // ========================================
+    // NETWORK ERROR
+    // ========================================
+
     if (!error.response) {
+      console.error(
+        "Network error:",
+        error.message,
+      )
+
       return Promise.reject(error)
     }
 
-    if (
-      error.response.status === 401 &&
-      !originalRequest._retry
-    ) {
+    const status = error.response.status
 
-      if (
-        originalRequest.url?.includes("/auth/login")
-      ) {
-        return Promise.reject(error)
-      }
+    // ========================================
+    // NOT 401
+    // ========================================
 
-      if (isRefreshing) {
+    if (status !== 401) {
+      console.error(
+        `${status} ${originalRequest?.url}`,
+        error,
+      )
 
-        return new Promise((resolve, reject) => {
-
-          failedQueue.push({
-            resolve,
-            reject
-          })
-
-        })
-          .then((token) => {
-
-            originalRequest.headers.Authorization =
-              "Bearer " + token
-
-            return api(originalRequest)
-
-          })
-          .catch((err) =>
-            Promise.reject(err)
-          )
-
-      }
-
-      originalRequest._retry = true
-      isRefreshing = true
-
-      const refreshToken =
-        localStorage.getItem("refresh")
-
-      if (!refreshToken) {
-
-        forceLogout()
-
-        return Promise.reject(error)
-
-      }
-
-      try {
-
-        const res = await axios.post(
-
-          `${import.meta.env.VITE_API_URL ||
-          "http://localhost:8000/api"
-          }/token/refresh/`,
-
-          {
-            refresh: refreshToken
-          }
-
-        )
-
-        const newAccess =
-          res.data.access
-
-        localStorage.setItem(
-          "access",
-          newAccess
-        )
-
-        api.defaults.headers.Authorization =
-          `Bearer ${newAccess}`
-
-        originalRequest.headers.Authorization =
-          `Bearer ${newAccess}`
-
-        processQueue(
-          null,
-          newAccess
-        )
-
-        return api(originalRequest)
-
-      }
-
-      catch (err) {
-
-        processQueue(
-          err,
-          null
-        )
-
-        forceLogout()
-
-        return Promise.reject(err)
-
-      }
-
-      finally {
-
-        isRefreshing = false
-
-      }
-
+      return Promise.reject(error)
     }
 
-    return Promise.reject(error)
+    // ========================================
+    // PREVENT INFINITE RETRY
+    // ========================================
 
-  }
+    if (originalRequest?._retry) {
+      forceLogout()
+
+      return Promise.reject(error)
+    }
+
+    // ========================================
+    // LOGIN REQUEST
+    // ========================================
+
+    if (
+      originalRequest?.url?.includes(
+        "/auth/login",
+      )
+    ) {
+      return Promise.reject(error)
+    }
+
+    // ========================================
+    // REFRESH TOKEN
+    // ========================================
+
+    const refresh =
+      localStorage.getItem("refresh")
+
+    if (!refresh) {
+      forceLogout()
+
+      return Promise.reject(error)
+    }
+
+    // ========================================
+    // WAIT FOR EXISTING REFRESH
+    // ========================================
+
+    if (isRefreshing) {
+      return new Promise(
+        (resolve, reject) => {
+          failedQueue.push({
+            resolve,
+            reject,
+          })
+        },
+      )
+        .then((token) => {
+          originalRequest.headers.Authorization =
+            `Bearer ${token}`
+
+          return api(originalRequest)
+        })
+        .catch((err) => {
+          return Promise.reject(err)
+        })
+    }
+
+    // ========================================
+    // START TOKEN REFRESH
+    // ========================================
+
+    originalRequest._retry = true
+    isRefreshing = true
+
+    try {
+      const refreshResponse =
+        await axios.post(
+          `${API_URL}/token/refresh/`,
+          {
+            refresh,
+          },
+        )
+
+      const newAccess =
+        refreshResponse.data.access
+
+      // Save new access token
+      localStorage.setItem(
+        "access",
+        newAccess,
+      )
+
+      // Update default Authorization
+      api.defaults.headers.common.Authorization =
+        `Bearer ${newAccess}`
+
+      // Update original request
+      originalRequest.headers.Authorization =
+        `Bearer ${newAccess}`
+
+      // Resolve queued requests
+      processQueue(
+        null,
+        newAccess,
+      )
+
+      // Retry original request
+      return api(originalRequest)
+    } catch (refreshError) {
+      processQueue(refreshError)
+
+      forceLogout()
+
+      return Promise.reject(
+        refreshError,
+      )
+    } finally {
+      isRefreshing = false
+    }
+  },
 )
 
+// ==========================================
+// FORCE LOGOUT
+// ==========================================
 
-// ==========================================
-// 💣 FORCE LOGOUT
-// ==========================================
 function forceLogout() {
-
   localStorage.removeItem("access")
   localStorage.removeItem("refresh")
 
-  window.location.href = "/login"
+  delete api.defaults.headers.common.Authorization
 
+  window.location.href = "/login"
 }
+
+// ==========================================
+// EXPORT
+// ==========================================
 
 export default api

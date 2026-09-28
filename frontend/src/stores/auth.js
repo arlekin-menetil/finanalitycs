@@ -2,27 +2,20 @@ import { defineStore } from "pinia"
 import api from "@/api/axios"
 
 export const useAuthStore = defineStore("auth", {
-
   state: () => ({
-
     access: localStorage.getItem("access") || null,
-
     refresh: localStorage.getItem("refresh") || null,
 
     user: null,
-
     profile: null,
 
     loading: false,
-
     error: null,
 
     initialized: false,
-
   }),
 
   getters: {
-
     // ==========================================
     // AUTH
     // ==========================================
@@ -34,13 +27,9 @@ export const useAuthStore = defineStore("auth", {
     // ==========================================
 
     isProfileCompleted: (state) => {
-
       return Boolean(
-
         state.profile?.is_profile_completed,
-
       )
-
     },
 
     // ==========================================
@@ -48,41 +37,29 @@ export const useAuthStore = defineStore("auth", {
     // ==========================================
 
     canUsePlatform() {
-
-      return this.isAuthenticated &&
-
+      return (
+        this.isAuthenticated &&
         this.isProfileCompleted
-
+      )
     },
-
   },
 
   actions: {
-
     // ==========================================
     // LOGIN
     // ==========================================
 
     async login(phone, password) {
-
       try {
-
         this.loading = true
-
         this.error = null
 
         const { data } = await api.post(
-
           "/auth/login/",
-
           {
-
             phone,
-
             password,
-
           },
-
         )
 
         this.setTokens(data)
@@ -90,27 +67,15 @@ export const useAuthStore = defineStore("auth", {
         await this.loadUser()
 
         return true
-
-      }
-
-      catch (err) {
-
+      } catch (err) {
         this.error =
-
           err.response?.data ||
-
           "Login failed"
 
         throw err
-
-      }
-
-      finally {
-
+      } finally {
         this.loading = false
-
       }
-
     },
 
     // ==========================================
@@ -118,31 +83,21 @@ export const useAuthStore = defineStore("auth", {
     // ==========================================
 
     setTokens(data) {
-
       this.access = data.access
-
       this.refresh = data.refresh
 
       localStorage.setItem(
-
         "access",
-
         data.access,
-
       )
 
       localStorage.setItem(
-
         "refresh",
-
         data.refresh,
-
       )
 
       api.defaults.headers.common.Authorization =
-
         `Bearer ${data.access}`
-
     },
 
     // ==========================================
@@ -150,11 +105,8 @@ export const useAuthStore = defineStore("auth", {
     // ==========================================
 
     async loadUser() {
-
       const { data } = await api.get(
-
         "/auth/me/",
-
       )
 
       this.user = data
@@ -162,7 +114,6 @@ export const useAuthStore = defineStore("auth", {
       await this.fetchProfile()
 
       return data
-
     },
 
     // ==========================================
@@ -170,35 +121,19 @@ export const useAuthStore = defineStore("auth", {
     // ==========================================
 
     async fetchProfile() {
-
       try {
-
         const { data } = await api.get(
-
           "/profile/",
-
         )
 
         this.profile = data
 
         return data
-
-      }
-
-      catch (e) {
-
-        console.warn(
-
-          "Profile not found",
-
-        )
-
+      } catch (e) {
         this.profile = null
 
         return null
-
       }
-
     },
 
     // ==========================================
@@ -206,31 +141,20 @@ export const useAuthStore = defineStore("auth", {
     // ==========================================
 
     async setupProfile(payload) {
-
       this.loading = true
 
       try {
-
         const { data } = await api.post(
-
           "/profile/setup/",
-
           payload,
-
         )
 
         await this.fetchProfile()
 
         return data
-
-      }
-
-      finally {
-
+      } finally {
         this.loading = false
-
       }
-
     },
 
     // ==========================================
@@ -238,9 +162,7 @@ export const useAuthStore = defineStore("auth", {
     // ==========================================
 
     async refreshProfile() {
-
       return await this.fetchProfile()
-
     },
 
     // ==========================================
@@ -248,25 +170,18 @@ export const useAuthStore = defineStore("auth", {
     // ==========================================
 
     logout() {
-
       this.access = null
-
       this.refresh = null
-
       this.user = null
-
       this.profile = null
 
       this.loading = false
-
       this.error = null
 
       localStorage.removeItem("access")
-
       localStorage.removeItem("refresh")
 
       delete api.defaults.headers.common.Authorization
-
     },
 
     // ==========================================
@@ -274,53 +189,31 @@ export const useAuthStore = defineStore("auth", {
     // ==========================================
 
     async init() {
-
       try {
-
         const access =
-
           localStorage.getItem("access")
 
         if (!access) {
-
           this.initialized = true
-
           return
-
         }
 
         this.access = access
 
         api.defaults.headers.common.Authorization =
-
           `Bearer ${access}`
 
         await this.loadUser()
-
-      }
-
-      catch (e) {
-
+      } catch (e) {
         console.error(
-
           "Auth init:",
-
           e,
-
         )
 
         this.logout()
-
-      }
-
-      finally {
-
+      } finally {
         this.initialized = true
-
       }
-
     },
-
   },
-
 })

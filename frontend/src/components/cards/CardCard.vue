@@ -1,6 +1,9 @@
 <script setup>
 import { computed } from "vue"
 import { useRouter } from "vue-router"
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
 
 const props = defineProps({
   item: {
@@ -26,7 +29,7 @@ const bankName = computed(() => {
   return (
     props.item.bank_name ||
     props.item.bank?.name ||
-    "Банк"
+    t("common.bank")
   )
 })
 
@@ -119,7 +122,7 @@ const logo = computed(() => {
         v-if="item.is_online"
         class="tag online"
       >
-        Онлайн
+        {{ t("cards.online") }}
       </span>
 
     </div>
@@ -131,7 +134,7 @@ const logo = computed(() => {
       <div class="stat">
 
         <span>
-          Валюта
+          {{ t("cards.currency") }}
         </span>
 
         <strong>
@@ -143,7 +146,7 @@ const logo = computed(() => {
       <div class="stat">
 
         <span>
-          Система
+          {{ t("cards.system") }}
         </span>
 
         <strong>
@@ -155,7 +158,7 @@ const logo = computed(() => {
       <div class="stat">
 
         <span>
-          Срок
+          {{ t("cards.term") }}
         </span>
 
         <strong>
@@ -167,7 +170,7 @@ const logo = computed(() => {
       <div class="stat">
 
         <span>
-          Выпуск
+          {{ t("cards.issue") }}
         </span>
 
         <strong>
@@ -184,7 +187,7 @@ const logo = computed(() => {
       class="btn"
       @click="openProduct"
     >
-      Подробнее
+      {{ t("cards.details") }}
     </button>
 
   </div>
@@ -194,30 +197,19 @@ const logo = computed(() => {
 <style scoped>
 
 .card {
-
   background: white;
-
   border-radius: 28px;
-
   padding: 24px;
-
   border: 1px solid #e5e7eb;
-
   display: flex;
-
   flex-direction: column;
-
   gap: 18px;
-
   transition: .25s;
-
   min-height: 320px;
 }
 
 .card:hover {
-
   transform: translateY(-3px);
-
   box-shadow:
     0 10px 25px rgba(0,0,0,.08);
 }
@@ -225,155 +217,103 @@ const logo = computed(() => {
 /* HEADER */
 
 .card-header {
-
   display: flex;
-
   gap: 16px;
-
   align-items: flex-start;
 }
 
 .logo {
-
   width: 56px;
-
   height: 56px;
-
   object-fit: contain;
-
   border-radius: 14px;
-
   background: white;
-
   border: 1px solid #e5e7eb;
-
   padding: 6px;
-
   flex-shrink: 0;
 }
 
 .header-content {
-
   flex: 1;
 }
 
 .bank {
-
   color: #64748b;
-
   font-size: 14px;
-
   margin-bottom: 4px;
 }
 
 .title {
-
   font-size: 20px;
-
   font-weight: 700;
-
   line-height: 1.3;
-
   margin: 0;
 }
 
 /* TAGS */
 
 .tags {
-
   display: flex;
-
   flex-wrap: wrap;
-
   gap: 8px;
 }
 
 .tag {
-
   padding: 6px 12px;
-
   border-radius: 999px;
-
   background: #f1f5f9;
-
   font-size: 12px;
-
   font-weight: 600;
-
   color: #334155;
 }
 
 .online {
-
   background: #dcfce7;
-
   color: #166534;
 }
 
 /* STATS */
 
 .stats {
-
   display: grid;
-
   grid-template-columns:
     repeat(2,1fr);
-
   gap: 12px;
 }
 
 .stat {
-
   background: #f8fafc;
-
   border-radius: 16px;
-
   padding: 14px;
 }
 
 .stat span {
-
   display: block;
-
   color: #64748b;
-
   font-size: 12px;
-
   margin-bottom: 6px;
 }
 
 .stat strong {
-
   font-size: 18px;
-
   font-weight: 700;
 }
 
 /* BUTTON */
 
 .btn {
-
   margin-top: auto;
-
   height: 44px;
-
   border: none;
-
   border-radius: 14px;
-
   background: #2563eb;
-
   color: white;
-
   font-weight: 700;
-
   cursor: pointer;
-
   transition: .2s;
 }
 
 .btn:hover {
-
   background: #1d4ed8;
 }
 

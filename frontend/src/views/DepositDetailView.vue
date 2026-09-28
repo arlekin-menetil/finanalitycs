@@ -1,10 +1,17 @@
 <script setup>
+
 import { ref, onMounted, computed } from "vue"
+
 import {
   useRoute,
   useRouter,
 } from "vue-router"
+
+import { useI18n } from "vue-i18n"
+
 import api from "@/api/axios"
+
+const { t } = useI18n()
 
 const route = useRoute()
 const router = useRouter()
@@ -17,6 +24,7 @@ const deposit = ref(null)
 // ==========================================
 // 💣 RAW DATA
 // ==========================================
+
 const raw = computed(() => {
   return deposit.value?.raw_data || {}
 })
@@ -24,6 +32,7 @@ const raw = computed(() => {
 // ==========================================
 // 💣 FORMATTED TERM
 // ==========================================
+
 const formattedTerm = computed(() => {
 
   const term = Number(
@@ -37,21 +46,14 @@ const formattedTerm = computed(() => {
   if (term < 12) {
 
     if (term === 1) {
-      return "1 месяц"
+      return `1 ${t("depositDetail.month")}`
     }
 
-    if (
-      term >= 2 &&
-      term <= 4
-    ) {
-      return `${term} месяца`
-    }
-
-    return `${term} месяцев`
+    return `${term} ${t("depositDetail.months")}`
   }
 
   if (term === 12) {
-    return "1 год"
+    return `1 ${t("depositDetail.year")}`
   }
 
   const years = Math.floor(
@@ -63,32 +65,19 @@ const formattedTerm = computed(() => {
   let yearsText = ""
 
   if (years === 1) {
-    yearsText = "1 год"
-  } else if (
-    years >= 2 &&
-    years <= 4
-  ) {
-    yearsText = `${years} года`
+    yearsText = `1 ${t("depositDetail.year")}`
   } else {
-    yearsText = `${years} лет`
+    yearsText = `${years} ${t("depositDetail.years")}`
   }
 
   if (!months) {
     return yearsText
   }
 
-  let monthsText = ""
-
-  if (months === 1) {
-    monthsText = "1 месяц"
-  } else if (
-    months >= 2 &&
-    months <= 4
-  ) {
-    monthsText = `${months} месяца`
-  } else {
-    monthsText = `${months} месяцев`
-  }
+  const monthsText =
+    months === 1
+      ? `1 ${t("depositDetail.month")}`
+      : `${months} ${t("depositDetail.months")}`
 
   return `${yearsText} ${monthsText}`
 })
@@ -96,6 +85,7 @@ const formattedTerm = computed(() => {
 // ==========================================
 // 💣 BACK
 // ==========================================
+
 function goBack() {
   router.back()
 }
@@ -103,6 +93,7 @@ function goBack() {
 // ==========================================
 // 💣 BANK LOGO
 // ==========================================
+
 const logo = computed(() => {
 
   const bank = (
@@ -117,6 +108,7 @@ const logo = computed(() => {
 // ==========================================
 // 💣 EXTRACT FIELD
 // ==========================================
+
 function extractField(text, field) {
 
   if (!text) {
@@ -147,6 +139,7 @@ function extractField(text, field) {
 // ==========================================
 // 💣 PARSED DESCRIPTION
 // ==========================================
+
 const depositFields = computed(() => {
 
   const text =
@@ -222,12 +215,12 @@ const depositFields = computed(() => {
         "Валюта"
       ),
   }
-
 })
 
 // ==========================================
 // 💣 LOAD DEPOSIT
 // ==========================================
+
 async function loadDeposit() {
 
   try {
@@ -261,17 +254,19 @@ async function loadDeposit() {
 
     error.value =
       err?.response?.data?.detail ||
-      "Не удалось загрузить вклад"
+      t("depositDetail.loadError")
 
   } finally {
 
     loading.value = false
+
   }
 }
 
 onMounted(() => {
   loadDeposit()
 })
+
 </script>
 
 <template>
@@ -284,7 +279,7 @@ onMounted(() => {
       v-if="loading"
       class="loading"
     >
-      Загрузка вклада...
+      {{ t("depositDetail.loading") }}
     </div>
 
     <!-- ERROR -->
@@ -302,7 +297,7 @@ onMounted(() => {
       v-else-if="!deposit"
       class="error"
     >
-      Вклад не найден
+      {{ t("depositDetail.notFound") }}
     </div>
 
     <!-- CONTENT -->
@@ -317,7 +312,7 @@ onMounted(() => {
           class="back-btn"
           @click="goBack"
         >
-          ← Назад
+          ← {{ t("common.back") }}
         </button>
 
       </div>
@@ -346,169 +341,169 @@ onMounted(() => {
 
       </div>
 
-<!-- STATS -->
+      <!-- STATS -->
 
-<div class="stats">
+      <div class="stats">
 
-  <div class="stat-card">
+        <div class="stat-card">
 
-    <span>
-      Ставка
-    </span>
+          <span>
+            {{ t("depositDetail.interest") }}
+          </span>
 
-    <strong>
-      {{ deposit.interest_rate || "-" }}%
-    </strong>
+          <strong>
+            {{ deposit.interest_rate || "-" }}%
+          </strong>
 
-  </div>
+        </div>
 
-  <div class="stat-card">
+        <div class="stat-card">
 
-    <span>
-      Срок
-    </span>
+          <span>
+            {{ t("depositDetail.term") }}
+          </span>
 
-    <strong>
-       {{ formattedTerm }}
-    </strong>
+          <strong>
+            {{ formattedTerm }}
+          </strong>
 
-  </div>
+        </div>
 
-  <div class="stat-card">
+        <div class="stat-card">
 
-    <span>
-      Банк
-    </span>
+          <span>
+            {{ t("depositDetail.bank") }}
+          </span>
 
-    <strong>
-      {{ deposit.bank_name }}
-    </strong>
+          <strong>
+            {{ deposit.bank_name }}
+          </strong>
 
-  </div>
+        </div>
 
-</div>
+      </div>
 
-<!-- CONDITIONS -->
+      <!-- CONDITIONS -->
 
-<div class="section">
+      <div class="section">
 
-  <h2>
-    Условия вклада
-  </h2>
+        <h2>
+          {{ t("depositDetail.conditions") }}
+        </h2>
 
-  <div class="details-grid">
+        <div class="details-grid">
 
-    <div class="detail-item">
+          <div class="detail-item">
 
-      <span>
-        Минимальная сумма
-      </span>
+            <span>
+              {{ t("depositDetail.minAmount") }}
+            </span>
 
-      <strong>
-        {{ raw.amount_min || depositFields.minAmount || "-" }}
-      </strong>
+            <strong>
+              {{ raw.amount_min || depositFields.minAmount || "-" }}
+            </strong>
 
-    </div>
+          </div>
 
-    <div class="detail-item">
+          <div class="detail-item">
 
-      <span>
-        Валюта
-      </span>
+            <span>
+              {{ t("depositDetail.currency") }}
+            </span>
 
-      <strong>
-         {{ depositFields.currency || "-" }}
-      </strong>
+            <strong>
+              {{ depositFields.currency || "-" }}
+            </strong>
 
-    </div>
+          </div>
 
-    <div class="detail-item">
+          <div class="detail-item">
 
-      <span>
-        Выплата процентов
-      </span>
+            <span>
+              {{ t("depositDetail.payout") }}
+            </span>
 
-      <strong>
-        {{ raw.payment_type || depositFields.payout || "-" }}
-      </strong>
+            <strong>
+              {{ raw.payment_type || depositFields.payout || "-" }}
+            </strong>
 
-    </div>
+          </div>
 
-    <div class="detail-item">
+          <div class="detail-item">
 
-      <span>
-        Начисление процентов
-      </span>
+            <span>
+              {{ t("depositDetail.accrual") }}
+            </span>
 
-      <strong>
-        {{ depositFields.accrual }}
-      </strong>
+            <strong>
+              {{ depositFields.accrual }}
+            </strong>
 
-    </div>
+          </div>
 
-    <div class="detail-item">
+          <div class="detail-item">
 
-      <span>
-        Капитализация
-      </span>
+            <span>
+              {{ t("depositDetail.capitalization") }}
+            </span>
 
-      <strong>
-        {{ depositFields.capitalization }}
-      </strong>
+            <strong>
+              {{ depositFields.capitalization }}
+            </strong>
 
-    </div>
+          </div>
 
-    <div class="detail-item">
+          <div class="detail-item">
 
-      <span>
-        Пополнение вклада
-      </span>
+            <span>
+              {{ t("depositDetail.refill") }}
+            </span>
 
-      <strong>
-        {{ depositFields.refill }}
-      </strong>
+            <strong>
+              {{ depositFields.refill }}
+            </strong>
 
-    </div>
+          </div>
 
-    <div class="detail-item">
+          <div class="detail-item">
 
-      <span>
-        Досрочное расторжение
-      </span>
+            <span>
+              {{ t("depositDetail.earlyClose") }}
+            </span>
 
-      <strong>
-        {{ depositFields.earlyClose }}
-      </strong>
+            <strong>
+              {{ depositFields.earlyClose }}
+            </strong>
 
-    </div>
+          </div>
 
-    <div class="detail-item">
+          <div class="detail-item">
 
-      <span>
-        Открытие вклада
-      </span>
+            <span>
+              {{ t("depositDetail.opening") }}
+            </span>
 
-      <strong>
-        {{ depositFields.opening }}
-      </strong>
+            <strong>
+              {{ depositFields.opening }}
+            </strong>
 
-    </div>
+          </div>
 
-    <div class="detail-item">
+          <div class="detail-item">
 
-      <span>
-        Последнее обновление
-      </span>
+            <span>
+              {{ t("depositDetail.updated") }}
+            </span>
 
-      <strong>
-        {{ raw.updated_at || depositFields.updated || "-" }}
-      </strong>
+            <strong>
+              {{ raw.updated_at || depositFields.updated || "-" }}
+            </strong>
 
-    </div>
+          </div>
 
-  </div>
+        </div>
 
-</div>
+      </div>
 
       <!-- SOURCE -->
 
@@ -518,7 +513,7 @@ onMounted(() => {
       >
 
         <h2>
-          Источник
+          {{ t("depositDetail.source") }}
         </h2>
 
         <a
@@ -526,7 +521,7 @@ onMounted(() => {
           target="_blank"
           class="link"
         >
-          Перейти к продукту
+          {{ t("depositDetail.goToProduct") }}
         </a>
 
       </div>
@@ -539,7 +534,7 @@ onMounted(() => {
       >
 
         <h2>
-          Страница банка
+          {{ t("depositDetail.bankPage") }}
         </h2>
 
         <a
@@ -547,7 +542,7 @@ onMounted(() => {
           target="_blank"
           class="link"
         >
-          Открыть сайт банка
+          {{ t("depositDetail.openBankWebsite") }}
         </a>
 
       </div>

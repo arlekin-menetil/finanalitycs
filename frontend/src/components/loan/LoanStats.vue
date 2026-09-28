@@ -1,5 +1,7 @@
 <script setup>
 
+import { useI18n } from "vue-i18n"
+
 defineProps({
   product: {
     type: Object,
@@ -12,6 +14,12 @@ defineProps({
   }
 })
 
+const { t } = useI18n()
+
+// ==========================================
+// FORMAT TERM
+// ==========================================
+
 function formatTerm(term) {
 
   const months = Number(term)
@@ -21,7 +29,7 @@ function formatTerm(term) {
   }
 
   if (months < 12) {
-    return `${months} мес.`
+    return `${months} ${t("loanStats.months")}`
   }
 
   if (months % 12 === 0) {
@@ -29,17 +37,13 @@ function formatTerm(term) {
     const years = months / 12
 
     if (years === 1) {
-      return "1 год"
+      return `1 ${t("loanStats.year")}`
     }
 
-    if (years >= 2 && years <= 4) {
-      return `${years} года`
-    }
-
-    return `${years} лет`
+    return `${years} ${t("loanStats.years")}`
   }
 
-  return `${months} мес.`
+  return `${months} ${t("loanStats.months")}`
 }
 
 </script>
@@ -48,12 +52,14 @@ function formatTerm(term) {
 
 <div class="stats">
 
-  <!-- СТАВКА -->
+  <!-- ==========================================
+       СТАВКА
+  =========================================== -->
 
   <div class="stat-card">
 
     <span>
-      Ставка
+      {{ t("loanStats.interest") }}
     </span>
 
     <strong>
@@ -62,12 +68,14 @@ function formatTerm(term) {
 
   </div>
 
-  <!-- СРОК -->
+  <!-- ==========================================
+       СРОК
+  =========================================== -->
 
   <div class="stat-card">
 
     <span>
-      Срок
+      {{ t("loanStats.term") }}
     </span>
 
     <strong>
@@ -80,12 +88,14 @@ function formatTerm(term) {
 
   </div>
 
-  <!-- БАНК -->
+  <!-- ==========================================
+       БАНК
+  =========================================== -->
 
   <div class="stat-card">
 
     <span>
-      Банк
+      {{ t("loanStats.bank") }}
     </span>
 
     <strong>

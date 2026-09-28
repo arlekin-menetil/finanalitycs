@@ -1,150 +1,293 @@
 <script setup>
-import { ref, computed, onMounted } from "vue"
-import { Bar, Line } from "vue-chartjs"
+
+import {
+  ref,
+  computed,
+  onMounted
+} from "vue"
+
+import { useI18n } from "vue-i18n"
+
+import {
+  Bar,
+  Line
+} from "vue-chartjs"
+
 import api from "@/api/axios"
 
+const { t, locale } = useI18n()
+
+// ==========================================================
+// STATE
+// ==========================================================
+
 const mobileData = ref([])
+
 const loading = ref(true)
+
 const error = ref("")
 
+// ==========================================================
+// LOAD
+// ==========================================================
+
 const loadMobileData = async () => {
+
   loading.value = true
+
   error.value = ""
 
   try {
-    const response = await api.get("/banks/mobile-analytics/")
 
-    mobileData.value = Array.isArray(response.data?.banks)
-      ? response.data.banks
-      : []
-  } catch (err) {
-    console.error("Ошибка загрузки мобильной аналитики:", err)
+    const response =
+      await api.get(
+        "/banks/mobile-analytics/"
+      )
 
-    error.value = "Не удалось загрузить данные Google Play"
-    mobileData.value = []
-  } finally {
-    loading.value = false
+    mobileData.value =
+      Array.isArray(response.data?.banks)
+        ? response.data.banks
+        : []
+
   }
+
+  catch (err) {
+
+    console.error(
+      "Ошибка загрузки мобильной аналитики:",
+      err
+    )
+
+    error.value =
+      t("mobileApps.loading")
+
+    mobileData.value = []
+
+  }
+
+  finally {
+
+    loading.value = false
+
+  }
+
 }
 
 onMounted(() => {
+
   loadMobileData()
+
 })
 
-/*
-|--------------------------------------------------------------------------
-| Helpers
-|--------------------------------------------------------------------------
-*/
+// ==========================================================
+// HELPERS
+// ==========================================================
 
-const formatInstalls = (value) => {
-  const installs = Number(value) || 0
+const formatInstalls = value => {
+
+  const installs =
+    Number(value) || 0
 
   if (installs >= 1_000_000) {
-    const millions = installs / 1_000_000
 
-    return `${Number.isInteger(millions) ? millions : millions.toFixed(1)} млн+`
+    const millions =
+      installs / 1_000_000
+
+    return `${
+      Number.isInteger(millions)
+        ? millions
+        : millions.toFixed(1)
+    } ${t("common.million")}+`
+
   }
 
   if (installs >= 1_000) {
-    const thousands = installs / 1_000
 
-    return `${Number.isInteger(thousands) ? thousands : thousands.toFixed(1)} тыс.+`
+    const thousands =
+      installs / 1_000
+
+    return `${
+      Number.isInteger(thousands)
+        ? thousands
+        : thousands.toFixed(1)
+    } ${t("common.thousand")}+`
+
   }
 
   return `${installs}+`
+
 }
 
-const formatReviews = (value) => {
-  const reviews = Number(value) || 0
+const formatReviews = value => {
 
-  return new Intl.NumberFormat("ru-RU").format(reviews)
+  const reviews =
+    Number(value) || 0
+
+  return new Intl.NumberFormat(
+    locale.value
+  ).format(reviews)
+
 }
 
-const formatRating = (value) => {
-  const rating = Number(value)
+const formatRating = value => {
+
+  const rating =
+    Number(value)
 
   if (!Number.isFinite(rating)) {
+
     return "—"
+
   }
 
   return rating.toFixed(2)
+
 }
 
-/*
-|--------------------------------------------------------------------------
-| Total statistics
-|--------------------------------------------------------------------------
-*/
+// ==========================================================
+// TOTAL STATISTICS
+// ==========================================================
 
 const totalBanks = computed(() => {
+
   return mobileData.value.length
+
 })
 
 const totalReviews = computed(() => {
+
   return mobileData.value.reduce(
-    (sum, item) => sum + (Number(item.reviews) || 0),
+
+    (sum, item) =>
+
+      sum +
+      (
+        Number(item.reviews) || 0
+      ),
+
     0
+
   )
+
 })
 
 const averageRating = computed(() => {
-  const ratings = mobileData.value
-    .map(item => Number(item.rating))
-    .filter(value => Number.isFinite(value))
+
+  const ratings =
+    mobileData.value
+
+      .map(
+        item =>
+          Number(item.rating)
+      )
+
+      .filter(
+        value =>
+          Number.isFinite(value)
+      )
 
   if (!ratings.length) {
+
     return 0
+
   }
 
   return (
-    ratings.reduce((sum, value) => sum + value, 0) /
+
+    ratings.reduce(
+
+      (sum, value) =>
+
+        sum + value,
+
+      0
+
+    )
+
+    /
+
     ratings.length
+
   )
+
 })
 
-/*
-|--------------------------------------------------------------------------
-| Install chart
-|--------------------------------------------------------------------------
-*/
+// ==========================================================
+// INSTALLS CHART
+// ==========================================================
 
 const installsData = computed(() => ({
-  labels: mobileData.value.map(item => item.bank),
+
+  labels:
+
+    mobileData.value.map(
+      item => item.bank
+    ),
 
   datasets: [
-    {
-      label: "Установки",
 
-      data: mobileData.value.map(
-        item => Number(item.installs_value) || 0
-      ),
+    {
+
+      label:
+        t(
+          "mobileApps.installs"
+        ),
+
+      data:
+
+        mobileData.value.map(
+
+          item =>
+
+            Number(
+              item.installs_value
+            ) || 0
+
+        ),
 
       borderRadius: 8,
 
       borderSkipped: false,
 
       barThickness: 34,
-    },
-  ],
-}))
 
-/*
-|--------------------------------------------------------------------------
-| Rating chart
-|--------------------------------------------------------------------------
-*/
+    }
+
+  ]
+
+}))
+// ==========================================================
+// RATING CHART
+// ==========================================================
 
 const ratingData = computed(() => ({
-  labels: mobileData.value.map(item => item.bank),
+
+  labels:
+
+    mobileData.value.map(
+      item => item.bank
+    ),
 
   datasets: [
-    {
-      label: "Рейтинг",
 
-      data: mobileData.value.map(
-        item => Number(item.rating) || 0
-      ),
+    {
+
+      label:
+        t(
+          "mobileApps.rating"
+        ),
+
+      data:
+
+        mobileData.value.map(
+
+          item =>
+
+            Number(
+              item.rating
+            ) || 0
+
+        ),
 
       borderWidth: 3,
 
@@ -155,286 +298,443 @@ const ratingData = computed(() => ({
       tension: 0.35,
 
       fill: false,
-    },
-  ],
+
+    }
+
+  ]
+
 }))
 
-/*
-|--------------------------------------------------------------------------
-| Chart options
-|--------------------------------------------------------------------------
-*/
+// ==========================================================
+// INSTALLS OPTIONS
+// ==========================================================
 
 const installsOptions = {
+
   responsive: true,
 
   maintainAspectRatio: false,
 
   plugins: {
+
     legend: {
+
       display: false,
+
     },
 
     tooltip: {
+
       callbacks: {
-        label: (context) => {
-          return ` ${formatInstalls(context.raw)}`
-        },
-      },
-    },
+
+        label: context => {
+
+          return ` ${formatInstalls(
+            context.raw
+          )}`
+
+        }
+
+      }
+
+    }
+
   },
 
   scales: {
+
     y: {
+
       beginAtZero: true,
 
       ticks: {
-        callback: (value) => {
-          if (value >= 1_000_000) {
-            return `${value / 1_000_000} млн`
+
+        callback: value => {
+
+          if (
+            value >= 1000000
+          ) {
+
+            return `${
+
+              value / 1000000
+
+            } ${
+
+              t("common.million")
+
+            }`
+
           }
 
-          if (value >= 1_000) {
-            return `${value / 1_000} тыс.`
+          if (
+            value >= 1000
+          ) {
+
+            return `${
+
+              value / 1000
+
+            } ${
+
+              t("common.thousand")
+
+            }`
+
           }
 
           return value
-        },
-      },
+
+        }
+
+      }
+
     },
 
     x: {
+
       grid: {
-        display: false,
-      },
-    },
-  },
+
+        display: false
+
+      }
+
+    }
+
+  }
+
 }
 
+// ==========================================================
+// RATING OPTIONS
+// ==========================================================
+
 const ratingOptions = {
+
   responsive: true,
 
   maintainAspectRatio: false,
 
   plugins: {
+
     legend: {
+
       display: false,
+
     },
 
     tooltip: {
+
       callbacks: {
-        label: (context) => {
-          return ` ${formatRating(context.raw)} / 5`
-        },
-      },
-    },
+
+        label: context => {
+
+          return ` ${
+
+            formatRating(
+              context.raw
+            )
+
+          } / 5`
+
+        }
+
+      }
+
+    }
+
   },
 
   scales: {
+
     y: {
+
       min: 0,
 
       max: 5,
 
       ticks: {
-        stepSize: 1,
-      },
+
+        stepSize: 1
+
+      }
+
     },
 
     x: {
+
       grid: {
-        display: false,
-      },
-    },
-  },
+
+        display: false
+
+      }
+
+    }
+
+  }
+
 }
+
 </script>
 
 <template>
-  <section class="mobile-apps">
-    <div class="mobile-apps__container">
 
-      <!-- HEADER -->
-      <div class="mobile-apps__header">
+<section class="mobile-apps">
 
-        <div class="mobile-apps__badge">
-          <span>▶</span>
-          Google Play
-        </div>
+  <div class="mobile-apps__container">
 
-        <h2 class="mobile-apps__title">
-          Мониторинг мобильных приложений
-        </h2>
+    <!-- HEADER -->
 
-        <p class="mobile-apps__subtitle">
-          Актуальные показатели банковских приложений:
-          установки, рейтинг и количество оценок.
-        </p>
+    <div class="mobile-apps__header">
+
+      <div class="mobile-apps__badge">
+
+        <span>▶</span>
+
+        Google Play
 
       </div>
 
-      <!-- LOADING -->
-      <div
-        v-if="loading"
-        class="mobile-apps__state"
+      <h2 class="mobile-apps__title">
+
+        {{ t("mobileApps.title") }}
+
+      </h2>
+
+      <p class="mobile-apps__subtitle">
+
+        {{ t("mobileApps.subtitle") }}
+
+      </p>
+
+    </div>
+
+    <!-- LOADING -->
+
+    <div
+      v-if="loading"
+      class="mobile-apps__state"
+    >
+
+      <div class="mobile-apps__loader"></div>
+
+      <span>
+
+        {{ t("mobileApps.loading") }}
+
+      </span>
+
+    </div>
+
+    <!-- ERROR -->
+
+    <div
+      v-else-if="error"
+      class="mobile-apps__state mobile-apps__state--error"
+    >
+
+      <span class="mobile-apps__state-icon">
+
+        !
+
+      </span>
+
+      <span>
+
+        {{ error }}
+
+      </span>
+
+      <button
+        class="mobile-apps__retry"
+        @click="loadMobileData"
       >
-        <div class="mobile-apps__loader"></div>
 
-        <span>
-          Загрузка данных Google Play...
-        </span>
-      </div>
+        {{ t("common.retry") }}
 
-      <!-- ERROR -->
-      <div
-        v-else-if="error"
-        class="mobile-apps__state mobile-apps__state--error"
-      >
-        <span class="mobile-apps__state-icon">
-          !
-        </span>
+      </button>
 
-        <span>
-          {{ error }}
-        </span>
+    </div>
 
-        <button
-          class="mobile-apps__retry"
-          @click="loadMobileData"
-        >
-          Повторить
-        </button>
-      </div>
+    <!-- CONTENT -->
 
-      <!-- CONTENT -->
-      <template v-else>
+    <template v-else>
 
-        <!-- KPI -->
-        <div class="mobile-apps__stats">
+      <!-- KPI -->
 
-          <div class="mobile-stat">
+      <div class="mobile-apps__stats">
 
-            <div class="mobile-stat__icon">
-              🏦
-            </div>
+        <div class="mobile-stat">
 
-            <div>
-              <span class="mobile-stat__label">
-                Приложений
-              </span>
+          <div class="mobile-stat__icon">
 
-              <strong class="mobile-stat__value">
-                {{ totalBanks }}
-              </strong>
-            </div>
+            🏦
 
           </div>
 
-          <div class="mobile-stat">
+          <div>
 
-            <div class="mobile-stat__icon">
-              ⭐
-            </div>
+            <span class="mobile-stat__label">
 
-            <div>
-              <span class="mobile-stat__label">
-                Средний рейтинг
-              </span>
+              {{ t("mobileApps.apps") }}
 
-              <strong class="mobile-stat__value">
-                {{ averageRating.toFixed(2) }}
-                <small>/ 5</small>
-              </strong>
-            </div>
+            </span>
 
-          </div>
+            <strong class="mobile-stat__value">
 
-          <div class="mobile-stat">
+              {{ totalBanks }}
 
-            <div class="mobile-stat__icon">
-              💬
-            </div>
-
-            <div>
-              <span class="mobile-stat__label">
-                Всего оценок
-              </span>
-
-              <strong class="mobile-stat__value">
-                {{ formatReviews(totalReviews) }}
-              </strong>
-            </div>
+            </strong>
 
           </div>
 
         </div>
 
-        <!-- CHARTS -->
-        <div class="mobile-apps__charts">
+        <div class="mobile-stat">
 
-          <!-- INSTALLS -->
-          <article class="mobile-chart-card">
+          <div class="mobile-stat__icon">
 
-            <div class="mobile-chart-card__header">
+            ⭐
 
-              <div>
-                <h3>
-                  📥 Установки приложений
-                </h3>
+          </div>
 
-                <p>
-                  Данные из Google Play
-                </p>
-              </div>
+          <div>
 
-              <span class="mobile-chart-card__source">
-                LIVE
-              </span>
+            <span class="mobile-stat__label">
 
-            </div>
+              {{ t("mobileApps.averageRating") }}
 
-            <div class="mobile-chart">
-              <Bar
-                :data="installsData"
-                :options="installsOptions"
-              />
-            </div>
+            </span>
 
-          </article>
+            <strong class="mobile-stat__value">
 
-          <!-- RATING -->
-          <article class="mobile-chart-card">
+              {{ averageRating.toFixed(2) }}
 
-            <div class="mobile-chart-card__header">
+              <small>/ 5</small>
 
-              <div>
-                <h3>
-                  ⭐ Рейтинг приложений
-                </h3>
+            </strong>
 
-                <p>
-                  Средняя оценка пользователей
-                </p>
-              </div>
-
-              <span class="mobile-chart-card__source">
-                LIVE
-              </span>
-
-            </div>
-
-            <div class="mobile-chart">
-              <Line
-                :data="ratingData"
-                :options="ratingOptions"
-              />
-            </div>
-
-          </article>
+          </div>
 
         </div>
 
-        <!-- BANK CARDS -->
+        <div class="mobile-stat">
+
+          <div class="mobile-stat__icon">
+
+            💬
+
+          </div>
+
+          <div>
+
+            <span class="mobile-stat__label">
+
+              {{ t("mobileApps.totalReviews") }}
+
+            </span>
+
+            <strong class="mobile-stat__value">
+
+              {{ formatReviews(totalReviews) }}
+
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- CHARTS -->
+
+      <div class="mobile-apps__charts">
+
+        <!-- INSTALLS -->
+
+        <article class="mobile-chart-card">
+
+          <div class="mobile-chart-card__header">
+
+            <div>
+
+              <h3>
+
+                📥 {{ t("mobileApps.installsChart") }}
+
+              </h3>
+
+              <p>
+
+                {{ t("mobileApps.googlePlayData") }}
+
+              </p>
+
+            </div>
+
+            <span class="mobile-chart-card__source">
+
+              {{ t("common.live") }}
+
+            </span>
+
+          </div>
+
+          <div class="mobile-chart">
+
+            <Bar
+              :data="installsData"
+              :options="installsOptions"
+            />
+
+          </div>
+
+        </article>
+
+        <!-- RATING -->
+
+        <article class="mobile-chart-card">
+
+          <div class="mobile-chart-card__header">
+
+            <div>
+
+              <h3>
+
+                ⭐ {{ t("mobileApps.ratingChart") }}
+
+              </h3>
+
+              <p>
+
+                {{ t("mobileApps.averageUsersRating") }}
+
+              </p>
+
+            </div>
+
+            <span class="mobile-chart-card__source">
+
+              {{ t("common.live") }}
+
+            </span>
+
+          </div>
+
+          <div class="mobile-chart">
+
+            <Line
+              :data="ratingData"
+              :options="ratingOptions"
+            />
+
+          </div>
+
+        </article>
+
+      </div>
+              <!-- BANK CARDS -->
+
         <div class="mobile-banks">
 
           <div
@@ -446,17 +746,25 @@ const ratingOptions = {
             <div class="mobile-bank__top">
 
               <div class="mobile-bank__logo">
+
                 {{ item.bank.charAt(0) }}
+
               </div>
 
               <div class="mobile-bank__name">
+
                 <h3>
+
                   {{ item.bank }}
+
                 </h3>
 
                 <span>
+
                   Google Play
+
                 </span>
+
               </div>
 
             </div>
@@ -466,11 +774,15 @@ const ratingOptions = {
               <div class="mobile-bank__metric">
 
                 <span>
-                  Установки
+
+                  {{ t("mobileApps.installs") }}
+
                 </span>
 
                 <strong>
+
                   {{ item.installs || formatInstalls(item.installs_value) }}
+
                 </strong>
 
               </div>
@@ -478,11 +790,15 @@ const ratingOptions = {
               <div class="mobile-bank__metric">
 
                 <span>
-                  Рейтинг
+
+                  {{ t("mobileApps.rating") }}
+
                 </span>
 
                 <strong>
+
                   ⭐ {{ formatRating(item.rating) }}
+
                 </strong>
 
               </div>
@@ -490,11 +806,15 @@ const ratingOptions = {
               <div class="mobile-bank__metric">
 
                 <span>
-                  Оценки
+
+                  {{ t("mobileApps.reviews") }}
+
                 </span>
 
                 <strong>
+
                   {{ formatReviews(item.reviews) }}
+
                 </strong>
 
               </div>
@@ -506,24 +826,31 @@ const ratingOptions = {
         </div>
 
         <!-- FOOTER -->
+
         <div class="mobile-apps__footer">
 
           <span class="mobile-apps__footer-dot"></span>
 
           <span>
-            Данные получены из Google Play
+
+            {{ t("mobileApps.footerGoogle") }}
+
           </span>
 
           <span>
-            Обновляются автоматически
+
+            {{ t("mobileApps.footerUpdate") }}
+
           </span>
 
         </div>
 
-      </template>
+    </template>
 
-    </div>
-  </section>
+  </div>
+
+</section>
+
 </template>
 
 <style scoped>

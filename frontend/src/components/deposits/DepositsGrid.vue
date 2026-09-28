@@ -1,19 +1,18 @@
 <script setup>
-
 import {
   computed,
   ref,
   watch,
-  nextTick
+  nextTick,
 } from "vue"
 
 import { storeToRefs } from "pinia"
+import { useI18n } from "vue-i18n"
 
-import { useDepositsStore }
-from "@/stores/deposits"
+import { useDepositsStore } from "@/stores/deposits"
+import DepositCard from "./DepositCard.vue"
 
-import DepositCard
-from "./DepositCard.vue"
+const { t } = useI18n()
 
 const store = useDepositsStore()
 
@@ -26,21 +25,13 @@ const {
 // ==========================================
 
 const priorityBanks = [
-
   "Hamkorbank",
-
   "Aloqabank",
-
   "Kapitalbank",
-
   "SQB",
-
   "NBU",
-
   "Ipak Yuli Bank",
-
   "Uzum Bank",
-
 ]
 
 // ==========================================
@@ -48,13 +39,11 @@ const priorityBanks = [
 // ==========================================
 
 const deposits = computed(() => {
-
   const data = [
-    ...filteredDeposits.value
+    ...filteredDeposits.value,
   ]
 
   data.sort((a, b) => {
-
     const aBank =
       a.bank_name || ""
 
@@ -71,11 +60,9 @@ const deposits = computed(() => {
       aPriority !== -1 &&
       bPriority !== -1
     ) {
-
       if (
         aPriority !== bPriority
       ) {
-
         return (
           aPriority -
           bPriority
@@ -128,7 +115,6 @@ const perPage = 9
 const gridRef = ref(null)
 
 const totalPages = computed(() => {
-
   return Math.max(
     1,
     Math.ceil(
@@ -139,7 +125,6 @@ const totalPages = computed(() => {
 })
 
 const paginatedDeposits = computed(() => {
-
   const start =
     (currentPage.value - 1) *
     perPage
@@ -158,7 +143,6 @@ const paginatedDeposits = computed(() => {
 // ==========================================
 
 const visiblePages = computed(() => {
-
   const total =
     totalPages.value
 
@@ -168,7 +152,6 @@ const visiblePages = computed(() => {
   const pages = []
 
   if (total <= 7) {
-
     for (
       let i = 1;
       i <= total;
@@ -223,7 +206,6 @@ const visiblePages = computed(() => {
 // ==========================================
 
 const startItem = computed(() => {
-
   if (
     !deposits.value.length
   ) {
@@ -240,7 +222,6 @@ const startItem = computed(() => {
 })
 
 const endItem = computed(() => {
-
   return Math.min(
     currentPage.value *
       perPage,
@@ -253,15 +234,11 @@ const endItem = computed(() => {
 // ==========================================
 
 async function scrollToGrid() {
-
   await nextTick()
 
   gridRef.value?.scrollIntoView({
-
     behavior: "smooth",
-
     block: "start",
-
   })
 }
 
@@ -270,7 +247,6 @@ async function scrollToGrid() {
 // ==========================================
 
 async function goToPage(page) {
-
   if (
     page < 1 ||
     page > totalPages.value
@@ -289,26 +265,18 @@ async function goToPage(page) {
 
 watch(
   () => [
-
     store.filters.rate,
-
     store.filters.currency,
-
     store.filters.bank,
-
     store.filters.term,
-
-    store.sort
-
+    store.sort,
   ],
   async () => {
-
     currentPage.value = 1
 
     await scrollToGrid()
   }
 )
-
 </script>
 
 <template>
@@ -339,13 +307,13 @@ watch(
 
       <div class="pagination-info">
 
-        Показано
+        {{ t("deposits.pagination.showing") }}
         {{ startItem }}
         –
         {{ endItem }}
-        из
+        {{ t("deposits.pagination.of") }}
         {{ deposits.length }}
-        вкладов
+        {{ t("deposits.pagination.deposits") }}
 
       </div>
 
@@ -410,15 +378,12 @@ watch(
 ========================================== */
 
 .grid {
-
   display: grid;
-
   gap: 24px;
-
   grid-template-columns:
     repeat(
       auto-fill,
-      minmax(350px,1fr)
+      minmax(350px, 1fr)
     );
 }
 
@@ -427,102 +392,64 @@ watch(
 ========================================== */
 
 .pagination-wrapper {
-
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
-
   gap: 16px;
-
   margin-top: 40px;
 }
 
 .pagination-info {
-
   color: #64748b;
-
   font-size: 14px;
-
   font-weight: 500;
 }
 
 .pagination {
-
   display: flex;
-
   justify-content: center;
-
   align-items: center;
-
   gap: 10px;
-
   flex-wrap: wrap;
 }
 
 .page-btn {
-
   min-width: 42px;
-
   height: 42px;
-
   padding: 0 12px;
-
   border: 1px solid #e5e7eb;
-
   border-radius: 12px;
-
   background: white;
-
   cursor: pointer;
-
   font-weight: 600;
-
   transition: all .2s ease;
 }
 
 .page-btn:hover {
-
   border-color: #2563eb;
-
   color: #2563eb;
-
   transform: translateY(-1px);
 }
 
 .page-btn.active {
-
   background: #2563eb;
-
   border-color: #2563eb;
-
   color: white;
 }
 
 .page-btn:disabled {
-
   opacity: .4;
-
   cursor: not-allowed;
 }
 
 .dots {
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
   min-width: 32px;
-
   height: 42px;
-
   color: #94a3b8;
-
   font-weight: 700;
-
   user-select: none;
 }
 
@@ -533,27 +460,22 @@ watch(
 @media (max-width: 768px) {
 
   .grid {
-
-    grid-template-columns:
-      1fr;
+    grid-template-columns: 1fr;
   }
 
   .pagination {
-
     gap: 8px;
   }
 
   .page-btn {
-
     min-width: 38px;
-
     height: 38px;
   }
 
   .dots {
-
     height: 38px;
   }
+
 }
 
 </style>

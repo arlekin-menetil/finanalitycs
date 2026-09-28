@@ -29,7 +29,11 @@ const { locale, t } = useI18n()
 // ==========================================
 
 const currentTitle = computed(() => {
-  return route.meta?.title || "Dashboard"
+  if (route.meta?.titleKey) {
+    return t(route.meta.titleKey)
+  }
+
+  return t("navigation.dashboard")
 })
 
 // ==========================================
@@ -39,6 +43,7 @@ const currentTitle = computed(() => {
 const displayName = computed(() => {
   if (auth.profile?.full_name) {
     const parts = auth.profile.full_name.split(" ")
+
     return parts[0]
   }
 
@@ -46,7 +51,7 @@ const displayName = computed(() => {
     return auth.user.phone
   }
 
-  return "User"
+  return t("personalInfo.values.user")
 })
 
 // ==========================================
@@ -69,44 +74,44 @@ const userInitial = computed(() => {
 
 const navigation = computed(() => [
   {
-    label: "Dashboard",
-    title: "Dashboard",
+    label: t("navigation.dashboard"),
+    title: t("navigation.dashboard"),
     to: "/app/dashboard",
     icon: "dashboard",
   },
   {
-    label: "Scoring",
-    title: "Scoring",
+    label: t("navigation.scoring"),
+    title: t("navigation.scoring"),
     to: "/app/scoring",
     icon: "scoring",
   },
   {
-    label: "Recommendations",
-    title: "Recommendations",
+    label: t("navigation.recommendations"),
+    title: t("navigation.recommendations"),
     to: "/app/recommendations",
     icon: "recommendations",
   },
   {
-    label: "Analytics",
-    title: "Analytics",
+    label: t("navigation.analytics"),
+    title: t("navigation.analytics"),
     to: "/app/analytics",
     icon: "analytics",
   },
   {
-    label: "Monitoring",
-    title: "Monitoring",
+    label: t("navigation.monitoring"),
+    title: t("navigation.monitoring"),
     to: "/app/monitoring",
     icon: "monitoring",
   },
   {
-    label: "Deposits",
-    title: "Deposits",
+    label: t("navigation.deposits"),
+    title: t("navigation.deposits"),
     to: "/app/deposits",
     icon: "deposits",
   },
   {
-    label: "Cards",
-    title: "Cards",
+    label: t("navigation.cards"),
+    title: t("navigation.cards"),
     to: "/app/cards",
     icon: "cards",
   },
@@ -122,18 +127,6 @@ onMounted(async () => {
   if (lang) {
     locale.value = lang
   }
-
-  try {
-    if (!auth.user) {
-      await auth.loadUser()
-    }
-
-    if (!auth.profile) {
-      await auth.fetchProfile()
-    }
-  } catch (e) {
-    console.error("Ошибка загрузки пользователя:", e)
-  }
 })
 
 // ==========================================
@@ -143,7 +136,7 @@ onMounted(async () => {
 const changeLang = () => {
   localStorage.setItem(
     "lang",
-    locale.value
+    locale.value,
   )
 }
 
@@ -219,7 +212,7 @@ const goHome = () => {
       <nav class="navigation">
 
         <div class="navigation-label">
-          PLATFORM
+          {{ t("navigation.platform") }}
         </div>
 
         <router-link
@@ -250,6 +243,7 @@ const goHome = () => {
                 height="7"
                 rx="1"
               />
+
               <rect
                 x="14"
                 y="3"
@@ -257,6 +251,7 @@ const goHome = () => {
                 height="7"
                 rx="1"
               />
+
               <rect
                 x="3"
                 y="14"
@@ -264,6 +259,7 @@ const goHome = () => {
                 height="7"
                 rx="1"
               />
+
               <rect
                 x="14"
                 y="14"
@@ -294,6 +290,7 @@ const goHome = () => {
                 cy="12"
                 r="9"
               />
+
               <path d="M12 7v5l3 2" />
               <path d="M8 4.5l-1.5-1" />
               <path d="M16 4.5l1.5-1" />
@@ -386,8 +383,10 @@ const goHome = () => {
                 height="14"
                 rx="2"
               />
+
               <path d="M7 9h10" />
               <path d="M7 13h5" />
+
               <circle
                 cx="17"
                 cy="14"
@@ -418,6 +417,7 @@ const goHome = () => {
                 height="14"
                 rx="2"
               />
+
               <path d="M2.5 10h19" />
               <path d="M6 15h4" />
             </svg>
@@ -442,7 +442,7 @@ const goHome = () => {
           <span class="status-dot"></span>
 
           <span>
-            System online
+            {{ t("navigation.systemOnline") }}
           </span>
 
         </div>
@@ -505,7 +505,7 @@ const goHome = () => {
             </span>
 
             <span>
-              Заполните профиль
+              {{ t("navigation.completeProfile") }}
             </span>
 
           </button>
@@ -546,6 +546,7 @@ const goHome = () => {
               class="lang-select"
               @change="changeLang"
             >
+
               <option value="ru">
                 RU
               </option>
@@ -557,6 +558,7 @@ const goHome = () => {
               <option value="uz">
                 UZ
               </option>
+
             </select>
 
           </div>
@@ -581,7 +583,7 @@ const goHome = () => {
               </span>
 
               <span class="profile-label">
-                Personal account
+                {{ t("navigation.personalAccount") }}
               </span>
 
             </span>
@@ -598,7 +600,7 @@ const goHome = () => {
           <button
             class="logout-button"
             type="button"
-            title="Logout"
+            :title="t('navigation.logout')"
             @click="logout"
           >
 

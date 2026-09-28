@@ -1410,7 +1410,7 @@ function startAutoRefresh() {
       () => {
         refreshMonitoring()
       },
-      5 * 60 * 1000,
+      60 * 60 * 1000,
     )
 }
 
@@ -1907,8 +1907,9 @@ const formattedLastUpdated =
 ========================================================= */
 
 onMounted(async () => {
+  console.count("Monitoring mounted")
   await loadMonitoring()
-  startAutoRefresh()
+  // // startAutoRefresh()
 })
 
 

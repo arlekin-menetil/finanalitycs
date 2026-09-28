@@ -1,8 +1,12 @@
 <script setup>
+
 import { computed } from "vue"
 import { storeToRefs } from "pinia"
+import { useI18n } from "vue-i18n"
 
 import { useDepositsStore } from "@/stores/deposits"
+
+const { t } = useI18n()
 
 const store = useDepositsStore()
 
@@ -18,13 +22,17 @@ const totalBanks = computed(() => {
   items.value.forEach((deposit) => {
 
     if (deposit.bank_name) {
+
       banks.add(deposit.bank_name)
+
     }
 
   })
 
   return banks.size
+
 })
+
 </script>
 
 <template>
@@ -36,17 +44,21 @@ const totalBanks = computed(() => {
       <div class="hero-left">
 
         <span class="hero-badge">
-          DEPOSIT ENGINE
+
+          {{ t("deposits.hero.badge") }}
+
         </span>
 
         <h1>
-          Банковские вклады
+
+          {{ t("deposits.hero.title") }}
+
         </h1>
 
         <p>
-          Подбор депозитных продуктов
-          банков Узбекистана
-          по ставке, сроку и условиям
+
+          {{ t("deposits.hero.description") }}
+
         </p>
 
       </div>
@@ -56,11 +68,15 @@ const totalBanks = computed(() => {
         <div class="stat">
 
           <strong>
+
             {{ totalCount }}
+
           </strong>
 
           <span>
-            Вкладов
+
+            {{ t("deposits.hero.deposits") }}
+
           </span>
 
         </div>
@@ -68,11 +84,15 @@ const totalBanks = computed(() => {
         <div class="stat">
 
           <strong>
+
             {{ totalBanks }}
+
           </strong>
 
           <span>
-            Банков
+
+            {{ t("deposits.hero.banks") }}
+
           </span>
 
         </div>
@@ -94,6 +114,7 @@ const totalBanks = computed(() => {
 .hero {
 
   margin-bottom: 38px;
+
 }
 
 .hero-content {
@@ -123,6 +144,7 @@ const totalBanks = computed(() => {
     );
 
   color: white;
+
 }
 
 .hero-content::before {
@@ -139,6 +161,7 @@ const totalBanks = computed(() => {
       rgba(255,255,255,.15),
       transparent 35%
     );
+
 }
 
 .hero-left {
@@ -146,6 +169,7 @@ const totalBanks = computed(() => {
   position: relative;
 
   z-index: 2;
+
 }
 
 .hero-badge {
@@ -168,6 +192,7 @@ const totalBanks = computed(() => {
   letter-spacing: .08em;
 
   backdrop-filter: blur(10px);
+
 }
 
 .hero h1 {
@@ -179,6 +204,7 @@ const totalBanks = computed(() => {
   font-weight: 900;
 
   line-height: 1;
+
 }
 
 .hero p {
@@ -192,6 +218,7 @@ const totalBanks = computed(() => {
   max-width: 700px;
 
   line-height: 1.8;
+
 }
 
 /* ==========================================
@@ -207,6 +234,7 @@ const totalBanks = computed(() => {
   display: flex;
 
   gap: 18px;
+
 }
 
 .stat {
@@ -223,6 +251,7 @@ const totalBanks = computed(() => {
   backdrop-filter: blur(12px);
 
   border: 1px solid rgba(255,255,255,.12);
+
 }
 
 .stat strong {
@@ -234,6 +263,7 @@ const totalBanks = computed(() => {
   font-weight: 900;
 
   margin-bottom: 10px;
+
 }
 
 .stat span {
@@ -241,6 +271,7 @@ const totalBanks = computed(() => {
   font-size: 14px;
 
   opacity: .9;
+
 }
 
 /* ==========================================
@@ -256,22 +287,27 @@ const totalBanks = computed(() => {
     align-items: flex-start;
 
     padding: 28px;
+
   }
 
   .hero h1 {
 
     font-size: 38px;
+
   }
 
   .hero-stats {
 
     width: 100%;
+
   }
 
   .stat {
 
     flex: 1;
+
   }
+
 }
 
 </style>

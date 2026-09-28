@@ -1,10 +1,15 @@
 <script setup>
+
+import { useI18n } from "vue-i18n"
+
 import DashboardHeader from "@/components/dashboard/DashboardHeader.vue"
 import DashboardKPI from "@/components/dashboard/DashboardKPI.vue"
 import CreditScoreCard from "@/components/dashboard/CreditScoreCard.vue"
 import RecommendationList from "@/components/dashboard/RecommendationList.vue"
 
 import { useDashboard } from "@/composables/useDashboard"
+
+const { t } = useI18n()
 
 const {
     loading,
@@ -14,6 +19,7 @@ const {
     creditReport,
     recommendations,
 } = useDashboard()
+
 </script>
 
 <template>
@@ -29,7 +35,11 @@ const {
         >
             <div class="loading-spinner"></div>
 
-            <span>Загрузка Dashboard...</span>
+            <span>
+
+  {{ t("dashboard.loading") }}
+
+</span>
         </div>
 
         <!-- ===================================== -->
@@ -46,11 +56,11 @@ const {
 
             <div>
                 <div class="error-title">
-                    Не удалось загрузить Dashboard
+                    {{ t("dashboard.errorTitle") }}
                 </div>
 
                 <div class="error-text">
-                    Проверьте подключение к серверу и попробуйте обновить страницу.
+                    {{ t("dashboard.errorText") }}
                 </div>
             </div>
         </div>

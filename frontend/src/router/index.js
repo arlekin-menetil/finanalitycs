@@ -4,51 +4,85 @@ import { useAuthStore } from "@/stores/auth"
 // ==========================
 // AUTH
 // ==========================
+
 import AuthPhone from "@/views/AuthPhone.vue"
 
 // ==========================
 // LANDING
 // ==========================
+
 import LandingView from "@/views/LandingView.vue"
 
 // ==========================
 // LAYOUT
 // ==========================
+
 import MainLayout from "@/layouts/MainLayout.vue"
 
 // ==========================
-// Lazy Views
+// LAZY VIEWS
 // ==========================
-const DashboardView = () => import("@/views/DashboardView.vue")
-const ScoringView = () => import("@/views/ScoringView.vue")
-const RecommendationsView = () => import("@/views/RecommendationsView.vue")
-const AnalyticsView = () => import("@/views/AnalyticsView.vue")
-const MonitoringView = () => import("@/views/MonitoringView.vue")
 
-// 👤
-const ProfileView = () => import("@/views/ProfileView.vue")
-const ProfileSetupView = () => import("@/views/ProfileSetupView.vue")
+const DashboardView = () =>
+  import("@/views/DashboardView.vue")
 
-// 💰
-const LoanView = () => import("@/views/LoanView.vue")
-const LoanDetailView = () => import("@/views/ProductDetailView.vue")
+const ScoringView = () =>
+  import("@/views/ScoringView.vue")
 
-// 🏦
-const DepositsView = () => import("@/views/DepositsView.vue")
-const DepositDetailView = () => import("@/views/DepositDetailView.vue")
+const RecommendationsView = () =>
+  import("@/views/RecommendationsView.vue")
 
-// 💳
-const CardsView = () => import("@/views/CardsView.vue")
-const CardDetailView = () => import("@/views/CardDetailView.vue")
+const AnalyticsView = () =>
+  import("@/views/AnalyticsView.vue")
 
-// 🏛
-const BankBranchesView = () => import("@/views/BankBranchesView.vue")
+const MonitoringView = () =>
+  import("@/views/MonitoringView.vue")
+
+// 👤 Profile
+
+const ProfileView = () =>
+  import("@/views/ProfileView.vue")
+
+const ProfileSetupView = () =>
+  import("@/views/ProfileSetupView.vue")
+
+// 💰 Loans
+
+const LoanView = () =>
+  import("@/views/LoanView.vue")
+
+const LoanDetailView = () =>
+  import("@/views/ProductDetailView.vue")
+
+// 🏦 Deposits
+
+const DepositsView = () =>
+  import("@/views/DepositsView.vue")
+
+const DepositDetailView = () =>
+  import("@/views/DepositDetailView.vue")
+
+// 💳 Cards
+
+const CardsView = () =>
+  import("@/views/CardsView.vue")
+
+const CardDetailView = () =>
+  import("@/views/CardDetailView.vue")
+
+// 🏛 Bank branches
+
+const BankBranchesView = () =>
+  import("@/views/BankBranchesView.vue")
 
 // =====================================
 // ROUTES
 // =====================================
 
 const routes = [
+  // ===================================
+  // LANDING
+  // ===================================
 
   {
     path: "/",
@@ -56,15 +90,22 @@ const routes = [
     component: LandingView,
   },
 
+  // ===================================
+  // LOGIN
+  // ===================================
+
   {
     path: "/login",
     name: "Login",
     component: AuthPhone,
   },
 
+  // ===================================
+  // APPLICATION
+  // ===================================
+
   {
     path: "/app",
-
     component: MainLayout,
 
     meta: {
@@ -72,11 +113,18 @@ const routes = [
     },
 
     children: [
+      // -------------------------------
+      // DEFAULT
+      // -------------------------------
 
       {
         path: "",
         redirect: "/app/profile",
       },
+
+      // -------------------------------
+      // DASHBOARD
+      // -------------------------------
 
       {
         path: "dashboard",
@@ -86,6 +134,10 @@ const routes = [
           title: "Dashboard",
         },
       },
+
+      // -------------------------------
+      // PROFILE
+      // -------------------------------
 
       {
         path: "profile",
@@ -105,6 +157,10 @@ const routes = [
         },
       },
 
+      // -------------------------------
+      // SCORING
+      // -------------------------------
+
       {
         path: "scoring",
         name: "Scoring",
@@ -113,6 +169,10 @@ const routes = [
           title: "Scoring",
         },
       },
+
+      // -------------------------------
+      // RECOMMENDATIONS
+      // -------------------------------
 
       {
         path: "recommendations",
@@ -123,6 +183,10 @@ const routes = [
         },
       },
 
+      // -------------------------------
+      // ANALYTICS
+      // -------------------------------
+
       {
         path: "analytics",
         name: "Analytics",
@@ -131,6 +195,10 @@ const routes = [
           title: "Analytics",
         },
       },
+
+      // -------------------------------
+      // MONITORING
+      // -------------------------------
 
       {
         path: "monitoring",
@@ -141,9 +209,9 @@ const routes = [
         },
       },
 
-      // =======================
+      // -------------------------------
       // LOANS
-      // =======================
+      // -------------------------------
 
       {
         path: "loans",
@@ -163,9 +231,9 @@ const routes = [
         },
       },
 
-      // =======================
+      // -------------------------------
       // DEPOSITS
-      // =======================
+      // -------------------------------
 
       {
         path: "deposits",
@@ -185,9 +253,9 @@ const routes = [
         },
       },
 
-      // =======================
+      // -------------------------------
       // CARDS
-      // =======================
+      // -------------------------------
 
       {
         path: "cards",
@@ -207,9 +275,9 @@ const routes = [
         },
       },
 
-      // =======================
-      // BANK
-      // =======================
+      // -------------------------------
+      // BANK BRANCHES
+      // -------------------------------
 
       {
         path: "bank/:id/branches",
@@ -219,16 +287,17 @@ const routes = [
           title: "Bank Branches",
         },
       },
-
     ],
-
   },
+
+  // ===================================
+  // 404
+  // ===================================
 
   {
     path: "/:pathMatch(.*)*",
     redirect: "/",
   },
-
 ]
 
 // =====================================
@@ -245,109 +314,67 @@ const router = createRouter({
 // =====================================
 
 router.beforeEach((to) => {
-
   const auth = useAuthStore()
 
-  // =====================================
-  // WAIT INIT
-  // =====================================
-
+  // Auth initialization is running.
+  // Don't block the initial navigation.
   if (!auth.initialized) {
-
     return true
-
   }
 
-  // =====================================
-  // NOT AUTHORIZED
-  // =====================================
+  // -----------------------------------
+  // Protected routes
+  // -----------------------------------
 
   if (
-
     to.meta.requiresAuth &&
-
     !auth.isAuthenticated
-
   ) {
-
     return "/login"
-
   }
 
-  // =====================================
-  // ALREADY LOGIN
-  // =====================================
+  // -----------------------------------
+  // Already authenticated
+  // -----------------------------------
 
   if (
-
     to.path === "/login" &&
-
     auth.isAuthenticated
-
   ) {
-
     return auth.isProfileCompleted
-
       ? "/app/dashboard"
-
       : "/app/profile"
-
   }
 
-  // =====================================
-  // PROFILE LOCK
-  // =====================================
+  // -----------------------------------
+  // Incomplete profile
+  // -----------------------------------
 
   if (
-
     auth.isAuthenticated &&
-
     !auth.isProfileCompleted
-
   ) {
-
     const allowedRoutes = new Set([
-
       "/app/profile",
-
       "/app/profile/edit",
-
     ])
 
-    if (
-
-      !allowedRoutes.has(to.path)
-
-    ) {
-
+    if (!allowedRoutes.has(to.path)) {
       return "/app/profile"
-
     }
-
   }
 
-  // =====================================
-  // ACCESS GRANTED
-  // =====================================
-
   return true
-
 })
 
 // =====================================
-// TITLE
+// AFTER NAVIGATION
 // =====================================
 
 router.afterEach((to) => {
-
-  document.title =
-
-    to.meta?.title
-
-      ? `${to.meta.title} | Bank Analytics`
-
-      : "Bank Analytics"
-
+  document.title = to.meta?.title
+    ? `${to.meta.title} | FinAnalytics`
+    : "FinAnalytics"
 })
 
 export default router

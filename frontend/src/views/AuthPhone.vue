@@ -1,8 +1,17 @@
 <script setup>
-import { ref, nextTick } from "vue"
+
+import {
+  ref,
+  nextTick
+} from "vue"
+
+import { useI18n } from "vue-i18n"
+
 import { useAuthStore } from "@/stores/auth"
 import { useRouter } from "vue-router"
 import api from "@/api/axios"
+
+const { t } = useI18n()
 
 const auth = useAuthStore()
 const router = useRouter()
@@ -22,7 +31,9 @@ const codeInput = ref(null)
 // ==========================================
 
 const cleanPhone = (value = "") => {
+
   return value.replace(/\D/g, "")
+
 }
 
 // ==========================================
@@ -30,19 +41,27 @@ const cleanPhone = (value = "") => {
 // ==========================================
 
 const goBack = () => {
+
   // Если мы на втором шаге —
   // возвращаемся к вводу номера
+
   if (step.value === 2) {
+
     step.value = 1
+
     code.value = ""
+
     error.value = null
 
     return
+
   }
 
   // Если мы на первом шаге —
   // всегда возвращаемся на лендинг
+
   router.replace("/")
+
 }
 
 // ==========================================
@@ -50,51 +69,84 @@ const goBack = () => {
 // ==========================================
 
 const sendCode = async () => {
+
   error.value = null
 
-  const cleaned = cleanPhone(phone.value)
+  const cleaned =
+    cleanPhone(phone.value)
 
   // Проверка номера
+
   if (!cleaned) {
-    error.value = "Введите номер телефона"
+
+    error.value =
+      t("auth.enterPhone")
+
     return
+
   }
 
   if (cleaned.length !== 12) {
-    error.value = "Неверный формат номера"
+
+    error.value =
+      t("auth.invalidPhone")
+
     return
+
   }
 
   loading.value = true
 
   try {
-    await api.post("/auth/send-code/", {
-      phone: cleaned
-    })
+
+    await api.post(
+      "/auth/send-code/",
+      {
+        phone: cleaned
+      }
+    )
 
     // Переходим ко второму шагу
+
     step.value = 2
 
     // Очищаем старую ошибку
+
     error.value = null
 
     // Ждём появления input в DOM
+
     await nextTick()
 
-    // Автоматически ставим курсор в поле кода
+    // Автоматически ставим курсор
+
     codeInput.value?.focus()
 
-  } catch (e) {
-    console.error("Send code error:", e)
+  }
+
+  catch (e) {
+
+    console.error(
+      "Send code error:",
+      e
+    )
 
     error.value =
-      e?.response?.data?.error ||
-      e?.response?.data?.detail ||
-      "Не удалось отправить код"
 
-  } finally {
-    loading.value = false
+      e?.response?.data?.error ||
+
+      e?.response?.data?.detail ||
+
+      t("auth.sendCodeError")
+
   }
+
+  finally {
+
+    loading.value = false
+
+  }
+
 }
 
 // ==========================================
@@ -102,26 +154,45 @@ const sendCode = async () => {
 // ==========================================
 
 const verifyCode = async () => {
+
   error.value = null
 
-  const enteredCode = code.value.trim()
+  const enteredCode =
+    code.value.trim()
 
   // Проверка кода
+
   if (!enteredCode) {
-    error.value = "Введите код"
+
+    error.value =
+      t("auth.enterCode")
+
     return
+
   }
 
   loading.value = true
 
   try {
-    const { data } = await api.post(
-      "/auth/verify-code/",
-      {
-        phone: cleanPhone(phone.value),
-        code: enteredCode
-      }
-    )
+
+    const { data } =
+      await api.post(
+
+        "/auth/verify-code/",
+
+        {
+
+          phone:
+            cleanPhone(
+              phone.value
+            ),
+
+          code:
+            enteredCode
+
+        }
+
+      )
 
     // ======================================
     // 🔑 СОХРАНЯЕМ JWT
@@ -136,33 +207,52 @@ const verifyCode = async () => {
     await auth.loadUser()
 
     // ======================================
-    // 📋 ЗАГРУЖАЕМ ПРОФИЛЬ
-    // ======================================
-
-    await auth.fetchProfile()
-
-    // ======================================
     // 🚀 РЕДИРЕКТ
     // ======================================
 
     if (auth.isProfileCompleted) {
-      router.replace("/app/dashboard")
-    } else {
-      router.replace("/app/profile-setup")
+
+      router.replace(
+        "/app/dashboard"
+      )
+
     }
 
-  } catch (e) {
-    console.error("Verify error:", e)
+    else {
+
+      router.replace(
+        "/app/profile-setup"
+      )
+
+    }
+
+  }
+
+  catch (e) {
+
+    console.error(
+      "Verify error:",
+      e
+    )
 
     error.value =
-      e?.response?.data?.error ||
-      e?.response?.data?.detail ||
-      "Неверный код подтверждения"
 
-  } finally {
-    loading.value = false
+      e?.response?.data?.error ||
+
+      e?.response?.data?.detail ||
+
+      t("auth.invalidCode")
+
   }
+
+  finally {
+
+    loading.value = false
+
+  }
+
 }
+
 </script>
 
 <template>
@@ -180,7 +270,7 @@ const verifyCode = async () => {
       @click="goBack"
     >
       <span class="back-button__icon">←</span>
-      <span>Назад</span>
+      <span>{{ t("login.back") }}</span>
     </button>
 
     <main class="login-container">
@@ -238,15 +328,19 @@ const verifyCode = async () => {
           </div>
 
           <h1>
-            {{ step === 1 ? "Вход в FinAnalytics" : "Подтверждение номера" }}
+            {{
+  step === 1
+    ? t("login.title")
+    : t("login.confirmTitle")
+}}
           </h1>
 
           <p v-if="step === 1">
-            Введите номер телефона, чтобы продолжить
+            {{ t("login.subtitle") }}
           </p>
 
           <p v-else>
-            Мы отправили код подтверждения на ваш номер
+            {{ t("login.confirmSubtitle") }}
           </p>
         </div>
 
@@ -262,7 +356,7 @@ const verifyCode = async () => {
               <span v-else>1</span>
             </div>
 
-            <span>Номер</span>
+            {{ t("login.phoneStep") }}
           </div>
 
           <div class="steps__line"></div>
@@ -275,7 +369,7 @@ const verifyCode = async () => {
               2
             </div>
 
-            <span>Код</span>
+            {{ t("login.codeStep") }}
           </div>
 
         </div>
@@ -293,7 +387,7 @@ const verifyCode = async () => {
           <div class="field">
 
             <label for="phone">
-              Номер телефона
+              {{ t("login.phone") }}
             </label>
 
             <div class="input-wrapper">
@@ -319,7 +413,7 @@ const verifyCode = async () => {
                 type="tel"
                 inputmode="numeric"
                 autocomplete="tel"
-                placeholder="+998 90 123 45 67"
+                :placeholder="t('login.phonePlaceholder')"
                 :disabled="loading"
                 @keyup.enter="sendCode"
               />
@@ -327,7 +421,7 @@ const verifyCode = async () => {
             </div>
 
             <span class="field-hint">
-              Используйте номер в формате +998XXXXXXXXX
+              {{ t("login.phoneHint") }}
             </span>
 
           </div>
@@ -341,7 +435,11 @@ const verifyCode = async () => {
             <span v-if="loading" class="loader"></span>
 
             <span>
-              {{ loading ? "Отправка кода..." : "Получить код" }}
+              {{
+  loading
+    ? t("login.sending")
+    : t("login.sendCode")
+}}
             </span>
 
             <span
@@ -381,7 +479,7 @@ const verifyCode = async () => {
             </div>
 
             <div>
-              <span>Код отправлен на</span>
+              <span>{{ t("login.codeSent") }}</span>
               <strong>+{{ cleanPhone(phone) }}</strong>
             </div>
 
@@ -390,7 +488,7 @@ const verifyCode = async () => {
           <div class="field">
 
             <label for="code">
-              Код подтверждения
+              {{ t("login.code") }}
             </label>
 
             <div class="input-wrapper input-wrapper--code">
@@ -424,7 +522,7 @@ const verifyCode = async () => {
                 type="text"
                 inputmode="numeric"
                 autocomplete="one-time-code"
-                placeholder="Введите 6-значный код"
+                :placeholder="t('login.codePlaceholder')"
                 maxlength="6"
                 :disabled="loading"
                 @keyup.enter="verifyCode"
@@ -443,7 +541,11 @@ const verifyCode = async () => {
             <span v-if="loading" class="loader"></span>
 
             <span>
-              {{ loading ? "Проверка..." : "Войти" }}
+              {{
+  loading
+    ? t("login.checking")
+    : t("login.login")
+}}
             </span>
 
             <span
@@ -460,7 +562,7 @@ const verifyCode = async () => {
             type="button"
             @click="step = 1; error = null"
           >
-            ← Изменить номер телефона
+            ← {{ t("login.changePhone") }}
           </button>
 
         </form>
@@ -532,13 +634,13 @@ const verifyCode = async () => {
             </svg>
 
             <span>
-              Безопасное подключение
+              {{ t("login.secure") }}
             </span>
 
           </div>
 
           <p>
-            Продолжая, вы соглашаетесь с условиями использования сервиса
+            {{ t("login.agreement") }}
           </p>
 
         </div>

@@ -1,5 +1,9 @@
 <script setup>
 
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
+
 defineEmits([
   "apply",
   "more"
@@ -15,14 +19,14 @@ defineEmits([
     class="apply"
     @click="$emit('apply')"
   >
-    🔥 Оформить онлайн
+    🔥 {{ t("loanActions.apply") }}
   </button>
 
   <button
     class="secondary"
     @click="$emit('more')"
   >
-    Другие предложения
+    {{ t("loanActions.more") }}
   </button>
 
 </div>

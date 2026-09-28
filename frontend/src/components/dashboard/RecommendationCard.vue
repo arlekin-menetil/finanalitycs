@@ -1,289 +1,10 @@
-<template>
-
-    <article class="recommendation-card">
-
-        <!-- ===================================== -->
-        <!-- HEADER -->
-        <!-- ===================================== -->
-
-        <div class="card-header">
-
-            <div class="bank-info">
-
-                <div class="bank-logo">
-
-                    <img
-
-                        :src="bankLogo"
-
-                        :alt="bankName"
-
-                        @error="logoError"
-
-                    />
-
-                </div>
-
-                <div>
-
-                    <h3 class="bank-name">
-
-                        {{ bankName }}
-
-                    </h3>
-
-                    <p class="product-name">
-
-                        {{ productName }}
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <div
-                class="match-score"
-                :class="matchClass"
-            >
-
-                <span>
-
-                    AI Match
-
-                </span>
-
-                <strong>
-
-                    {{ rankingScore }}
-
-                </strong>
-
-            </div>
-
-        </div>
-
-        <!-- ===================================== -->
-        <!-- BADGES -->
-        <!-- ===================================== -->
-
-        <div class="badges">
-
-            <div
-
-                v-if="featured"
-
-                class="badge featured"
-
-            >
-
-                ⭐ Лучший выбор
-
-            </div>
-
-            <div
-
-                v-if="isOnline"
-
-                class="badge online"
-
-            >
-
-                Онлайн оформление
-
-            </div>
-
-            <div
-
-                v-if="approvalProbability >= 80"
-
-                class="badge success"
-
-            >
-
-                Высокий шанс одобрения
-
-            </div>
-
-        </div>
-
-        <!-- ===================================== -->
-        <!-- REASONS -->
-        <!-- ===================================== -->
-
-        <div
-
-            v-if="reasons.length"
-
-            class="reasons"
-
-        >
-
-            <h4>
-
-                Почему рекомендуем
-
-            </h4>
-
-            <ul>
-
-                <li
-
-                    v-for="reason in reasons"
-
-                    :key="reason.title"
-
-                >
-
-                    ✔ {{ reason.title }}
-
-                </li>
-
-            </ul>
-
-        </div>
-
-        <!-- ===================================== -->
-        <!-- INFORMATION -->
-        <!-- ===================================== -->
-
-        <div class="info-grid">
-
-            <div class="info-item">
-
-                <span>
-
-                    Процентная ставка
-
-                </span>
-
-                <strong>
-
-                    {{ interestRate }} %
-
-                </strong>
-
-            </div>
-
-            <div class="info-item">
-
-                <span>
-
-                    Максимальный лимит
-
-                </span>
-
-                <strong>
-
-                    {{ formatMoney(recommendedLimit) }}
-
-                </strong>
-
-            </div>
-
-            <div class="info-item">
-
-                <span>
-
-                    Вероятность одобрения
-
-                </span>
-
-                <strong>
-
-                    {{ approvalProbability }} %
-
-                </strong>
-
-            </div>
-
-            <div class="info-item">
-
-                <span>
-
-                    Способ оформления
-
-                </span>
-
-                <strong>
-
-                    {{ isOnline ? "Онлайн" : "В отделении" }}
-
-                </strong>
-
-            </div>
-
-        </div>
-
-        <!-- ===================================== -->
-        <!-- CAMPAIGNS -->
-        <!-- ===================================== -->
-
-        <div
-
-            v-if="campaigns.length"
-
-            class="campaigns"
-
-        >
-
-            <div
-
-                v-for="campaign in campaigns"
-
-                :key="campaign.title"
-
-                class="campaign"
-
-            >
-
-                {{ campaign.badge }}
-
-                {{ campaign.title }}
-
-            </div>
-
-        </div>
-
-        <!-- ===================================== -->
-        <!-- FOOTER -->
-        <!-- ===================================== -->
-
-        <div class="card-footer">
-
-            <button
-
-                class="btn secondary"
-
-                @click="openProduct"
-
-            >
-
-                Подробнее
-
-            </button>
-
-            <button
-
-                class="btn primary"
-
-                @click="openBank"
-
-            >
-
-                Подать заявку
-
-            </button>
-
-        </div>
-
-    </article>
-
-</template>
-
 <script setup>
 
 import { computed } from "vue"
+import { useI18n } from "vue-i18n"
+
+const { t, locale } = useI18n()
+
 
 // ==========================================
 // PROPS
@@ -291,87 +12,90 @@ import { computed } from "vue"
 
 const props = defineProps({
 
-    recommendation: {
-
-        type: Object,
-
-        required: true,
-
-    },
+  recommendation: {
+    type: Object,
+    required: true,
+  },
 
 })
+
 
 // ==========================================
 // COMPUTED
 // ==========================================
 
 const bankName = computed(() =>
-
-    props.recommendation?.bank?.name || props.recommendation?.bank?.short_name || "-"
-
+  props.recommendation?.bank?.name ||
+  props.recommendation?.bank?.short_name ||
+  t("common.unknownBank")
 )
+
 
 const productName = computed(() =>
-
-    props.recommendation?.product?.name || "-"
-
+  props.recommendation?.product?.name ||
+  t("recommendations.product")
 )
+
 
 const interestRate = computed(() =>
-
-    Number(
-        props.recommendation?.product?.interest_rate ?? 0
-    )
-
+  Number(
+    props.recommendation?.product?.interest_rate ?? 0
+  )
 )
+
 
 const recommendedLimit = computed(() =>
-
-    Number(
-        props.recommendation?.recommended_limit ?? 0
-    )
-
+  Number(
+    props.recommendation?.recommended_limit ?? 0
+  )
 )
+
 
 const approvalProbability = computed(() =>
-
-    Number(
-        props.recommendation?.approval_probability ?? 0
-    )
-
+  Number(
+    props.recommendation?.approval_probability ?? 0
+  )
 )
+
 
 const rankingScore = computed(() =>
-
-    Number(
-        props.recommendation?.ranking_score ?? 0
-    )
-
+  Number(
+    props.recommendation?.ranking_score ?? 0
+  )
 )
 
-const isOnline = computed(() =>
 
-    props.recommendation?.product?.is_online === true
+const isOnline = computed(() => {
 
-)
+  const product =
+    props.recommendation?.product || {}
+
+  return (
+    product.is_online === true ||
+    product.is_online_credit === true ||
+    product.is_online === 1 ||
+    product.is_online_credit === 1 ||
+    product.is_online === "true" ||
+    product.is_online_credit === "true"
+  )
+
+})
+
 
 const featured = computed(() =>
-
-    props.recommendation?.featured === true
-
+  props.recommendation?.featured === true
 )
+
 
 const campaigns = computed(() =>
-
-    props.recommendation?.campaigns || []
-
+  props.recommendation?.campaigns || []
 )
+
 
 const reasons = computed(() =>
-
-    props.recommendation?.reasons || []
-
+  props.recommendation?.reasons || []
 )
+
 
 // ==========================================
 // BANK LOGO
@@ -379,52 +103,68 @@ const reasons = computed(() =>
 
 const bankLogo = computed(() => {
 
-    const bank = String(bankName.value)
-        .toLowerCase()
-        .replace(/'/g, "")
-        .replace(/"/g, "")
-        .replace(/\s+/g, "")
-        .replace(/-/g, "")
+  const bank = String(bankName.value)
+    .toLowerCase()
+    .replace(/'/g, "")
+    .replace(/"/g, "")
+    .replace(/\s+/g, "")
+    .replace(/-/g, "")
 
-    const aliases = {
 
-        asiaalliancebank: "asiaalliancebank",
+  const aliases = {
 
-        asiaalliance: "asiaalliance",
+    asiaalliancebank:
+      "asiaalliancebank",
 
-        ipakyoli: "ipakyuli",
+    asiaalliance:
+      "asiaalliance",
 
-        ipakyulibank: "ipakyulibank",
+    ipakyoli:
+      "ipakyuli",
 
-        ipakyuli: "ipakyuli",
+    ipakyulibank:
+      "ipakyulibank",
 
-        orientfinans: "orientfinans",
+    orientfinans:
+      "orientfinans",
 
-        xalqbank: "xalqbank",
+    xalqbank:
+      "xalqbank",
 
-        xalqbanki: "xalqbanki",
+    xalqbanki:
+      "xalqbanki",
 
-        trustbank: "trustbank",
+    trustbank:
+      "trustbank",
 
-        trastbank: "trastbank",
+    trastbank:
+      "trastbank",
 
-        kdbuzbekiston: "kdbuzbekiston",
+    kdbuzbekiston:
+      "kdbuzbekiston",
 
-        kdbbank: "kdbbank",
+    kdbbank:
+      "kdbbank",
 
-    }
+  }
 
-    const file = aliases[bank] || bank
 
-    return `/banks/${file}.png`
+  const file =
+    aliases[bank] || bank
+
+
+  return `/banks/${file}.png`
 
 })
 
+
 function logoError(event) {
 
-    event.target.src = "/banks/default.png"
+  event.target.src =
+    "/banks/default.png"
 
 }
+
 
 // ==========================================
 // LINKS
@@ -432,37 +172,41 @@ function logoError(event) {
 
 function openProduct() {
 
-    const url = props.recommendation?.product?.source_url
+  const url =
+    props.recommendation?.product?.source_url ||
+    props.recommendation?.source_url
 
-        || props.recommendation?.source_url
 
-    if (url) {
+  if (url) {
 
-        window.open(
-            url,
-            "_blank"
-        )
+    window.open(
+      url,
+      "_blank"
+    )
 
-    }
+  }
 
 }
+
 
 function openBank() {
 
-    const url = props.recommendation?.product?.bank_url
+  const url =
+    props.recommendation?.product?.bank_url ||
+    props.recommendation?.bank_url
 
-        || props.recommendation?.bank_url
 
-    if (url) {
+  if (url) {
 
-        window.open(
-            url,
-            "_blank"
-        )
+    window.open(
+      url,
+      "_blank"
+    )
 
-    }
+  }
 
 }
+
 
 // ==========================================
 // MATCH COLOR
@@ -470,47 +214,294 @@ function openBank() {
 
 const matchClass = computed(() => {
 
-    if (rankingScore.value >= 90)
+  if (rankingScore.value >= 90)
+    return "excellent"
 
-        return "excellent"
+  if (rankingScore.value >= 75)
+    return "good"
 
-    if (rankingScore.value >= 75)
+  if (rankingScore.value >= 60)
+    return "medium"
 
-        return "good"
-
-    if (rankingScore.value >= 60)
-
-        return "medium"
-
-    return "low"
+  return "low"
 
 })
 
+
 // ==========================================
-// HELPERS
+// LOCALE
+// ==========================================
+
+const numberLocale = computed(() => {
+
+  const locales = {
+    ru: "ru-RU",
+    en: "en-US",
+    uz: "uz-UZ",
+  }
+
+  return locales[locale.value] || "ru-RU"
+
+})
+
+
+// ==========================================
+// MONEY
 // ==========================================
 
 function formatMoney(value) {
 
-    return new Intl.NumberFormat(
-
-        "ru-RU",
-
-        {
-
-            maximumFractionDigits: 0,
-
-        }
-
-    ).format(
-
-        Number(value || 0)
-
-    ) + " сум"
+  return new Intl.NumberFormat(
+    numberLocale.value,
+    {
+      maximumFractionDigits: 0,
+    }
+  ).format(
+    Number(value || 0)
+  )
 
 }
 
 </script>
+
+
+<template>
+
+  <article class="recommendation-card">
+
+
+    <!-- ===================================== -->
+    <!-- HEADER -->
+    <!-- ===================================== -->
+
+    <div class="card-header">
+
+      <div class="bank-info">
+
+        <div class="bank-logo">
+
+          <img
+            :src="bankLogo"
+            :alt="bankName"
+            @error="logoError"
+          />
+
+        </div>
+
+
+        <div>
+
+          <h3 class="bank-name">
+            {{ bankName }}
+          </h3>
+
+
+          <p class="product-name">
+            {{ productName }}
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="match-score"
+        :class="matchClass"
+      >
+
+        <span>
+          {{ t("recommendations.match") }}
+        </span>
+
+        <strong>
+          {{ rankingScore }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <!-- ===================================== -->
+    <!-- BADGES -->
+    <!-- ===================================== -->
+
+    <div class="badges">
+
+
+      <div
+        v-if="featured"
+        class="badge featured"
+      >
+        ⭐ {{ t("recommendations.bestOffer") }}
+      </div>
+
+
+      <div
+        v-if="isOnline"
+        class="badge online"
+      >
+        {{ t("recommendations.online") }}
+      </div>
+
+
+      <div
+        v-if="approvalProbability >= 80"
+        class="badge success"
+      >
+        {{ t("recommendations.highApprovalChance") }}
+      </div>
+
+
+    </div>
+
+
+    <!-- ===================================== -->
+    <!-- REASONS -->
+    <!-- ===================================== -->
+
+    <div
+      v-if="reasons.length"
+      class="reasons"
+    >
+
+      <h4>
+        {{ t("recommendations.whyRecommend") }}
+      </h4>
+
+
+      <ul>
+
+        <li
+          v-for="reason in reasons"
+          :key="reason.title"
+        >
+          ✔ {{ reason.title }}
+        </li>
+
+      </ul>
+
+    </div>
+
+
+    <!-- ===================================== -->
+    <!-- INFORMATION -->
+    <!-- ===================================== -->
+
+    <div class="info-grid">
+
+
+      <div class="info-item">
+
+        <span>
+          {{ t("recommendations.interest") }}
+        </span>
+
+        <strong>
+          {{ interestRate }} %
+        </strong>
+
+      </div>
+
+
+      <div class="info-item">
+
+        <span>
+          {{ t("recommendations.loanLimit") }}
+        </span>
+
+        <strong>
+          {{ formatMoney(recommendedLimit) }}
+        </strong>
+
+      </div>
+
+
+      <div class="info-item">
+
+        <span>
+          {{ t("recommendations.approval") }}
+        </span>
+
+        <strong>
+          {{ approvalProbability }} %
+        </strong>
+
+      </div>
+
+
+      <div class="info-item">
+
+        <span>
+          {{ t("recommendations.applicationMethod") }}
+        </span>
+
+        <strong>
+          {{
+            isOnline
+              ? t("recommendations.online")
+              : t("recommendations.offline")
+          }}
+        </strong>
+
+      </div>
+
+
+    </div>
+
+
+    <!-- ===================================== -->
+    <!-- CAMPAIGNS -->
+    <!-- ===================================== -->
+
+    <div
+      v-if="campaigns.length"
+      class="campaigns"
+    >
+
+      <div
+        v-for="campaign in campaigns"
+        :key="campaign.title"
+        class="campaign"
+      >
+
+        {{ campaign.badge }}
+        {{ campaign.title }}
+
+      </div>
+
+    </div>
+
+
+    <!-- ===================================== -->
+    <!-- FOOTER -->
+    <!-- ===================================== -->
+
+    <div class="card-footer">
+
+      <button
+        class="btn secondary"
+        @click="openProduct"
+      >
+        {{ t("recommendations.details") }}
+      </button>
+
+
+      <button
+        class="btn primary"
+        @click="openBank"
+      >
+        {{ t("recommendations.applyOnline") }}
+      </button>
+
+    </div>
+
+
+  </article>
+
+</template>
+
 
 <style scoped>
 
@@ -520,65 +511,68 @@ function formatMoney(value) {
 
 .recommendation-card{
 
-    position:relative;
+  position:relative;
 
-    overflow:hidden;
+  overflow:hidden;
 
-    display:flex;
+  display:flex;
 
-    flex-direction:column;
+  flex-direction:column;
 
-    gap:28px;
+  gap:28px;
 
-    padding:30px;
+  padding:30px;
 
-    border-radius:28px;
+  border-radius:28px;
 
-    background:#ffffff;
+  background:#ffffff;
 
-    border:1px solid #e2e8f0;
+  border:1px solid #e2e8f0;
 
-    box-shadow:0 16px 40px rgba(15,23,42,.06);
+  box-shadow:0 16px 40px rgba(15,23,42,.06);
 
-    transition:
-        transform .30s,
-        box-shadow .30s,
-        border-color .30s;
+  transition:
+    transform .30s,
+    box-shadow .30s,
+    border-color .30s;
 
 }
+
 
 .recommendation-card::before{
 
-    content:"";
+  content:"";
 
-    position:absolute;
+  position:absolute;
 
-    left:0;
+  left:0;
 
-    top:0;
+  top:0;
 
-    width:100%;
+  width:100%;
 
-    height:5px;
+  height:5px;
 
-    background:linear-gradient(
-        90deg,
-        #2563eb,
-        #3b82f6,
-        #60a5fa
-    );
+  background:linear-gradient(
+    90deg,
+    #2563eb,
+    #3b82f6,
+    #60a5fa
+  );
 
 }
+
 
 .recommendation-card:hover{
 
-    transform:translateY(-8px);
+  transform:translateY(-8px);
 
-    border-color:#3b82f6;
+  border-color:#3b82f6;
 
-    box-shadow:0 26px 60px rgba(37,99,235,.18);
+  box-shadow:0 26px 60px rgba(37,99,235,.18);
 
 }
+
 
 /* ==========================================================
    HEADER
@@ -586,25 +580,27 @@ function formatMoney(value) {
 
 .card-header{
 
-    display:flex;
+  display:flex;
 
-    justify-content:space-between;
+  justify-content:space-between;
 
-    align-items:flex-start;
+  align-items:flex-start;
 
-    gap:22px;
+  gap:22px;
 
 }
+
 
 .bank-info{
 
-    display:flex;
+  display:flex;
 
-    align-items:center;
+  align-items:center;
 
-    gap:18px;
+  gap:18px;
 
 }
+
 
 /* ==========================================================
    LOGO
@@ -612,47 +608,50 @@ function formatMoney(value) {
 
 .bank-logo{
 
-    width:72px;
+  width:72px;
 
-    height:72px;
+  height:72px;
 
-    border-radius:18px;
+  border-radius:18px;
 
-    overflow:hidden;
+  overflow:hidden;
 
-    background:#ffffff;
+  background:#ffffff;
 
-    border:1px solid #e2e8f0;
+  border:1px solid #e2e8f0;
 
-    display:flex;
+  display:flex;
 
-    align-items:center;
+  align-items:center;
 
-    justify-content:center;
+  justify-content:center;
 
-    flex-shrink:0;
+  flex-shrink:0;
 
-    box-shadow:0 8px 20px rgba(0,0,0,.05);
+  box-shadow:0 8px 20px rgba(0,0,0,.05);
 
 }
+
 
 .bank-logo img{
 
-    width:88%;
+  width:88%;
 
-    height:88%;
+  height:88%;
 
-    object-fit:contain;
+  object-fit:contain;
 
-    transition:.25s;
+  transition:.25s;
 
 }
+
 
 .recommendation-card:hover .bank-logo img{
 
-    transform:scale(1.05);
+  transform:scale(1.05);
 
 }
+
 
 /* ==========================================================
    TITLES
@@ -660,27 +659,29 @@ function formatMoney(value) {
 
 .bank-name{
 
-    margin:0;
+  margin:0;
 
-    font-size:24px;
+  font-size:24px;
 
-    font-weight:700;
+  font-weight:700;
 
-    color:#0f172a;
+  color:#0f172a;
 
 }
+
 
 .product-name{
 
-    margin-top:6px;
+  margin-top:6px;
 
-    font-size:15px;
+  font-size:15px;
 
-    color:#64748b;
+  color:#64748b;
 
-    line-height:1.5;
+  line-height:1.5;
 
 }
+
 
 /* ==========================================================
    MATCH
@@ -688,47 +689,50 @@ function formatMoney(value) {
 
 .match-score{
 
-    min-width:95px;
+  min-width:95px;
 
-    display:flex;
+  display:flex;
 
-    flex-direction:column;
+  flex-direction:column;
 
-    align-items:center;
+  align-items:center;
 
-    justify-content:center;
+  justify-content:center;
 
-    padding:14px;
+  padding:14px;
 
-    border-radius:20px;
+  border-radius:20px;
 
-    background:#eff6ff;
+  background:#eff6ff;
 
-    border:1px solid #bfdbfe;
+  border:1px solid #bfdbfe;
 
 }
+
 
 .match-score span{
 
-    font-size:11px;
+  font-size:11px;
 
-    letter-spacing:1px;
+  letter-spacing:1px;
 
-    text-transform:uppercase;
+  text-transform:uppercase;
 
-    color:#64748b;
+  color:#64748b;
 
 }
+
 
 .match-score strong{
 
-    margin-top:8px;
+  margin-top:8px;
 
-    font-size:30px;
+  font-size:30px;
 
-    font-weight:700;
+  font-weight:700;
 
 }
+
 
 /* ==========================================================
    MATCH COLORS
@@ -736,59 +740,67 @@ function formatMoney(value) {
 
 .match-score.excellent{
 
-    background:#dcfce7;
+  background:#dcfce7;
 
-    border-color:#86efac;
+  border-color:#86efac;
 
 }
+
 
 .match-score.excellent strong{
 
-    color:#15803d;
+  color:#15803d;
 
 }
+
 
 .match-score.good{
 
-    background:#dbeafe;
+  background:#dbeafe;
 
-    border-color:#93c5fd;
+  border-color:#93c5fd;
 
 }
+
 
 .match-score.good strong{
 
-    color:#2563eb;
+  color:#2563eb;
 
 }
+
 
 .match-score.medium{
 
-    background:#fef3c7;
+  background:#fef3c7;
 
-    border-color:#fde68a;
+  border-color:#fde68a;
 
 }
+
 
 .match-score.medium strong{
 
-    color:#d97706;
+  color:#d97706;
 
 }
+
 
 .match-score.low{
 
-    background:#fee2e2;
+  background:#fee2e2;
 
-    border-color:#fecaca;
+  border-color:#fecaca;
 
 }
+
 
 .match-score.low strong{
 
-    color:#dc2626;
+  color:#dc2626;
 
 }
+
 
 /* ==========================================================
    BADGES
@@ -796,55 +808,60 @@ function formatMoney(value) {
 
 .badges{
 
-    display:flex;
+  display:flex;
 
-    flex-wrap:wrap;
+  flex-wrap:wrap;
 
-    gap:12px;
+  gap:12px;
 
 }
+
 
 .badge{
 
-    padding:8px 15px;
+  padding:8px 15px;
 
-    border-radius:999px;
+  border-radius:999px;
 
-    font-size:12px;
+  font-size:12px;
 
-    font-weight:600;
+  font-weight:600;
 
-    display:flex;
+  display:flex;
 
-    align-items:center;
+  align-items:center;
 
-    gap:6px;
+  gap:6px;
 
 }
+
 
 .featured{
 
-    background:#fef3c7;
+  background:#fef3c7;
 
-    color:#92400e;
+  color:#92400e;
 
 }
+
 
 .online{
 
-    background:#dbeafe;
+  background:#dbeafe;
 
-    color:#1d4ed8;
+  color:#1d4ed8;
 
 }
+
 
 .success{
 
-    background:#dcfce7;
+  background:#dcfce7;
 
-    color:#15803d;
+  color:#15803d;
 
 }
+
 
 /* ==========================================================
    REASONS
@@ -852,57 +869,61 @@ function formatMoney(value) {
 
 .reasons{
 
-    padding:22px;
+  padding:22px;
 
-    border-radius:22px;
+  border-radius:22px;
 
-    background:#f8fafc;
+  background:#f8fafc;
 
-    border:1px solid #e2e8f0;
+  border:1px solid #e2e8f0;
 
 }
+
 
 .reasons h4{
 
-    margin:0 0 16px;
+  margin:0 0 16px;
 
-    font-size:17px;
+  font-size:17px;
 
-    font-weight:700;
+  font-weight:700;
 
-    color:#0f172a;
+  color:#0f172a;
 
 }
+
 
 .reasons ul{
 
-    margin:0;
+  margin:0;
 
-    padding:0;
+  padding:0;
 
-    list-style:none;
+  list-style:none;
 
-    display:flex;
+  display:flex;
 
-    flex-direction:column;
+  flex-direction:column;
 
-    gap:12px;
+  gap:12px;
 
 }
+
 
 .reasons li{
 
-    display:flex;
+  display:flex;
 
-    align-items:flex-start;
+  align-items:flex-start;
 
-    gap:10px;
+  gap:10px;
 
-    color:#475569;
+  color:#475569;
 
-    line-height:1.6;
+  line-height:1.6;
 
 }
+
 
 /* ==========================================================
    INFORMATION GRID
@@ -910,59 +931,64 @@ function formatMoney(value) {
 
 .info-grid{
 
-    display:grid;
+  display:grid;
 
-    grid-template-columns:repeat(2,1fr);
+  grid-template-columns:repeat(2,1fr);
 
-    gap:18px;
+  gap:18px;
 
 }
+
 
 .info-item{
 
-    padding:18px;
+  padding:18px;
 
-    border-radius:18px;
+  border-radius:18px;
 
-    background:#f8fafc;
+  background:#f8fafc;
 
-    border:1px solid #e2e8f0;
+  border:1px solid #e2e8f0;
 
-    transition:.25s;
+  transition:.25s;
 
 }
+
 
 .info-item:hover{
 
-    background:#eff6ff;
+  background:#eff6ff;
 
-    border-color:#bfdbfe;
+  border-color:#bfdbfe;
 
 }
+
 
 .info-item span{
 
-    display:block;
+  display:block;
 
-    font-size:13px;
+  font-size:13px;
 
-    color:#64748b;
+  color:#64748b;
 
 }
+
 
 .info-item strong{
 
-    display:block;
+  display:block;
 
-    margin-top:10px;
+  margin-top:10px;
 
-    font-size:18px;
+  font-size:18px;
 
-    font-weight:700;
+  font-weight:700;
 
-    color:#0f172a;
+  color:#0f172a;
 
 }
+
 
 /* ==========================================================
    CAMPAIGNS
@@ -970,29 +996,31 @@ function formatMoney(value) {
 
 .campaigns{
 
-    display:flex;
+  display:flex;
 
-    flex-wrap:wrap;
+  flex-wrap:wrap;
 
-    gap:10px;
+  gap:10px;
 
 }
+
 
 .campaign{
 
-    padding:8px 15px;
+  padding:8px 15px;
 
-    border-radius:999px;
+  border-radius:999px;
 
-    background:#fee2e2;
+  background:#fee2e2;
 
-    color:#b91c1c;
+  color:#b91c1c;
 
-    font-size:13px;
+  font-size:13px;
 
-    font-weight:600;
+  font-weight:600;
 
 }
+
 
 /* ==========================================================
    FOOTER
@@ -1000,73 +1028,75 @@ function formatMoney(value) {
 
 .card-footer{
 
-    display:flex;
+  display:flex;
 
-    justify-content:flex-end;
+  justify-content:flex-end;
 
-    gap:16px;
+  gap:16px;
 
-    margin-top:auto;
+  margin-top:auto;
 
 }
+
 
 .btn{
 
-    min-width:170px;
+  min-width:170px;
 
-    padding:13px 22px;
+  padding:13px 22px;
 
-    border:none;
+  border:none;
 
-    border-radius:14px;
+  border-radius:14px;
 
-    cursor:pointer;
+  cursor:pointer;
 
-    font-size:14px;
+  font-size:14px;
 
-    font-weight:600;
+  font-weight:600;
 
-    transition:.25s;
+  transition:.25s;
 
 }
+
 
 .btn.primary{
 
-    color:white;
+  color:white;
 
-    background:linear-gradient(
-
-        135deg,
-
-        #2563eb,
-
-        #3b82f6
-
-    );
+  background:linear-gradient(
+    135deg,
+    #2563eb,
+    #3b82f6
+  );
 
 }
+
 
 .btn.primary:hover{
 
-    transform:translateY(-2px);
+  transform:translateY(-2px);
 
-    box-shadow:0 12px 24px rgba(37,99,235,.25);
+  box-shadow:0 12px 24px rgba(37,99,235,.25);
 
 }
+
 
 .btn.secondary{
 
-    background:#f1f5f9;
+  background:#f1f5f9;
 
-    color:#0f172a;
+  color:#0f172a;
 
 }
+
 
 .btn.secondary:hover{
 
-    background:#e2e8f0;
+  background:#e2e8f0;
 
 }
+
 
 /* ==========================================================
    DARK MODE
@@ -1074,85 +1104,97 @@ function formatMoney(value) {
 
 .dark .recommendation-card{
 
-    background:#0f172a;
+  background:#0f172a;
 
-    border-color:#1e293b;
+  border-color:#1e293b;
 
 }
+
 
 .dark .bank-logo{
 
-    background:#1e293b;
+  background:#1e293b;
 
-    border-color:#334155;
+  border-color:#334155;
 
 }
+
 
 .dark .bank-name{
 
-    color:#ffffff;
+  color:#ffffff;
 
 }
+
 
 .dark .product-name{
 
-    color:#94a3b8;
+  color:#94a3b8;
 
 }
+
 
 .dark .reasons{
 
-    background:#1e293b;
+  background:#1e293b;
 
-    border-color:#334155;
+  border-color:#334155;
 
 }
+
 
 .dark .reasons h4{
 
-    color:#ffffff;
+  color:#ffffff;
 
 }
+
 
 .dark .reasons li{
 
-    color:#cbd5e1;
+  color:#cbd5e1;
 
 }
+
 
 .dark .info-item{
 
-    background:#1e293b;
+  background:#1e293b;
 
-    border-color:#334155;
+  border-color:#334155;
 
 }
+
 
 .dark .info-item:hover{
 
-    background:#263548;
+  background:#263548;
 
 }
+
 
 .dark .info-item strong{
 
-    color:#ffffff;
+  color:#ffffff;
 
 }
+
 
 .dark .btn.secondary{
 
-    background:#1e293b;
+  background:#1e293b;
 
-    color:white;
+  color:white;
 
 }
+
 
 .dark .btn.secondary:hover{
 
-    background:#334155;
+  background:#334155;
 
 }
+
 
 /* ==========================================================
    RESPONSIVE
@@ -1160,67 +1202,76 @@ function formatMoney(value) {
 
 @media (max-width:900px){
 
-    .card-header{
+  .card-header{
 
-        flex-direction:column;
+    flex-direction:column;
 
-        align-items:flex-start;
+    align-items:flex-start;
 
-    }
+  }
 
-    .match-score{
 
-        width:100%;
+  .match-score{
 
-    }
+    width:100%;
 
-    .info-grid{
+  }
 
-        grid-template-columns:1fr;
 
-    }
+  .info-grid{
 
-    .card-footer{
+    grid-template-columns:1fr;
 
-        flex-direction:column;
+  }
 
-    }
 
-    .btn{
+  .card-footer{
 
-        width:100%;
+    flex-direction:column;
 
-    }
+  }
+
+
+  .btn{
+
+    width:100%;
+
+  }
 
 }
+
 
 @media (max-width:600px){
 
-    .recommendation-card{
+  .recommendation-card{
 
-        padding:22px;
+    padding:22px;
 
-    }
+  }
 
-    .bank-logo{
 
-        width:60px;
+  .bank-logo{
 
-        height:60px;
+    width:60px;
 
-    }
+    height:60px;
 
-    .bank-name{
+  }
 
-        font-size:20px;
 
-    }
+  .bank-name{
 
-    .match-score strong{
+    font-size:20px;
 
-        font-size:24px;
+  }
 
-    }
+
+  .match-score strong{
+
+    font-size:24px;
+
+  }
 
 }
+
 </style>

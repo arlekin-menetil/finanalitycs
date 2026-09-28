@@ -1,291 +1,271 @@
-<template>
-
-    <section class="dashboard-kpi">
-
-        <div class="kpi-card">
-
-            <div class="kpi-label">
-
-                Ежемесячный доход
-
-            </div>
-
-            <div class="kpi-value">
-
-                {{ formatMoney(income) }}
-
-            </div>
-
-        </div>
-
-        <div class="kpi-card">
-
-            <div class="kpi-label">
-
-                Ежемесячные обязательства
-
-            </div>
-
-            <div class="kpi-value">
-
-                {{ formatMoney(obligations) }}
-
-            </div>
-
-        </div>
-
-        <div class="kpi-card">
-
-            <div class="kpi-label">
-
-                Свободный остаток
-
-            </div>
-
-            <div class="kpi-value">
-
-                {{ formatMoney(balance) }}
-
-            </div>
-
-        </div>
-
-        <div class="kpi-card">
-
-            <div class="kpi-label">
-
-                Debt To Income
-
-            </div>
-
-            <div class="kpi-value">
-
-                {{ Number(dti).toFixed(2) }}%
-
-            </div>
-
-        </div>
-
-    </section>
-
-</template>
-
 <script setup>
+import { useI18n } from "vue-i18n"
 
-const props = defineProps({
+import DashboardHeader from "@/components/dashboard/DashboardHeader.vue"
+import DashboardKPI from "@/components/dashboard/DashboardKPI.vue"
+import CreditScoreCard from "@/components/dashboard/CreditScoreCard.vue"
+import RecommendationList from "@/components/dashboard/RecommendationList.vue"
 
-    income: {
+import { useDashboard } from "@/composables/useDashboard"
 
-        type: Number,
+const { t } = useI18n()
 
-        default: 0,
-
-    },
-
-    obligations: {
-
-        type: Number,
-
-        default: 0,
-
-    },
-
-    balance: {
-
-        type: Number,
-
-        default: 0,
-
-    },
-
-    dti: {
-
-        type: Number,
-
-        default: 0,
-
-    },
-
-})
-
-function formatMoney(value) {
-
-    return new Intl.NumberFormat(
-
-        "ru-RU",
-
-        {
-
-            maximumFractionDigits: 0,
-
-        }
-
-    ).format(
-
-        Number(value || 0)
-
-    ) + " сум"
-
-}
-
+const {
+    loading,
+    error,
+    profile,
+    scoring,
+    creditReport,
+    recommendations,
+} = useDashboard()
 </script>
+
+<template>
+    <div class="dashboard-page">
+
+        <!-- Loading -->
+
+        <div
+            v-if="loading"
+            class="dashboard-loading"
+        >
+            <div class="loading-spinner"></div>
+
+            <span>
+                {{ t("dashboard.loading") }}
+            </span>
+        </div>
+
+        <!-- Error -->
+
+        <div
+            v-else-if="error"
+            class="dashboard-error"
+        >
+            <div class="error-icon">
+                !
+            </div>
+
+            <div>
+
+                <div class="error-title">
+                    {{ t("dashboard.errorTitle") }}
+                </div>
+
+                <div class="error-text">
+                    {{ t("dashboard.errorText") }}
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+
+        <template v-else>
+
+            <DashboardHeader
+                :user-name="profile?.full_name"
+                :profile-completed="profile?.profile_completed"
+                :employment-verified="profile?.employment_verified"
+                :last-ai-update="scoring?.created_at"
+                :profile-version="scoring?.profile_version"
+            />
+
+            <DashboardKPI
+                :profile="profile"
+                :score="scoring"
+                :credit-report="creditReport"
+            />
+
+            <CreditScoreCard
+                :score="scoring"
+                :credit-report="creditReport"
+                :profile="profile"
+            />
+
+            <RecommendationList
+                v-if="recommendations?.length"
+                :recommendations="recommendations"
+            />
+
+        </template>
+
+    </div>
+</template>
 
 <style scoped>
 
-/* ==========================================================
-   GRID
-========================================================== */
+.dashboard-page {
+    width: 100%;
+    max-width: 1400px;
 
-.dashboard-kpi{
+    margin: 0 auto;
 
-    display:grid;
+    padding: 32px;
 
-    grid-template-columns:repeat(4,1fr);
+    display: flex;
+    flex-direction: column;
 
-    gap:24px;
+    gap: 32px;
 
+    box-sizing: border-box;
 }
 
-/* ==========================================================
-   CARD
-========================================================== */
+/* ========================================= */
+/* LOADING */
+/* ========================================= */
 
-.kpi-card{
+.dashboard-loading {
+    min-height: 420px;
 
-    position:relative;
+    display: flex;
+    flex-direction: column;
 
-    overflow:hidden;
+    align-items: center;
+    justify-content: center;
 
-    padding:28px;
+    gap: 16px;
 
-    border-radius:24px;
+    color: #64748b;
 
-    background:#ffffff;
-
-    border:1px solid #e2e8f0;
-
-    transition:.3s;
-
-    box-shadow:0 12px 30px rgba(15,23,42,.05);
-
+    font-size: 16px;
+    font-weight: 600;
 }
 
-.kpi-card:hover{
+.loading-spinner {
+    width: 38px;
+    height: 38px;
 
-    transform:translateY(-6px);
+    border-radius: 50%;
 
-    box-shadow:0 20px 45px rgba(37,99,235,.12);
+    border: 4px solid #e2e8f0;
+    border-top-color: #2563eb;
 
-    border-color:#3b82f6;
-
+    animation: dashboard-spin .8s linear infinite;
 }
 
-.kpi-card::before{
+@keyframes dashboard-spin {
 
-    content:"";
-
-    position:absolute;
-
-    top:0;
-
-    left:0;
-
-    width:100%;
-
-    height:5px;
-
-    background:linear-gradient(
-        90deg,
-        #2563eb,
-        #3b82f6
-    );
-
-}
-
-/* ==========================================================
-   TEXT
-========================================================== */
-
-.kpi-label{
-
-    font-size:14px;
-
-    color:#64748b;
-
-    margin-bottom:18px;
-
-}
-
-.kpi-value{
-
-    font-size:34px;
-
-    font-weight:700;
-
-    color:#0f172a;
-
-    line-height:1.2;
-
-}
-
-/* ==========================================================
-   DARK
-========================================================== */
-
-.dark .kpi-card{
-
-    background:#0f172a;
-
-    border-color:#1e293b;
-
-    box-shadow:none;
-
-}
-
-.dark .kpi-value{
-
-    color:white;
-
-}
-
-.dark .kpi-label{
-
-    color:#94a3b8;
-
-}
-
-/* ==========================================================
-   RESPONSIVE
-========================================================== */
-
-@media (max-width:1200px){
-
-    .dashboard-kpi{
-
-        grid-template-columns:repeat(2,1fr);
-
+    to {
+        transform: rotate(360deg);
     }
 
 }
 
-@media (max-width:700px){
+/* ========================================= */
+/* ERROR */
+/* ========================================= */
 
-    .dashboard-kpi{
+.dashboard-error {
+    display: flex;
 
-        grid-template-columns:1fr;
+    align-items: center;
 
+    gap: 16px;
+
+    padding: 22px 24px;
+
+    border-radius: 20px;
+
+    background: #fef2f2;
+
+    border: 1px solid #fecaca;
+
+    color: #991b1b;
+}
+
+.error-icon {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: #fee2e2;
+
+    color: #dc2626;
+
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.error-title {
+    margin-bottom: 4px;
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.error-text {
+    color: #b91c1c;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+/* ========================================= */
+/* RESPONSIVE */
+/* ========================================= */
+
+@media (max-width:1024px){
+
+    .dashboard-page{
+        padding:28px;
+        gap:28px;
     }
 
-    .kpi-card{
+}
 
-        padding:22px;
+@media (max-width:768px){
 
+    .dashboard-page{
+        padding:20px;
+        gap:24px;
     }
 
-    .kpi-value{
+    .dashboard-loading{
+        min-height:320px;
+    }
 
-        font-size:28px;
+    .dashboard-error{
+        padding:18px;
+    }
 
+}
+
+@media (max-width:480px){
+
+    .dashboard-page{
+        padding:16px;
+        gap:20px;
+    }
+
+    .dashboard-error{
+        align-items:flex-start;
+    }
+
+    .error-icon{
+        width:36px;
+        height:36px;
+
+        border-radius:10px;
+
+        font-size:17px;
+    }
+
+    .error-title{
+        font-size:14px;
+    }
+
+    .error-text{
+        font-size:13px;
     }
 
 }

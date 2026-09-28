@@ -1,48 +1,82 @@
 <script setup>
 
-import { computed } from "vue"
+import {
+  computed,
+} from "vue"
+
+import {
+  useI18n,
+} from "vue-i18n"
+
+
+const {
+  t,
+  locale,
+} = useI18n()
+
 
 const props = defineProps({
 
-    profile: {
+  profile: {
 
-        type: Object,
+    type: Object,
 
-        required: true,
+    required: true,
 
-    },
+  },
 
 })
+
 
 // ==========================================
 // FORMAT MONEY
 // ==========================================
 
-function formatMoney(value){
+function formatMoney(value) {
 
-    const number = Number(value ?? 0)
+  const number = Number(value ?? 0)
 
-    if (!number){
+  if (!number) {
 
-        return "Не указано"
+    return t(
+      "financialInfo.values.notSpecified",
+    )
 
-    }
+  }
 
-    return number.toLocaleString(
 
-        "ru-RU",
+  const localeMap = {
 
-        {
+    ru: "ru-RU",
 
-            minimumFractionDigits: 2,
+    en: "en-US",
 
-            maximumFractionDigits: 2,
+    uz: "uz-UZ",
 
-        },
+  }
 
-    ) + " UZS"
+
+  const formatted =
+    number.toLocaleString(
+
+      localeMap[locale.value] ||
+      "ru-RU",
+
+      {
+
+        minimumFractionDigits: 2,
+
+        maximumFractionDigits: 2,
+
+      },
+
+    )
+
+
+  return `${formatted} UZS`
 
 }
+
 
 // ==========================================
 // FINANCIAL DATA
@@ -50,87 +84,85 @@ function formatMoney(value){
 
 const income = computed(() =>
 
-    Number(
-
-        props.profile?.income ?? 0
-
-    )
+  Number(
+    props.profile?.income ?? 0
+  )
 
 )
+
 
 const expenses = computed(() =>
 
-    Number(
-
-        props.profile?.expenses ?? 0
-
-    )
+  Number(
+    props.profile?.expenses ?? 0
+  )
 
 )
+
 
 const totalDebt = computed(() =>
 
-    Number(
-
-        props.profile?.totalDebt ?? 0
-
-    )
+  Number(
+    props.profile?.totalDebt ?? 0
+  )
 
 )
+
 
 const overdueDebt = computed(() =>
 
-    Number(
-
-        props.profile?.overdueDebt ?? 0
-
-    )
+  Number(
+    props.profile?.overdueDebt ?? 0
+  )
 
 )
+
 
 const contractsCount = computed(() =>
 
-    Number(
-
-        props.profile?.contractsCount ?? 0
-
-    )
+  Number(
+    props.profile?.contractsCount ?? 0
+  )
 
 )
+
 
 const netBalance = computed(() =>
 
-    Number(
+  Number(
 
-        props.profile?.profile?.net_balance ??
+    props.profile?.profile?.net_balance ??
 
-        props.profile?.net_balance ??
+    props.profile?.net_balance ??
 
-        income.value - expenses.value
+    income.value - expenses.value
 
-    )
+  )
 
 )
 
+
 const dti = computed(() => {
 
-    const value = Number(
+  const value = Number(
 
-        props.profile?.profile?.dti ??
+    props.profile?.profile?.dti ??
 
-        props.profile?.dti ??
+    props.profile?.dti ??
 
-        0
+    0
 
-    )
+  )
 
-    return value > 0
 
-        ? Math.round(value)
+  return value > 0
 
-        : null
+    ? Math.round(value)
+
+    : null
 
 })
+
 
 // ==========================================
 // FINANCIAL STATUS
@@ -138,51 +170,63 @@ const dti = computed(() => {
 
 const financialStatus = computed(() => {
 
-    if (dti.value === null){
-
-        return {
-
-            text: "Недостаточно данных",
-
-            color: "#94a3b8",
-
-        }
-
-    }
-
-    if (dti.value <= 35){
-
-        return {
-
-            text: "Стабильное",
-
-            color: "#16a34a",
-
-        }
-
-    }
-
-    if (dti.value <= 50){
-
-        return {
-
-            text: "Умеренная нагрузка",
-
-            color: "#f59e0b",
-
-        }
-
-    }
+  if (dti.value === null) {
 
     return {
 
-        text: "Высокая нагрузка",
+      text: t(
+        "financialInfo.status.insufficientData",
+      ),
 
-        color: "#ef4444",
+      color: "#94a3b8",
 
     }
 
+  }
+
+
+  if (dti.value <= 35) {
+
+    return {
+
+      text: t(
+        "financialInfo.status.stable",
+      ),
+
+      color: "#16a34a",
+
+    }
+
+  }
+
+
+  if (dti.value <= 50) {
+
+    return {
+
+      text: t(
+        "financialInfo.status.moderate",
+      ),
+
+      color: "#f59e0b",
+
+    }
+
+  }
+
+
+  return {
+
+    text: t(
+      "financialInfo.status.high",
+    ),
+
+    color: "#ef4444",
+
+  }
+
 })
+
 
 // ==========================================
 // SUMMARY
@@ -190,254 +234,237 @@ const financialStatus = computed(() => {
 
 const summary = computed(() => ({
 
-    income: formatMoney(
+  income: formatMoney(
+    income.value
+  ),
 
-        income.value
+  expenses: formatMoney(
+    expenses.value
+  ),
 
-    ),
+  debt: formatMoney(
+    totalDebt.value
+  ),
 
-    expenses: formatMoney(
+  overdue: formatMoney(
+    overdueDebt.value
+  ),
 
-        expenses.value
+  balance: formatMoney(
+    netBalance.value
+  ),
 
-    ),
+  contracts: contractsCount.value,
 
-    debt: formatMoney(
+  dti:
 
-        totalDebt.value
+    dti.value !== null
 
-    ),
+      ? `${dti.value}%`
 
-    overdue: formatMoney(
-
-        overdueDebt.value
-
-    ),
-
-    balance: formatMoney(
-
-        netBalance.value
-
-    ),
-
-    contracts: contractsCount.value,
-
-    dti:
-
-        dti.value !== null
-
-            ? `${dti.value}%`
-
-            : "—",
+      : t(
+          "financialInfo.values.empty"
+        ),
 
 }))
 
 </script>
 
+
 <template>
 
-<div class="card">
+  <div class="card">
 
     <div class="card-header">
 
-        <div>
+      <div>
 
-            <h2>
+        <h2>
+          💰 {{ t("financialInfo.title") }}
+        </h2>
 
-                💰 Финансовый профиль
+        <p>
+          {{ t("financialInfo.description") }}
+        </p>
 
-            </h2>
+      </div>
 
-            <p>
 
-                Актуальные показатели вашего финансового состояния.
-
-            </p>
-
-        </div>
-
-        <span class="badge">
-
-            Обновлено
-
-        </span>
+      <span class="badge">
+        {{ t("financialInfo.updated") }}
+      </span>
 
     </div>
+
 
     <div class="items">
 
-        <!-- Доход -->
 
-        <div class="item">
+      <!-- ДОХОД -->
 
-            <div class="label">
+      <div class="item">
 
-                💵 Ежемесячный доход
+        <div class="label">
+          💵 {{ t("financialInfo.income") }}
+        </div>
 
-            </div>
+        <div class="value income">
+          {{ summary.income }}
+        </div>
 
-            <div class="value income">
+      </div>
 
-                {{ summary.income }}
 
-            </div>
+      <!-- РАСХОДЫ -->
+
+      <div class="item">
+
+        <div class="label">
+          💸 {{ t("financialInfo.expenses") }}
+        </div>
+
+        <div class="value">
+          {{ summary.expenses }}
+        </div>
+
+      </div>
+
+
+      <!-- СВОБОДНЫЙ ОСТАТОК -->
+
+      <div class="item">
+
+        <div class="label">
+          💰 {{ t("financialInfo.balance") }}
+        </div>
+
+        <div
+          class="value"
+          :class="
+            netBalance >= 0
+              ? 'income'
+              : 'debt'
+          "
+        >
+
+          {{ summary.balance }}
 
         </div>
 
-        <!-- Расходы -->
+      </div>
 
-        <div class="item">
 
-            <div class="label">
+      <!-- ОБЩАЯ ЗАДОЛЖЕННОСТЬ -->
 
-                💸 Ежемесячные расходы
+      <div class="item">
 
-            </div>
+        <div class="label">
+          🏦 {{ t("financialInfo.totalDebt") }}
+        </div>
 
-            <div class="value">
+        <div class="value debt">
 
-                {{ summary.expenses }}
-
-            </div>
+          {{ summary.debt }}
 
         </div>
 
-        <!-- Свободный остаток -->
+      </div>
 
-        <div class="item">
 
-            <div class="label">
+      <!-- ПРОСРОЧКА -->
 
-                💰 Свободный остаток
+      <div class="item">
 
-            </div>
+        <div class="label">
+          ⚠ {{ t("financialInfo.overdue") }}
+        </div>
 
-            <div
-                class="value"
-                :class="netBalance >= 0 ? 'income' : 'debt'"
-            >
+        <div
+          class="value"
+          :class="
+            overdueDebt > 0
+              ? 'overdue'
+              : 'income'
+          "
+        >
 
-                {{ summary.balance }}
-
-            </div>
+          {{
+            overdueDebt > 0
+              ? summary.overdue
+              : t(
+                  "financialInfo.values.absent"
+                )
+          }}
 
         </div>
 
-        <!-- Общая задолженность -->
+      </div>
 
-        <div class="item">
 
-            <div class="label">
+      <!-- ДОГОВОРЫ -->
 
-                🏦 Общая задолженность
+      <div class="item">
 
-            </div>
+        <div class="label">
+          📄 {{ t("financialInfo.contracts") }}
+        </div>
 
-            <div class="value debt">
+        <div class="value">
 
-                {{ summary.debt }}
-
-            </div>
+          {{ summary.contracts }}
 
         </div>
 
-        <!-- Просрочки -->
+      </div>
 
-        <div class="item">
 
-            <div class="label">
+      <!-- DTI -->
 
-                ⚠ Просроченная задолженность
+      <div class="item">
 
-            </div>
+        <div class="label">
+          📊 Debt-to-Income
+        </div>
 
-            <div
-                class="value"
-                :class="overdueDebt > 0 ? 'overdue' : 'income'"
-            >
+        <div class="value">
 
-                {{
-
-                    overdueDebt > 0
-
-                        ? summary.overdue
-
-                        : "Отсутствует"
-
-                }}
-
-            </div>
+          {{ summary.dti }}
 
         </div>
 
-        <!-- Договоры -->
+      </div>
 
-        <div class="item">
 
-            <div class="label">
+      <!-- ФИНАНСОВОЕ СОСТОЯНИЕ -->
 
-                📄 Активные договоры
+      <div class="item">
 
-            </div>
+        <div class="label">
+          📈 {{ t("financialInfo.financialStatus") }}
+        </div>
 
-            <div class="value">
+        <div
+          class="status"
+          :style="{
+            backgroundColor:
+              financialStatus.color
+          }"
+        >
 
-                {{ summary.contracts }}
-
-            </div>
+          {{ financialStatus.text }}
 
         </div>
 
-        <!-- DTI -->
+      </div>
 
-        <div class="item">
-
-            <div class="label">
-
-                📊 Debt-to-Income
-
-            </div>
-
-            <div class="value">
-
-                {{ summary.dti }}
-
-            </div>
-
-        </div>
-
-        <!-- Финансовый статус -->
-
-        <div class="item">
-
-            <div class="label">
-
-                📈 Финансовое состояние
-
-            </div>
-
-            <div
-                class="status"
-                :style="{
-
-                    backgroundColor:
-
-                        financialStatus.color
-
-                }"
-            >
-
-                {{ financialStatus.text }}
-
-            </div>
-
-        </div>
 
     </div>
 
-</div>
+  </div>
 
 </template>
+
+
 <style scoped>
 
 .card{

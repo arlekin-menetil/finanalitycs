@@ -10,10 +10,14 @@ import {
   useRouter,
 } from "vue-router"
 
+import { useI18n } from "vue-i18n"
+
 import api from "@/api/axios"
 
 const route = useRoute()
 const router = useRouter()
+
+const { t, te } = useI18n()
 
 const loading = ref(true)
 const error = ref(null)
@@ -21,14 +25,14 @@ const error = ref(null)
 const card = ref(null)
 
 // ==========================================
-// 💳 RAW
+// 💳 RAW DATA
 // ==========================================
 const raw = computed(() => {
   return card.value?.raw_data || {}
 })
 
 // ==========================================
-// 💳 STRUCTURED
+// 💳 STRUCTURED DATA
 // ==========================================
 const structured = computed(() => {
   return raw.value?.structured || {}
@@ -38,7 +42,6 @@ const structured = computed(() => {
 // 🏦 BANK LOGO
 // ==========================================
 const logo = computed(() => {
-
   const bank = (
     card.value?.bank_name || ""
   )
@@ -49,10 +52,9 @@ const logo = computed(() => {
 })
 
 // ==========================================
-// 💳 CARD TYPE
+// 💳 CARD SYSTEM
 // ==========================================
 const cardSystem = computed(() => {
-
   return (
     raw.value?.card_system ||
     structured.value?.card_system ||
@@ -64,7 +66,6 @@ const cardSystem = computed(() => {
 // 💰 ISSUE COST
 // ==========================================
 const issueCost = computed(() => {
-
   return (
     raw.value?.issue_cost ||
     structured.value?.issue_cost ||
@@ -76,7 +77,6 @@ const issueCost = computed(() => {
 // 🌍 CURRENCY
 // ==========================================
 const currency = computed(() => {
-
   return (
     card.value?.currency ||
     structured.value?.currency ||
@@ -88,7 +88,6 @@ const currency = computed(() => {
 // 📅 VALIDITY
 // ==========================================
 const validity = computed(() => {
-
   return (
     raw.value?.validity_period ||
     structured.value?.validity_period ||
@@ -97,13 +96,129 @@ const validity = computed(() => {
 })
 
 // ==========================================
+// 🌍 TRANSLATE CURRENCY
+// ==========================================
+const translateCurrency = (value) => {
+  if (!value || String(value).trim() === "—") {
+    return t("cards.cardDetail.values.empty")
+  }
+
+  const key = String(value)
+    .trim()
+    .toUpperCase()
+
+  const translationKey =
+    `cards.cardDetail.values.currencies.${key}`
+
+  return te(translationKey)
+    ? t(translationKey)
+    : value
+}
+
+// ==========================================
+// 💳 TRANSLATE CARD SYSTEM
+// ==========================================
+const translateCardSystem = (value) => {
+  if (!value || String(value).trim() === "—") {
+    return t("cards.cardDetail.values.empty")
+  }
+
+  const key = String(value)
+    .trim()
+    .toUpperCase()
+
+  const translationKey =
+    `cards.cardDetail.values.cardSystems.${key}`
+
+  return te(translationKey)
+    ? t(translationKey)
+    : value
+}
+
+// ==========================================
+// 📅 TRANSLATE SIMPLE VALUE
+// ==========================================
+const translateValue = (value) => {
+  if (
+    !value ||
+    String(value).trim() === "—"
+  ) {
+    return t("cards.cardDetail.values.empty")
+  }
+
+  return value
+}
+
+// ==========================================
+// 🚪 TRANSLATE OPEN METHODS
+// ==========================================
+const translateOpenMethods = (methods) => {
+  if (!methods?.length) {
+    return t(
+      "cards.cardDetail.values.notSpecified"
+    )
+  }
+
+  return methods
+    .map((method) => {
+      const normalized = String(method)
+        .trim()
+        .toLowerCase()
+
+      if (normalized === "online") {
+        return t(
+          "cards.cardDetail.values.online"
+        )
+      }
+
+      if (
+        normalized === "branch" ||
+        normalized === "office"
+      ) {
+        return t(
+          "cards.cardDetail.values.branch"
+        )
+      }
+
+      return method
+    })
+    .join(", ")
+}
+
+// ==========================================
+// 📄 TRANSLATE DOCUMENTS
+// ==========================================
+const translateDocuments = (value) => {
+  if (!value) {
+    return t(
+      "cards.cardDetail.values.notSpecified"
+    )
+  }
+
+  const text = String(value)
+    .trim()
+    .toLowerCase()
+
+  if (
+    text.includes("паспорт") ||
+    text.includes("руз") ||
+    text.includes("гражданина")
+  ) {
+    return t(
+      "cards.cardDetail.values.documents.passportUzbekistan"
+    )
+  }
+
+  return value
+}
+
+// ==========================================
 // 🚀 LOAD CARD
 // ==========================================
 async function loadCard() {
-
   try {
-
     loading.value = true
+    error.value = null
 
     const { data } = await api.get(
       `/products/${route.params.id}/`
@@ -115,17 +230,13 @@ async function loadCard() {
       "💳 CARD:",
       data
     )
-
   } catch (err) {
-
     console.error(err)
 
     error.value =
       err?.response?.data?.detail ||
-      "Не удалось загрузить карту"
-
+      t("cards.cardDetail.loadError")
   } finally {
-
     loading.value = false
   }
 }
@@ -149,12 +260,16 @@ onMounted(() => {
 
   <div class="card-detail-page">
 
+    <!-- LOADING -->
+
     <div
       v-if="loading"
       class="loading"
     >
-      Загрузка карты...
+      {{ t("cards.cardDetail.loading") }}
     </div>
+
+    <!-- ERROR -->
 
     <div
       v-else-if="error"
@@ -162,6 +277,8 @@ onMounted(() => {
     >
       {{ error }}
     </div>
+
+    <!-- CONTENT -->
 
     <template v-else>
 
@@ -171,7 +288,7 @@ onMounted(() => {
         class="back-btn"
         @click="goBack"
       >
-        ← Назад
+        ← {{ t("common.back") }}
       </button>
 
       <!-- HERO -->
@@ -202,39 +319,55 @@ onMounted(() => {
 
       <div class="stats">
 
+        <!-- CURRENCY -->
+
         <div class="stat">
 
-          <span>Валюта</span>
+          <span>
+            {{ t("cards.cardDetail.currency") }}
+          </span>
 
           <strong>
-            {{ currency }}
+            {{ translateCurrency(currency) }}
           </strong>
 
         </div>
 
+        <!-- CARD SYSTEM -->
+
         <div class="stat">
 
-          <span>Платёжная система</span>
+          <span>
+            {{ t("cards.cardDetail.cardSystem") }}
+          </span>
 
           <strong>
-            {{ cardSystem }}
+            {{ translateCardSystem(cardSystem) }}
           </strong>
 
         </div>
 
+        <!-- VALIDITY -->
+
         <div class="stat">
 
-          <span>Срок действия</span>
+          <span>
+            {{ t("cards.cardDetail.validity") }}
+          </span>
 
           <strong>
-            {{ validity }}
+            {{ translateValue(validity) }}
           </strong>
 
         </div>
 
+        <!-- ISSUE COST -->
+
         <div class="stat">
 
-          <span>Стоимость выпуска</span>
+          <span>
+            {{ t("cards.cardDetail.issueCost") }}
+          </span>
 
           <strong>
             {{ issueCost }}
@@ -249,53 +382,85 @@ onMounted(() => {
       <div class="conditions">
 
         <h2>
-          Условия карты
+          {{ t("cards.cardDetail.conditions") }}
         </h2>
 
         <div class="conditions-grid">
+
+          <!-- DOCUMENTS -->
 
           <div
             v-if="raw.documents_required"
             class="condition-item"
           >
 
-            <span>Документы</span>
+            <span>
+              {{ t("cards.cardDetail.documents") }}
+            </span>
 
             <strong>
-              {{ raw.documents_required }}
+              {{
+                translateDocuments(
+                  raw.documents_required
+                )
+              }}
             </strong>
 
           </div>
+
+          <!-- ONLINE APPLICATION -->
 
           <div class="condition-item">
 
-            <span>Онлайн оформление</span>
+            <span>
+              {{ t("cards.cardDetail.onlineApplication") }}
+            </span>
 
             <strong>
-              {{ card.is_online ? "Да" : "Нет" }}
+              {{
+                card.is_online
+                  ? t(
+                      "cards.cardDetail.values.yes"
+                    )
+                  : t(
+                      "cards.cardDetail.values.no"
+                    )
+              }}
             </strong>
 
           </div>
+
+          <!-- OPEN METHODS -->
 
           <div
             v-if="raw.open_methods?.length"
             class="condition-item"
           >
 
-            <span>Способ открытия</span>
+            <span>
+              {{ t("cards.cardDetail.openMethod") }}
+            </span>
 
             <strong>
-              {{ raw.open_methods.join(", ") }}
+              {{
+                translateOpenMethods(
+                  raw.open_methods
+                )
+              }}
             </strong>
 
           </div>
+
+          <!-- UPDATED -->
 
           <div
             v-if="structured.updated_at"
             class="condition-item"
           >
 
-            <span>Последнее обновление</span>
+            <span>
+              {{ t("cards.cardDetail.updated") }}
+            </span>
 
             <strong>
               {{ structured.updated_at }}
@@ -312,7 +477,7 @@ onMounted(() => {
       <div class="source-card">
 
         <h2>
-          Источник
+          {{ t("cards.cardDetail.source") }}
         </h2>
 
         <div class="source-links">
@@ -321,16 +486,18 @@ onMounted(() => {
             v-if="card.source_url"
             :href="card.source_url"
             target="_blank"
+            rel="noopener noreferrer"
           >
-            Перейти к продукту
+            {{ t("cards.cardDetail.goToProduct") }}
           </a>
 
           <a
             v-if="card.bank_url"
             :href="card.bank_url"
             target="_blank"
+            rel="noopener noreferrer"
           >
-            Сайт банка
+            {{ t("cards.cardDetail.bankWebsite") }}
           </a>
 
         </div>
@@ -640,13 +807,21 @@ onMounted(() => {
 }
 
 .hero-meta {
+
   display: flex;
+
   align-items: center;
+
   gap: 16px;
+
   margin-top: 12px;
+
   color: #64748b;
+
   font-size: 15px;
+
   font-weight: 500;
+
   flex-wrap: wrap;
 }
 

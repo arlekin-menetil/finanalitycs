@@ -1,26 +1,26 @@
 <script setup>
 import { computed } from "vue"
 import { storeToRefs } from "pinia"
+import { useI18n } from "vue-i18n"
 
 import { useCardsStore } from "@/stores/cards"
+
+const { t } = useI18n()
 
 const store = useCardsStore()
 
 const {
   items,
-  totalCount
+  totalCount,
 } = storeToRefs(store)
 
 const totalBanks = computed(() => {
-
   const banks = new Set()
 
   items.value.forEach((card) => {
-
     if (card.bank_name) {
       banks.add(card.bank_name)
     }
-
   })
 
   return banks.size
@@ -40,13 +40,11 @@ const totalBanks = computed(() => {
         </span>
 
         <h1>
-          Банковские карты
+          {{ t("cards.hero.title") }}
         </h1>
 
         <p>
-          Подбор дебетовых, кредитных
-          и международных карт
-          банков Узбекистана
+          {{ t("cards.hero.description") }}
         </p>
 
       </div>
@@ -60,7 +58,7 @@ const totalBanks = computed(() => {
           </strong>
 
           <span>
-            Карт
+            {{ t("cards.hero.cards") }}
           </span>
 
         </div>
@@ -72,7 +70,7 @@ const totalBanks = computed(() => {
           </strong>
 
           <span>
-            Банков
+            {{ t("cards.hero.banks") }}
           </span>
 
         </div>

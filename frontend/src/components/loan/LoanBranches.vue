@@ -1,6 +1,7 @@
 <script setup>
 
 import { computed } from "vue"
+import { useI18n } from "vue-i18n"
 import BankMap from "@/components/banks/BankMap.vue"
 
 const props = defineProps({
@@ -16,6 +17,12 @@ const props = defineProps({
   }
 
 })
+
+const { t } = useI18n()
+
+// ==========================================
+// 🌐 ONLINE PRODUCT
+// ==========================================
 
 const isOnlineProduct = computed(() => {
 
@@ -34,14 +41,14 @@ const isOnlineProduct = computed(() => {
   <div class="header">
 
     <h3>
-      📍 Филиалы банка
+      📍 {{ t("loanBranches.title") }}
     </h3>
 
     <div class="bank-name">
       {{
         product?.bank?.name ||
         product?.bank_name ||
-        "Банк"
+        t("loanBranches.bank")
       }}
     </div>
 
@@ -51,6 +58,7 @@ const isOnlineProduct = computed(() => {
   <!-- ===================================== -->
   <!-- 🌐 ONLINE PRODUCT -->
   <!-- ===================================== -->
+
   <div
     v-if="isOnlineProduct"
     class="online-block"
@@ -61,15 +69,12 @@ const isOnlineProduct = computed(() => {
     </div>
 
     <div class="online-title">
-      Онлайн оформление
+      {{ t("loanBranches.online.title") }}
     </div>
 
     <div class="online-text">
 
-      Данный продукт оформляется полностью онлайн.
-
-      Посещение филиала банка
-      не требуется.
+      {{ t("loanBranches.online.description") }}
 
     </div>
 
@@ -79,6 +84,7 @@ const isOnlineProduct = computed(() => {
   <!-- ===================================== -->
   <!-- 🏦 OFFLINE PRODUCT -->
   <!-- ===================================== -->
+
   <template v-else>
 
     <template v-if="branches.length">
@@ -90,7 +96,7 @@ const isOnlineProduct = computed(() => {
 
       <div class="branches-count">
 
-        Найдено филиалов:
+        {{ t("loanBranches.found") }}:
 
         <strong>
           {{ branches.length }}
@@ -110,13 +116,12 @@ const isOnlineProduct = computed(() => {
       </div>
 
       <div class="empty-title">
-        Филиалы пока не загружены
+        {{ t("loanBranches.empty.title") }}
       </div>
 
       <div class="empty-text">
 
-        Информация о филиалах
-        данного банка отсутствует
+        {{ t("loanBranches.empty.description") }}
 
       </div>
 

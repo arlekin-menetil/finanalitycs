@@ -64,3 +64,4 @@ services:
 
 volumes:
   postgres_data:
+    name: bankanalytics_postgres_data

@@ -6,7 +6,11 @@ import {
   nextTick
 } from "vue"
 
+import { useI18n } from "vue-i18n"
+
 import RecommendationCard from "./RecommendationCard.vue"
+
+const { t } = useI18n()
 
 const props = defineProps({
 
@@ -209,11 +213,11 @@ async function goToPage(page) {
     </div>
 
     <h2>
-      Ничего не найдено
+      {{ t("recommendations.recommendationsGrid.emptyTitle") }}
     </h2>
 
     <p>
-      Попробуйте изменить фильтры
+      {{ t("recommendations.recommendationsGrid.emptyDescription") }}
     </p>
 
   </div>
@@ -248,13 +252,13 @@ async function goToPage(page) {
 
       <div class="pagination-info">
 
-        Показано
+        {{ t("recommendations.recommendationsGrid.showing") }}
         {{ startItem }}
         –
         {{ endItem }}
-        из
+        {{ t("recommendations.recommendationsGrid.of") }}
         {{ items.length }}
-        продуктов
+        {{ t("recommendations.recommendationsGrid.products") }}
 
       </div>
 
@@ -564,6 +568,7 @@ async function goToPage(page) {
 
     height: 38px;
   }
+
 }
 
 </style>

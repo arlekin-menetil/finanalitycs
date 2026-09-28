@@ -1,36 +1,123 @@
 export default {
   // =========================================================
+  // COMMON — Umumiy elementlar
+  // =========================================================
+
+  common: {
+    profile: "Profil",
+    user: "Foydalanuvchi",
+    bank: "Bank",
+
+    login: "Kirish",
+    logout: "Chiqish",
+
+    save: "Saqlash",
+    cancel: "Bekor qilish",
+    close: "Yopish",
+    confirm: "Tasdiqlash",
+
+    yes: "Ha",
+    no: "Yo‘q",
+
+    loading: "Yuklanmoqda...",
+    error: "Xatolik",
+    success: "Muvaffaqiyatli",
+
+    search: "Qidirish",
+    filter: "Filtr",
+    reset: "Tozalash",
+    refresh: "Yangilash",
+
+    next: "Keyingi",
+    back: "Orqaga",
+    previous: "Oldingi",
+
+    details: "Batafsil",
+    viewAll: "Barchasini ko‘rish",
+
+    online: "Onlayn",
+    offline: "Oflayn",
+
+    ai: "BankAnalytics AI",
+  },
+
+  // =========================================================
   // AUTH — Avtorizatsiya
   // =========================================================
 
   auth: {
     login: "Kirish",
-
     phone: "Telefon",
-
     password: "Parol",
-
     submit: "Tizimga kirish",
 
     logout: "Chiqish",
 
     register: "Ro‘yxatdan o‘tish",
-
     registration: "Ro‘yxatdan o‘tish",
 
     confirmPassword: "Parolni tasdiqlang",
 
     code: "Tasdiqlash kodi",
-
     sendCode: "Kodni yuborish",
-
     confirmCode: "Kodni tasdiqlash",
-
     resendCode: "Kodni qayta yuborish",
 
     forgotPassword: "Parolni unutdingizmi?",
-
     rememberMe: "Meni eslab qolish",
+  },
+
+  // =========================================================
+  // NAVIGATION — Navigatsiya
+  // =========================================================
+
+  nav: {
+    dashboard: "Boshqaruv paneli",
+    scoring: "Skoring",
+    recommendations: "Tavsiyalar",
+    analytics: "Analitika",
+    monitoring: "Monitoring",
+    deposits: "Omonatlar",
+    cards: "Kartalar",
+    profile: "Profil",
+    branches: "Filiallar",
+    logout: "Chiqish",
+  },
+
+  landingNav: {
+    integrations: "Integratsiyalar",
+    monitoring: "Monitoring",
+    mobile: "Mobil ilovalar",
+    currency: "Valyuta kursi",
+  },
+
+  // =========================================================
+  // BRAND — Brend
+  // =========================================================
+
+  brand: {
+    name: "FinAnalytics",
+    financial: "Moliyaviy",
+    intelligence: "Intellekt",
+  },
+
+  // =========================================================
+  // LANGUAGES — Tillar
+  // =========================================================
+
+  languages: {
+    ru: "Русский",
+    en: "English",
+    uz: "O‘zbekcha",
+  },
+
+  // =========================================================
+  // CURRENCY — Valyuta
+  // =========================================================
+
+  currency: {
+    uzs: "so‘m",
+    symbol: "so‘m",
   },
 
   // =========================================================
@@ -44,40 +131,30 @@ export default {
       "Shaxsiy tavsiyalar olish uchun moliyaviy ma'lumotlaringizni to‘ldiring",
 
     income: "Oylik daromad",
-
     expenses: "Oylik xarajatlar",
-
     obligations: "Oylik majburiyatlar",
 
     creditScore: "Kredit reytingi",
 
     employment: "Ish bilan ta'minlanganlik",
-
     employmentVerified:
       "Ish bilan ta'minlanganlik tasdiqlangan",
 
     workExperience: "Ish tajribasi",
-
     months: "oy",
 
     dti: "Qarz yuklamasi",
-
     netBalance: "Mavjud qoldiq",
 
     submit: "Profilni saqlash",
-
     save: "Saqlash",
-
     saving: "Saqlanmoqda...",
-
     loading: "Profil saqlanmoqda...",
 
     success: "Profil muvaffaqiyatli saqlandi",
-
     error: "Profilni saqlashda xatolik yuz berdi",
 
     completed: "Profil to‘ldirilgan",
-
     incomplete: "Profil to‘liq to‘ldirilmagan",
 
     version: "Profil versiyasi",
@@ -98,19 +175,14 @@ export default {
       "Bu yerda moliyaviy profilingiz, AI-skoring va rasmiy kredit tarixingiz tahlili natijalari jamlangan.",
 
     score: "Kredit reytingi",
-
     approval: "Tasdiqlanish ehtimoli",
-
     risk: "Xavf darajasi",
 
     income: "Daromad",
-
     obligations: "Majburiyatlar",
-
     expenses: "Xarajatlar",
 
     available: "Mavjud",
-
     freeBalance: "Mavjud qoldiq",
 
     incomeVsObligations:
@@ -124,35 +196,19 @@ export default {
 
     error: "Skoring ma'lumotlarini yuklashda xatolik",
 
-    // =======================================================
-    // Risk
-    // =======================================================
-
     riskLevels: {
       LOW: "Past xavf",
-
       MEDIUM: "O‘rtacha xavf",
-
       HIGH: "Yuqori xavf",
-
       REJECT: "Yuqori kredit xavfi",
-
       UNKNOWN: "Ma'lumot yetarli emas",
 
       low: "Past xavf",
-
       medium: "O‘rtacha xavf",
-
       high: "Yuqori xavf",
-
       reject: "Yuqori kredit xavfi",
-
       unknown: "Ma'lumot yetarli emas",
     },
-
-    // =======================================================
-    // Credit analysis
-    // =======================================================
 
     creditAnalysis: "Kredit tahlili",
 
@@ -176,12 +232,7 @@ export default {
     scoreCalculated:
       "AI bahosi moliyaviy profilingiz asosida hisoblangan",
 
-    scoreRange:
-      "Baholash diapazoni",
-
-    // =======================================================
-    // Approval
-    // =======================================================
+    scoreRange: "Baholash diapazoni",
 
     approvalSection: "TASDIQLASH",
 
@@ -200,19 +251,11 @@ export default {
     lowProbability:
       "Past ehtimol",
 
-    // =======================================================
-    // Credit limit
-    // =======================================================
-
     recommendedLimit:
       "Tavsiya etilgan kredit limiti",
 
     limitDescription:
       "Joriy moliyaviy profilingiz asosida hisoblangan limit",
-
-    // =======================================================
-    // Financial snapshot
-    // =======================================================
 
     financialSnapshot:
       "MOLIYAVIY UMUMIY KO‘RINISH",
@@ -235,10 +278,6 @@ export default {
     netBalance:
       "Mavjud qoldiq",
 
-    // =======================================================
-    // AI analysis
-    // =======================================================
-
     aiAnalysis:
       "AI-TAHLIL",
 
@@ -253,11 +292,6 @@ export default {
 
     employmentScore:
       "Ish bilan ta'minlanganlik",
-
-    // =======================================================
-    // Dashboard recommendations
-    // Boshqaruv panelidagi tavsiyalar
-    // =======================================================
 
     recommendations:
       "Bank tavsiyalari",
@@ -295,10 +329,6 @@ export default {
     showMore:
       "Ko‘proq ko‘rsatish",
 
-    // =======================================================
-    // Profile / analysis status
-    // =======================================================
-
     lastAiAnalysis:
       "So‘nggi AI-tahlil",
 
@@ -326,10 +356,6 @@ export default {
     employmentNotVerified:
       "tasdiqlanmagan",
 
-    // =======================================================
-    // Score metrics
-    // =======================================================
-
     metrics: {
       income:
         "Daromad",
@@ -356,10 +382,6 @@ export default {
   // =========================================================
 
   recommendations: {
-    // =======================================================
-    // Page header
-    // =======================================================
-
     title:
       "Tavsiya etilgan banklar",
 
@@ -372,10 +394,6 @@ export default {
     empty:
       "Mos takliflar topilmadi",
 
-    // =======================================================
-    // Hero
-    // =======================================================
-
     hero: {
       badge:
         "AI asosidagi tavsiyalar",
@@ -387,9 +405,52 @@ export default {
         "Moliyaviy profilingiz va AI-skoring asosida sizga eng mos bank mahsulotlarini toping.",
     },
 
-    // =======================================================
-    // Statistics
-    // =======================================================
+    filters: {
+      all:
+        "Barchasi",
+
+      loans:
+        "Kreditlar",
+
+      businessCredit:
+        "Biznes kreditlari",
+
+      micro:
+        "Mikrokreditlar",
+
+      mortgage:
+        "Ipoteka",
+
+      auto:
+        "Avtokreditlar",
+
+      education:
+        "Ta'lim",
+
+      green:
+        "Green",
+
+      overdraft:
+        "Overdraft",
+
+      onlineOnly:
+        "Faqat onlayn",
+
+      allBanks:
+        "Barcha banklar",
+
+      bestMatch:
+        "Eng yaxshi moslik",
+
+      minRate:
+        "Eng past foiz stavkasi",
+
+      approval:
+        "Tasdiqlanish ehtimoli",
+
+      maxAmount:
+        "Maksimal summa",
+    },
 
     stats: {
       products:
@@ -399,10 +460,6 @@ export default {
         "bank",
     },
 
-    // =======================================================
-    // Sections
-    // =======================================================
-
     sections: {
       recommendedBanks:
         "Tavsiya etilgan banklar",
@@ -411,16 +468,8 @@ export default {
         "Barcha mahsulotlar",
     },
 
-    // =======================================================
-    // AI
-    // =======================================================
-
     aiRating:
       "AI reytingi",
-
-    // =======================================================
-    // Recommendation metrics
-    // =======================================================
 
     match:
       "Moslik",
@@ -446,66 +495,6 @@ export default {
     bestOffer:
       "Eng yaxshi taklif",
 
-    // =======================================================
-    // Sorting
-    // =======================================================
-
-    sortMatch:
-      "Eng yaxshi moslik",
-
-    sortRate:
-      "Eng past foiz stavkasi",
-
-    sortApproval:
-      "Eng yuqori tasdiqlanish ehtimoli",
-
-    sortLimit:
-      "Eng katta limit",
-
-    // =======================================================
-    // Product filters
-    // =======================================================
-
-    filterAll:
-      "Barchasi",
-
-    filterLoan:
-      "Kreditlar",
-
-    filterMicro:
-      "Mikrokreditlar",
-
-    filterMortgage:
-      "Ipoteka",
-
-    filterAuto:
-      "Avtokreditlar",
-
-    filterEducation:
-      "Ta'lim",
-
-    filterGreen:
-      "Green",
-
-    filterOverdraft:
-      "Overdraft",
-
-    filterCard:
-      "Kartalar",
-
-    filterInstallment:
-      "Muddatli to‘lov",
-
-    filterBusiness:
-      "Biznes",
-
-    filterConsumer:
-      "Iste’mol kreditlari",
-
-    // =======================================================
-    // Product information
-    // =======================================================
-
     product:
       "Mahsulot",
 
@@ -524,25 +513,97 @@ export default {
     offline:
       "Filialda",
 
-    onlineOnly:
-      "Faqat onlayn",
-
-    // =======================================================
-    // Bank filter
-    // =======================================================
-
-    allBanks:
-      "Barcha banklar",
-
-    // =======================================================
-    // Counters
-    // =======================================================
+    details:
+      "Batafsil",
 
     offers:
       "taklif",
 
     products:
       "mahsulot",
+
+    recommendationsGrid: {
+      emptyTitle:
+        "Hech narsa topilmadi",
+
+      emptyDescription:
+        "Filtrlarni o‘zgartirib ko‘ring",
+
+      showing:
+        "Ko‘rsatilmoqda",
+
+      of:
+        "dan",
+
+      products:
+        "mahsulot",
+    },
+  },
+
+  // =========================================================
+  // LOAN REQUIREMENTS — Kredit talablari
+  // =========================================================
+
+  loanRequirements: {
+    title:
+      "Asosiy talablar",
+
+    document: {
+      title:
+        "Hujjat",
+
+      description:
+        "Pasport yoki ID-karta",
+    },
+
+    citizenship: {
+      title:
+        "Fuqarolik",
+
+      description:
+        "O‘zbekiston Respublikasi",
+    },
+
+    solvency: {
+      title:
+        "To‘lov qobiliyati",
+
+      description:
+        "Tasdiqlangan daromad manbai",
+    },
+
+    decision: {
+      title:
+        "Bank qarori",
+
+      description:
+        "Yakuniy qarorni bank qabul qiladi",
+    },
+
+    online: {
+      title:
+        "Onlayn ariza",
+
+      description:
+        "Arizani to‘g‘ridan-to‘g‘ri bank saytida topshirishingiz mumkin",
+
+      button:
+        "Bankka o‘tish",
+
+      noUrl:
+        "Ushbu mahsulot uchun onlayn ariza havolasi hozircha mavjud emas",
+    },
+
+    offline: {
+      title:
+        "Filialda rasmiylashtirish",
+
+      description:
+        "Ariza topshirish uchun bank filialiga murojaat qiling",
+
+      button:
+        "Filialni topish",
+    },
   },
 
   // =========================================================
@@ -589,10 +650,6 @@ export default {
     score:
       "Ball",
 
-    // =======================================================
-    // Current score
-    // =======================================================
-
     lastCalculation:
       "Oxirgi hisoblash",
 
@@ -617,16 +674,8 @@ export default {
     currentRisk:
       "Joriy xavf darajasi",
 
-    // =======================================================
-    // Trend
-    // =======================================================
-
     trendDescription:
       "So‘nggi hisob-kitoblar bo‘yicha kredit reytingining o‘zgarishi",
-
-    // =======================================================
-    // Scoring factors
-    // =======================================================
 
     aiBreakdown:
       "Skoring omillari",
@@ -652,10 +701,6 @@ export default {
     profile:
       "Moliyaviy profil",
 
-    // =======================================================
-    // Statistics
-    // =======================================================
-
     average:
       "O‘rtacha",
 
@@ -671,10 +716,6 @@ export default {
     change:
       "O‘zgarish",
 
-    // =======================================================
-    // History
-    // =======================================================
-
     historyDescription:
       "So‘nggi 20 ta kredit skoringi hisob-kitobi",
 
@@ -687,29 +728,17 @@ export default {
     noHistory:
       "Skoring tarixi hali mavjud emas",
 
-    // =======================================================
-    // Limits / errors
-    // =======================================================
-
     dailyLimit:
       "Skoringni kuniga faqat bir marta qayta hisoblash mumkin",
 
     loadError:
       "Skoring ma’lumotlarini yuklab bo‘lmadi",
 
-    // =======================================================
-    // Notifications
-    // =======================================================
-
     toastSuccess:
       "Skoring muvaffaqiyatli qayta hisoblandi",
 
     toastError:
       "Qayta hisoblashda xatolik yuz berdi",
-
-    // =======================================================
-    // Risk levels
-    // =======================================================
 
     risk: {
       low:
@@ -723,6 +752,91 @@ export default {
 
       reject:
         "Kritik",
+    },
+
+    // -------------------------------------------------------
+    // Score Card
+    // -------------------------------------------------------
+
+    card: {
+      empty: {
+        title:
+          "Skoring hozircha mavjud emas",
+
+        description:
+          "Shaxsiy kredit reytingingizni olish uchun profilingizni to‘ldiring va tahlilni amalga oshiring",
+      },
+
+      outOf:
+        "850 balldan",
+
+      creditRating:
+        "Kredit reytingi",
+
+      approval:
+        "Tasdiqlanish",
+
+      risk:
+        "Xavf",
+
+      level:
+        "Daraja",
+
+      aiAnalysis:
+        "AI tahlili",
+
+      recommendation:
+        "Tavsiya",
+
+      riskLevels: {
+        low:
+          "Past",
+
+        medium:
+          "O‘rta",
+
+        high:
+          "Yuqori",
+      },
+
+      levels: {
+        excellent:
+          "A’lo",
+
+        good:
+          "Yaxshi",
+
+        medium:
+          "O‘rta",
+
+        low:
+          "Past",
+      },
+
+      explanations: {
+        excellent:
+          "Sizning kredit reytingingiz juda yuqori. Banklar sizga past foiz stavkalari, yuqori limitlar va tezkor tasdiqlashni taklif qilishlari mumkin.",
+
+        good:
+          "Profilingiz ishonchli ko‘rinadi. Ko‘pgina banklar kreditni yaxshi shartlarda tasdiqlashlari mumkin.",
+
+        medium:
+          "Sizning reytingingiz o‘rtacha darajada. Ayrim banklar qo‘shimcha ma’lumotlarni so‘rashi mumkin.",
+
+        low:
+          "Sizning reytingingiz hozircha past. Moliyaviy yuklamani yaxshilash, majburiyatlarni kamaytirish va daromad barqarorligini oshirish tavsiya etiladi.",
+      },
+
+      recommendations: {
+        high:
+          "Siz ipoteka, avtokreditlar va past foiz stavkalariga ega premium mahsulotlardan foydalanishingiz mumkin.",
+
+        medium:
+          "O‘rtacha moliyaviy yuklamaga ega iste’mol kreditlari va mikrokreditlar tavsiya etiladi.",
+
+        low:
+          "Kredit tarixini bosqichma-bosqich yaxshilash uchun kichik mikrokreditlar va onlayn kreditlardan boshlash ma’qul.",
+      },
     },
   },
 
@@ -783,86 +897,335 @@ export default {
       "Yakshanba",
   },
 
+// =========================================================
+// ANALYTICS — Analitika
+// =========================================================
+
+analytics: {
+  title:
+    "Banklar analitikasi",
+
+  subtitle:
+    "Bank mahsulotlari, foiz stavkalari, limitlar va Recommendation Engine shaxsiy ko‘rsatkichlari tahlili",
+
   // =========================================================
-  // ANALYTICS — Analitika
+  // Bank filtri
   // =========================================================
 
-  analytics: {
+  selectBank:
+    "Bankni tanlang",
+
+  allBanks:
+    "Barcha banklar",
+
+  refresh:
+    "Yangilash",
+
+  retry:
+    "Qayta urinish",
+
+  unknownBank:
+    "Noma’lum bank",
+
+  untitled:
+    "Nomsiz",
+
+  loading:
+    "Analitika yuklanmoqda...",
+
+  empty:
+    "Ko‘rsatish uchun ma’lumotlar mavjud emas",
+
+  // =========================================================
+  // Xatolar
+  // =========================================================
+
+  errors: {
+    products:
+      "Bank mahsulotlarini yuklashda xatolik yuz berdi",
+
+    recommendations:
+      "Recommendation Engine shaxsiy ma’lumotlarini yuklab bo‘lmadi",
+
+    analytics:
+      "Analitikani yuklashda xatolik yuz berdi",
+  },
+
+  // =========================================================
+  // Ogohlantirish
+  // =========================================================
+
+  warning: {
     title:
-      "Bank bozori analitikasi",
+      "Shaxsiy AI-analitika vaqtincha mavjud emas",
 
-    loading:
-      "Analitika yuklanmoqda...",
+    description:
+      "Bozor ma’lumotlari yuklandi, ammo mahsulotlar uchun ranking score va tasdiqlanish ehtimoli hisoblanmagan.",
+  },
 
-    totalBanks:
-      "Banklar soni",
+  // =========================================================
+  // Recommendation Engine
+  // =========================================================
 
-    averageInterest:
-      "O‘rtacha foiz stavkasi",
+  recommendationStatus: {
+    title:
+      "Recommendation Engine shaxsiy ma’lumotlari:",
 
-    averageApproval:
-      "O‘rtacha tasdiqlanish ehtimoli",
+    of:
+      "dan",
 
-    bestBank:
-      "Eng yaxshi taklif",
+    products:
+      "mahsulot",
+  },
 
-    interestRates:
-      "Foiz stavkalari",
+  // =========================================================
+  // KPI
+  // =========================================================
+
+  kpi: {
+    totalProducts:
+      "Jami mahsulotlar",
+
+    bankProducts:
+      "Bank mahsulotlari",
+
+    availableProducts:
+      "mavjud mahsulotlar",
+
+    averageRate:
+      "O‘rtacha stavka",
+
+    byAvailableProducts:
+      "mavjud mahsulotlar bo‘yicha",
+
+    maximumLimit:
+      "Maksimal limit",
+
+    maximumProductAmount:
+      "mahsulotning maksimal summasi",
+
+    aiRating:
+      "AI-reyting",
+
+    averageRanking:
+      "Recommendation Engine o‘rtacha ranking score",
 
     approvalProbability:
       "Tasdiqlanish ehtimoli",
 
-    loanLimits:
+    personalApproval:
+      "Recommendation Engine shaxsiy prognozi",
+
+    recommendedLimit:
+      "Tavsiya etilgan limit",
+
+    maximumPersonalLimit:
+      "maksimal shaxsiy limit",
+
+    onlineProducts:
+      "Onlayn mahsulotlar",
+
+    availableOnline:
+      "onlayn mavjud",
+
+    recommendedBanks:
+      "Tavsiya etilgan banklar",
+
+    recommendedBank:
+      "Tavsiya etilgan bank",
+  },
+
+  // =========================================================
+  // Grafiklar
+  // =========================================================
+
+  charts: {
+    interestTitle:
+      "Foiz stavkalari",
+
+    interestDescription:
+      "Bank mahsulotlarining foiz stavkalarini taqqoslash",
+
+    limitsTitle:
       "Kredit limitlari",
 
-    rankingScores:
-      "Tavsiya reytinglari",
+    limitsDescription:
+      "Bank mahsulotlarining maksimal bozor summalari",
 
-    mobileDownloads:
-      "Mobil ilova yuklab olishlar",
+    aiTitle:
+      "Banklarning AI-reytingi",
 
-    mobileRatings:
-      "Mobil ilova reytinglari",
+    aiDescription:
+      "Recommendation Engine o‘rtacha ranking score ko‘rsatkichi",
 
-    high:
-      "Yuqori",
+    productsTitle:
+      "Bank mahsulotlari",
 
-    medium:
-      "O‘rtacha",
+    productsDescription:
+      "Banklar bo‘yicha mavjud mahsulotlar soni",
 
-    low:
-      "Past",
+    openingTitle:
+      "Rasmiylashtirish usullari",
 
-    marketMonitoring:
-      "Bozor monitoringi",
+    openingDescription:
+      "Onlayn, filial yoki ikkala variant",
 
-    digitalRanking:
-      "Banklarning raqamli reytingi",
+    avgRate:
+      "O‘rtacha stavka (%)",
 
-    interestMonitor:
-      "Foiz stavkalari monitoringi",
+    rate:
+      "Foiz stavkasi (%)",
 
-    marketForecast:
-      "AI bozor prognozi",
+    maxProductLimit:
+      "Mahsulotning maksimal limiti (mln so‘m)",
 
-    current:
-      "Hozirgi",
+    productLimit:
+      "Mahsulot limiti (mln so‘m)",
 
-    forecast30:
-      "30 kun",
+    avgAiRating:
+      "O‘rtacha AI-reyting",
 
-    forecast90:
-      "90 kun",
-
-    bankComparison:
-      "Banklarni taqqoslash",
-
-    productComparison:
-      "Mahsulotlarni taqqoslash",
-
-    marketAverage:
-      "Bozor o‘rtachasi",
+    productCount:
+      "Mahsulotlar soni",
   },
+
+  // =========================================================
+  // Rasmiylashtirish usullari
+  // =========================================================
+
+  opening: {
+    online:
+      "Onlayn",
+
+    branch:
+      "Filialda",
+
+    both:
+      "Onlayn + filial",
+  },
+
+  // =========================================================
+  // Banklarni taqqoslash jadvali
+  // =========================================================
+
+  table: {
+    description:
+      "Bank mahsulotlari bo‘yicha bozor va shaxsiy ko‘rsatkichlar",
+
+    bank:
+      "Bank",
+
+    products:
+      "Mahsulotlar",
+
+    averageRate:
+      "O‘rtacha stavka",
+
+    approval:
+      "Tasdiqlanish",
+
+    aiProducts:
+      "AI mahsulotlar",
+
+    online:
+      "Onlayn",
+
+    branch:
+      "Filial",
+
+    maxLimit:
+      "Maks. limit",
+
+    recommendedLimit:
+      "Tavsiya etilgan limit",
+  },
+
+  // =========================================================
+  // O‘lchov birliklari
+  // =========================================================
+
+  units: {
+    million:
+      "mln",
+
+    billion:
+      "mlrd",
+  },
+
+  // =========================================================
+  // Eski kalitlar
+  // Boshqa komponentlar bilan moslik uchun saqlangan
+  // =========================================================
+
+  totalBanks:
+    "Banklar soni",
+
+  averageInterest:
+    "O‘rtacha foiz stavkasi",
+
+  averageApproval:
+    "O‘rtacha tasdiqlanish ehtimoli",
+
+  bestBank:
+    "Eng yaxshi taklif",
+
+  interestRates:
+    "Foiz stavkalari",
+
+  approvalProbability:
+    "Tasdiqlanish ehtimoli",
+
+  loanLimits:
+    "Kredit limitlari",
+
+  rankingScores:
+    "Tavsiya reytinglari",
+
+  mobileDownloads:
+    "Mobil ilova yuklab olishlar",
+
+  mobileRatings:
+    "Mobil ilova reytinglari",
+
+  high:
+    "Yuqori",
+
+  medium:
+    "O‘rtacha",
+
+  low:
+    "Past",
+
+  marketMonitoring:
+    "Bozor monitoringi",
+
+  digitalRanking:
+    "Banklarning raqamli reytingi",
+
+  interestMonitor:
+    "Foiz stavkalari monitoringi",
+
+  marketForecast:
+    "AI bozor prognozi",
+
+  current:
+    "Joriy",
+
+  forecast30:
+    "30 kun",
+
+  forecast90:
+    "90 kun",
+
+  bankComparison:
+    "Banklarni taqqoslash",
+
+  productComparison:
+    "Mahsulotlarni taqqoslash",
+
+  marketAverage:
+    "Bozor o‘rtachasi",
+},
 
   // =========================================================
   // ALERTS — Bildirishnomalar
@@ -952,156 +1315,6 @@ export default {
   },
 
   // =========================================================
-  // COMMON — Umumiy elementlar
-  // =========================================================
-
-  common: {
-    login:
-      "Kirish",
-
-    logout:
-      "Chiqish",
-
-    save:
-      "Saqlash",
-
-    cancel:
-      "Bekor qilish",
-
-    close:
-      "Yopish",
-
-    confirm:
-      "Tasdiqlash",
-
-    yes:
-      "Ha",
-
-    no:
-      "Yo‘q",
-
-    loading:
-      "Yuklanmoqda...",
-
-    error:
-      "Xatolik",
-
-    success:
-      "Muvaffaqiyatli",
-
-    search:
-      "Qidirish",
-
-    filter:
-      "Filtr",
-
-    reset:
-      "Tozalash",
-
-    refresh:
-      "Yangilash",
-
-    next:
-      "Keyingi",
-
-    back:
-      "Orqaga",
-
-    previous:
-      "Oldingi",
-
-    details:
-      "Batafsil",
-
-    viewAll:
-      "Barchasini ko‘rish",
-
-    online:
-      "Onlayn",
-
-    offline:
-      "Oflayn",
-
-    ai:
-      "BankAnalytics AI",
-  },
-
-  // =========================================================
-  // NAVIGATION — Navigatsiya
-  // =========================================================
-
-  nav: {
-    dashboard:
-      "Boshqaruv paneli",
-
-    scoring:
-      "Skoring",
-
-    recommendations:
-      "Tavsiyalar",
-
-    analytics:
-      "Analitika",
-
-    monitoring:
-      "Monitoring",
-
-    deposits:
-      "Omonatlari",
-
-    cards:
-      "Kartalar",
-
-    profile:
-      "Profil",
-
-    branches:
-      "Filiallar",
-
-    logout:
-      "Chiqish",
-  },
-
-  // =========================================================
-  // BRAND — Brend
-  // =========================================================
-
-  brand: {
-    financial:
-      "Financial",
-
-    intelligence:
-      "Intelligence",
-  },
-
-  // =========================================================
-  // LANGUAGES — Tillar
-  // =========================================================
-
-  languages: {
-    ru:
-      "Русский",
-
-    en:
-      "English",
-
-    uz:
-      "O‘zbekcha",
-  },
-
-  // =========================================================
-  // CURRENCY — Valyuta
-  // =========================================================
-
-  currency: {
-    uzs:
-      "so‘m",
-
-    symbol:
-      "so‘m",
-  },
-
-  // =========================================================
   // STATS — Statistika
   // =========================================================
 
@@ -1121,11 +1334,26 @@ export default {
   // =========================================================
 
   data: {
+    badge:
+      "Integratsiyalar",
+
     title:
       "Ma'lumot manbalari",
 
     desc:
-      "Platforma ishonchli ma'lumot manbalaridan foydalanadi. Ma'lumotlar har 15 kunda yangilanadi.",
+      "Platforma ishonchli ma'lumot manbalaridan foydalanadi. Ma'lumotlar avtomatik ravishda har 15 kunda yangilanadi.",
+
+    connected:
+      "Ulangan",
+
+    source:
+      "Manba",
+
+    updateTitle:
+      "Ma'lumotlarni avtomatik yangilash",
+
+    updateDesc:
+      "Platforma rasmiy bank manbalaridan ma'lumotlarni doimiy ravishda yig‘adi va yangilab boradi. Shu sababli bank mahsulotlari, foiz stavkalari, mobil ilovalar va moliyaviy tahlil ma'lumotlari doimo dolzarb bo‘lib qoladi.",
 
     bank:
       "Amaldagi bank mahsulotlari, stavkalari va takliflari",
@@ -1150,6 +1378,27 @@ export default {
   benefits: {
     title:
       "Monitoring",
+
+    badge:
+      "Bank bozori monitoringi",
+
+    description:
+      "Platforma bank mahsulotlari, mobil ilovalar, foiz stavkalari va raqamli bank xizmatlarini real vaqt rejimida kuzatadi.",
+
+    monitoringPeriod:
+      "24/7 monitoring",
+
+    live:
+      "LIVE",
+
+    monitoringTitle:
+      "Doimiy monitoring",
+
+    monitoringDesc:
+      "Foiz stavkalari, kredit mahsulotlari, mobil ilovalar va banklarning asosiy moliyaviy ko‘rsatkichlarini avtomatik kuzatish.",
+
+    active:
+      "Monitoring faol",
 
     analytics:
       "Analitika",
@@ -1183,6 +1432,9 @@ export default {
   chart: {
     title:
       "Valyuta kursi",
+
+    loading:
+      "Yuklanmoqda...",
 
     mon:
       "Du",
@@ -1228,5 +1480,755 @@ export default {
 
     swap:
       "Valyutalarni almashtirish",
+
+    loading:
+      "Yuklanmoqda...",
   },
+
+  // =========================================================
+  // MOBILE APPS — Mobil ilovalar
+  // =========================================================
+
+  mobileApps: {
+    title:
+      "Mobil ilovalar monitoringi",
+
+    subtitle:
+      "Bank mobil ilovalarining joriy ko‘rsatkichlari: o‘rnatishlar soni, reyting va baholar.",
+
+    loading:
+      "Google Play ma'lumotlari yuklanmoqda...",
+
+    apps:
+      "Ilovalar",
+
+    averageRating:
+      "O‘rtacha reyting",
+
+    totalReviews:
+      "Jami baholar",
+
+    installs:
+      "O‘rnatishlar",
+
+    rating:
+      "Reyting",
+
+    reviews:
+      "Baholar",
+
+    installsChart:
+      "Ilovalar o‘rnatilishi",
+
+    ratingChart:
+      "Ilovalar reytingi",
+
+    googlePlayData:
+      "Google Play ma'lumotlari",
+
+    averageUsersRating:
+      "Foydalanuvchilarning o‘rtacha bahosi",
+
+    footerGoogle:
+      "Ma'lumotlar Google Play'dan olindi",
+
+    footerUpdate:
+      "Avtomatik yangilanadi",
+  },
+
+  // =========================================================
+  // FOOTER — Footer
+  // =========================================================
+
+  footer: {
+    description:
+      "Mazkur platforma 08.00.16 — «Raqamli iqtisodiyot va xalqaro raqamli integratsiya» mutaxassisligi bo‘yicha ilmiy tadqiqot doirasida ishlab chiqilgan.",
+
+    contacts:
+      "Kontaktlar",
+
+    location:
+      "Toshkent, O‘zbekiston",
+
+    rights:
+      "Barcha huquqlar himoyalangan.",
+  },
+
+  // =========================================================
+  // LOGIN — Login
+  // =========================================================
+
+  login: {
+    back:
+      "Ortga",
+
+    title:
+      "Tizimga kirish",
+
+    subtitle:
+      "Tasdiqlash SMS kodini olish uchun telefon raqamingizni kiriting.",
+
+    confirmTitle:
+      "Kirishni tasdiqlash",
+
+    confirmSubtitle:
+      "SMS orqali yuborilgan tasdiqlash kodini kiriting.",
+
+    phoneStep:
+      "Telefon",
+
+    codeStep:
+      "Tasdiqlash",
+
+    phone:
+      "Telefon raqami",
+
+    phonePlaceholder:
+      "998901234567",
+
+    phoneHint:
+      "Telefon raqamini xalqaro formatda kiriting.",
+
+    sendCode:
+      "Kod olish",
+
+    sending:
+      "Yuborilmoqda...",
+
+    code:
+      "Tasdiqlash kodi",
+
+    codePlaceholder:
+      "Kodni kiriting",
+
+    codeSent:
+      "{phone} raqamiga kod yuborildi",
+
+    login:
+      "Kirish",
+
+    checking:
+      "Tekshirilmoqda...",
+
+    resend:
+      "Kodni qayta yuborish",
+
+    secure:
+      "Xavfsiz autentifikatsiya",
+
+    fast:
+      "Tezkor kirish",
+
+    sms:
+      "SMS orqali tasdiqlash",
+
+    copyright:
+      "Bank mahsulotlarini tahlil qilish ilmiy platformasi",
+
+    changePhone:
+      "Telefon raqamini o‘zgartirish",
+
+    agreement:
+      "Davom etish orqali siz xizmatdan foydalanish shartlariga rozilik bildirasiz",
+  },
+
+  // =========================================================
+  // EMPTY — General empty states
+  // =========================================================
+
+  empty: {
+    title:
+      "Omonatlar topilmadi",
+
+    description:
+      "Filtrlash parametrlarini o‘zgartiring yoki qidiruvni tozalang.",
+  },
+
+// =========================================================
+// DEPOSITS — Omonat
+// =========================================================
+
+deposits: {
+
+  // -------------------------------------------------------
+  // Hero
+  // -------------------------------------------------------
+
+  hero: {
+    badge: "DEPOSIT ENGINE",
+    title: "Bank omonatlari",
+    description:
+      "O‘zbekiston banklarining depozit mahsulotlarini foiz stavkasi, muddat va shartlar bo‘yicha tanlang.",
+    deposits: "Omonat",
+    banks: "Bank",
+  },
+
+  // -------------------------------------------------------
+  // Empty state
+  // -------------------------------------------------------
+
+  empty: {
+    title: "Omonat topilmadi",
+    description:
+      "Filtrlash parametrlarini o‘zgartirib ko‘ring yoki qidiruvni tozalang.",
+  },
+
+  // -------------------------------------------------------
+  // Banks
+  // -------------------------------------------------------
+
+  banks: {
+    recommended: "Tavsiya etilgan banklar",
+    popular: "Mashhur banklar",
+    match: "Moslik",
+    rateTo: "Stavka gacha",
+    deposits: "omonat",
+  },
+
+  // -------------------------------------------------------
+  // Filters
+  // -------------------------------------------------------
+
+  filters: {
+    all: "Barchasi",
+    highRate: "Yuqori stavka",
+    allBanks: "Barcha banklar",
+  },
+
+  // -------------------------------------------------------
+  // Sort
+  // -------------------------------------------------------
+
+  sort: {
+    maxRate: "Eng yuqori foiz stavkasi",
+    term: "Muddat",
+    bank: "Bank",
+  },
+
+  // -------------------------------------------------------
+  // Deposit Card
+  // -------------------------------------------------------
+
+  product: "Omonat",
+  online: "Onlayn",
+  interest: "Foiz stavkasi",
+  term: "Muddat",
+  currency: "Valyuta",
+  applicationMethod: "Rasmiylashtirish",
+  branch: "Filialda",
+  details: "Batafsil",
+
+  month: "oy",
+  months: "oy",
+  year: "yil",
+  years: "yil",
+
+  // -------------------------------------------------------
+  // Pagination
+  // -------------------------------------------------------
+
+  pagination: {
+    showing: "Ko‘rsatilmoqda",
+    of: "dan",
+    deposits: "omonat",
+  },
+},
+
+// =========================================================
+// DEPOSIT DETAIL — Omonat tafsilotlari
+// =========================================================
+
+depositDetail: {
+
+  loading:
+    "Omonat yuklanmoqda...",
+
+  loadError:
+    "Omonatni yuklab bo‘lmadi",
+
+  notFound:
+    "Omonat topilmadi",
+
+  month:
+    "oy",
+
+  months:
+    "oy",
+
+  year:
+    "yil",
+
+  years:
+    "yil",
+
+  interest:
+    "Foiz stavkasi",
+
+  term:
+    "Muddat",
+
+  bank:
+    "Bank",
+
+  conditions:
+    "Omonat shartlari",
+
+  minAmount:
+    "Minimal summa",
+
+  currency:
+    "Valyuta",
+
+  payout:
+    "Foizlarni to‘lash",
+
+  accrual:
+    "Foizlarni hisoblash",
+
+  capitalization:
+    "Kapitalizatsiya",
+
+  refill:
+    "Omonatni to‘ldirish",
+
+  earlyClose:
+    "Muddatidan oldin bekor qilish",
+
+  opening:
+    "Omonatni ochish",
+
+  updated:
+    "So‘nggi yangilanish",
+
+  source:
+    "Manba",
+
+  goToProduct:
+    "Mahsulotga o‘tish",
+
+  bankPage:
+    "Bank sahifasi",
+
+  openBankWebsite:
+    "Bank saytini ochish",
+},
+// =========================================================
+// CARDS — Bank kartalari
+// =========================================================
+
+cards: {
+
+  // -------------------------------------------------------
+  // Hero
+  // -------------------------------------------------------
+
+  hero: {
+    badge: "CARD ENGINE",
+    title: "Bank kartalari",
+    description:
+      "O‘zbekiston banklarining debet, kredit va xalqaro kartalarini tanlang",
+    cards: "Karta",
+    banks: "Bank",
+  },
+
+  // -------------------------------------------------------
+  // Banks
+  // -------------------------------------------------------
+
+  popularBanks: "Mashhur banklar",
+  cardsCount: "ta karta",
+
+  // -------------------------------------------------------
+  // Filters
+  // -------------------------------------------------------
+
+  filters: {
+    all: "Barchasi",
+    online: "Onlayn rasmiylashtirish",
+    allBanks: "Barcha banklar",
+  },
+
+  // -------------------------------------------------------
+  // Sort
+  // -------------------------------------------------------
+
+  sort: {
+    maxRate: "Eng yuqori foiz stavkasi",
+    term: "Muddat",
+    bank: "Bank",
+  },
+
+  // -------------------------------------------------------
+  // Card
+  // -------------------------------------------------------
+
+  online: "Onlayn",
+  currency: "Valyuta",
+  system: "Karta tizimi",
+  term: "Amal qilish muddati",
+  issue: "Chiqarish",
+  details: "Batafsil",
+
+  // -------------------------------------------------------
+  // Pagination
+  // -------------------------------------------------------
+
+  pagination: {
+    showing: "Ko‘rsatilmoqda",
+    of: "dan",
+    cards: "karta",
+  },
+
+  // -------------------------------------------------------
+  // Card Detail
+  // -------------------------------------------------------
+
+  cardDetail: {
+    loading: "Karta yuklanmoqda...",
+    loadError: "Kartani yuklab bo‘lmadi",
+    notFound: "Karta topilmadi",
+
+    currency: "Valyuta",
+    cardSystem: "Karta tizimi",
+    validity: "Amal qilish muddati",
+    issueCost: "Chiqarish narxi",
+
+    conditions: "Karta shartlari",
+    documents: "Hujjatlar",
+    onlineApplication: "Onlayn rasmiylashtirish",
+    openMethod: "Ochish usuli",
+    updated: "So‘nggi yangilanish",
+
+    source: "Manba",
+    goToProduct: "Mahsulotga o‘tish",
+    bankWebsite: "Bank sayti",
+
+    // -----------------------------------------------------
+    // Values
+    // -----------------------------------------------------
+
+    values: {
+      yes: "Ha",
+      no: "Yo‘q",
+      notSpecified: "Ko‘rsatilmagan",
+      unavailable: "Mavjud emas",
+
+      online: "Onlayn",
+      branch: "Filialda",
+      onlineAndBranch: "Onlayn va filialda",
+
+      currencies: {
+        UZS: "O‘zbekiston so‘mi",
+        USD: "AQSh dollari",
+        EUR: "Yevro",
+        RUB: "Rossiya rubli",
+      },
+
+      cardSystems: {
+        UZCARD: "Uzcard",
+        HUMO: "Humo",
+        VISA: "Visa",
+        MASTERCARD: "Mastercard",
+        UNIONPAY: "UnionPay",
+        MIR: "Mir",
+      },
+    },
+  },
+
+},
+// =========================================================
+// PROFILE VIEW — Shaxsiy kabinet
+// =========================================================
+
+profileView: {
+  title: "Shaxsiy kabinet",
+  loading: "Profil yuklanmoqda...",
+
+  errors: {
+    loadFailed: "Profilni yuklashda xatolik yuz berdi",
+  },
+},
+
+// =========================================================
+// PERSONAL INFO — Shaxsiy ma'lumotlar
+// =========================================================
+
+personalInfo: {
+  passport: "Pasport",
+  birthDate: "Tug‘ilgan sana",
+  jobType: "Bandlik turi",
+  profileStatus: "Profil holati",
+
+  actions: {
+    edit: "Tahrirlash",
+  },
+
+  values: {
+    empty: "—",
+    notSpecified: "Ko‘rsatilmagan",
+    user: "Foydalanuvchi",
+  },
+
+  status: {
+    completed: "To‘ldirilgan",
+    incomplete: "To‘ldirilmagan",
+  },
+
+  jobTypes: {
+    employee: "Xodim",
+    business: "Tadbirkor",
+    entrepreneur: "Tadbirkor",
+    selfEmployed: "O‘zini o‘zi band qilgan",
+    freelancer: "Frilanser",
+    student: "Talaba",
+    unemployed: "Ishsiz",
+    pensioner: "Nafaqaxo‘r",
+  },
+},
+
+// =========================================================
+// EMPLOYMENT VERIFICATION — Mehnat faoliyati
+// =========================================================
+
+employmentVerification: {
+  title: "Mehnat faoliyati",
+  description: "Joriy ish joyingiz haqidagi ma’lumotlar",
+
+  status: {
+    verified: "✔ Tasdiqlangan",
+    notVerified: "Tasdiqlanmagan",
+  },
+
+  upload: {
+    title: "Mehnat faoliyati to‘g‘risidagi ma’lumotnomani yuklang",
+    description: "PDF faylni bu yerga sudrab keling yoki faylni tanlang",
+    choose: "PDF tanlash",
+    checking: "Hujjat tekshirilmoqda...",
+  },
+
+  details: {
+    startDate: "Ish boshlagan sana",
+    experience: "Ish staji",
+    status: "Holati",
+    department: "Bo‘lim",
+  },
+
+  values: {
+    years: "y.",
+    months: "oy",
+    empty: "—",
+    companyUnknown: "Kompaniya aniqlanmadi",
+    positionUnknown: "Lavozim ko‘rsatilmagan",
+    working: "Ishlaydi",
+    notWorking: "Ishlamaydi",
+  },
+
+  more: "Qo‘shimcha ma’lumot",
+
+  additional: {
+    companyInn: "Kompaniya STIR",
+    pinfl: "JShShIR",
+  },
+
+  actions: {
+    getDocument: "Hujjatni olish",
+    replace: "Hujjatni almashtirish",
+  },
+
+  errors: {
+    pdfOnly: "Faqat PDF fayllarni yuklash mumkin.",
+    upload: "Faylni yuklashda xatolik yuz berdi.",
+  },
+},
+
+// =========================================================
+// FINANCIAL INFO — Moliyaviy ma'lumotlar
+// =========================================================
+
+financialInfo: {
+  title: "Moliyaviy profil",
+  description: "Moliyaviy holatingizning joriy ko‘rsatkichlari.",
+  updated: "Yangilangan",
+
+  income: "Oylik daromad",
+  expenses: "Oylik xarajatlar",
+  balance: "Erkin qoldiq",
+  totalDebt: "Umumiy qarzdorlik",
+  overdue: "Muddati o‘tgan qarzdorlik",
+  contracts: "Amaldagi shartnomalar",
+  financialStatus: "Moliyaviy holat",
+
+  dti: "Qarz yuklamasi (DTI)",
+
+  values: {
+    notSpecified: "Ko‘rsatilmagan",
+    empty: "—",
+    absent: "Mavjud emas",
+  },
+
+  status: {
+    insufficientData: "Ma’lumot yetarli emas",
+    stable: "Barqaror",
+    moderate: "O‘rtacha yuklama",
+    high: "Yuqori yuklama",
+  },
+},
+
+// =========================================================
+// SCORE CARD — Kredit reytingi
+// =========================================================
+
+scoreCard: {
+  title: "Kredit reytingi",
+  rating: "Kredit reytingi",
+
+  risk: {
+    minimal: "Minimal xavf",
+    low: "Past xavf",
+    medium: "O‘rtacha xavf",
+    elevated: "Yuqori xavf",
+    high: "Juda yuqori xavf",
+    noData: "Ma’lumot yo‘q",
+  },
+},
+
+// =========================================================
+// AI ANALYSIS — AI tahlili
+// =========================================================
+
+aiAnalysis: {
+  title: "AI tahlili",
+  badge: "Smart Analytics",
+
+  strongSides: "Kuchli tomonlar",
+  risks: "Xavflar",
+  recommendations: "Tavsiyalar",
+
+  positives: {
+    highScore: "Kredit reytingi yuqori.",
+    noOverdue: "Muddati o‘tgan qarzdorlik mavjud emas.",
+    lowDebtLoad: "Qarz yuklamasi past.",
+    few: "Hozircha ijobiy omillar kam.",
+  },
+
+  warnings: {
+    lowScore: "Kredit reytingi past.",
+    overdue: "Muddati o‘tgan qarzdorlik mavjud.",
+    highDebtLoad: "Qarz yuklamasi yuqori.",
+    manyContracts: "Kredit shartnomalari soni ko‘p.",
+    noCritical: "Jiddiy xavflar aniqlanmadi.",
+  },
+
+  advice: {
+    payOverdue: "Muddati o‘tgan qarzdorlikni so‘ndiring.",
+    reduceDebtLoad: "Qarz yuklamasini kamaytiring.",
+    newLoans: "Yangi kreditlarni rasmiylashtirish tavsiya etilmaydi.",
+    recommendedBank: "Tavsiya etilgan bank",
+    stable: "Moliyaviy holatingiz barqaror ko‘rinmoqda.",
+  },
+},
+
+// =========================================================
+// CREDIT REPORT UPLOAD — Kredit tarixi
+// =========================================================
+
+creditReportUpload: {
+  title: "Kredit tarixi",
+
+  description:
+    "Kredit tarixini yangilash uchun Infokredit hisobotini yuklang.",
+
+  uploadZone: {
+    title: "Kredit hisobotini yuklang",
+    description: "Faylni bu yerga sudrab olib keling yoki",
+    choose: "faylni tanlang",
+    formats: "Qo‘llab-quvvatlanadigan formatlar",
+    changeFile: "Faylni almashtirish",
+    removeFile: "Faylni o‘chirish",
+    creditObligations: "Kredit majburiyatlari",
+  },
+
+  buttons: {
+    uploading: "Yuklanmoqda...",
+    update: "🔄 Hisobotni yangilash",
+    upload: "📤 Hisobotni yuklash",
+  },
+
+  success: "Kredit hisoboti muvaffaqiyatli qayta ishlandi.",
+
+  errors: {
+    selectFile: "HTML yoki PDF faylni tanlang.",
+    uploadFailed: "Kredit hisobotini yuklashning imkoni bo‘lmadi.",
+  },
+
+  activeContracts: "Amaldagi kredit shartnomalari",
+
+  table: {
+    bank: "Bank",
+    contract: "Shartnoma",
+    currency: "Valyuta",
+    totalDebt: "Umumiy qarz",
+    overdue: "Muddati o‘tgan qarz",
+    monthlyPayment: "Oylik to‘lov",
+  },
+
+  empty: {
+    title: "Kredit shartnomalari mavjud emas",
+    description:
+      "Hisobot yuklangandan so‘ng, bu yerda amaldagi kredit shartnomalari ro‘yxati paydo bo‘ladi.",
+  },
+},
+
+// =========================================================
+// RECOMMENDATIONS CARD — Eng yaxshi takliflar
+// =========================================================
+
+recommendationsCard: {
+  title: "Eng yaxshi takliflar",
+
+  approvalChance: "{level} tasdiqlanish ehtimoli",
+  interestRate: "Foiz stavkasi {rate}",
+
+  levels: {
+    veryHigh: "Juda yuqori",
+    high: "Yuqori",
+    good: "Yaxshi",
+    medium: "O‘rtacha",
+    low: "Past",
+  },
+},
+
+// =========================================================
+// GOVERNMENT SERVICES — Davlat xizmatlari
+// =========================================================
+
+governmentServices: {
+  title: "Davlat xizmatlari",
+
+  description:
+    "O‘zbekiston Respublikasi davlat xizmatlari orqali rasmiy hujjatlar va kredit tarixini oling.",
+
+  myGov: "my.gov.uz saytiga o‘tish",
+  infokredit: "Infokredit saytiga o‘tish",
+},
+// =========================================================
+// NAVIGATION — Navigatsiya
+// =========================================================
+
+navigation: {
+  platform: "PLATFORMA",
+
+  dashboard: "Boshqaruv paneli",
+  scoring: "Skoring",
+  recommendations: "Tavsiyalar",
+  analytics: "Tahlil",
+  monitoring: "Monitoring",
+  deposits: "Omonatlar",
+  cards: "Kartalar",
+
+  systemOnline: "Tizim ishlamoqda",
+  completeProfile: "Profilingizni to‘ldiring",
+  personalAccount: "Shaxsiy kabinet",
+  logout: "Chiqish",
+},
 }

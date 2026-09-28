@@ -1,78 +1,79 @@
 <script setup>
 
-import { computed } from "vue"
+import {
+  computed,
+} from "vue"
+
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
+
 
 const props = defineProps({
 
-    profile: {
-        type: Object,
-        required: true,
-    },
+  profile: {
+    type: Object,
+    required: true,
+  },
 
-    score: {
-        type: Object,
-        required: true,
-    },
+  score: {
+    type: Object,
+    required: true,
+  },
 
-    recommendations: {
-        type: Array,
-        default: () => [],
-    },
+  recommendations: {
+    type: Array,
+    default: () => [],
+  },
 
 })
+
 
 // =====================================================
 // DATA
 // =====================================================
 
 const creditScore = computed(() =>
-
-    Number(props.score.score || 0)
-
+  Number(props.score.score || 0)
 )
+
 
 const risk = computed(() =>
-
-    props.score.risk || "UNKNOWN"
-
+  props.score.risk || "UNKNOWN"
 )
+
 
 const income = computed(() =>
-
-    Number(props.profile.income || 0)
-
+  Number(props.profile.income || 0)
 )
+
 
 const totalDebt = computed(() =>
-
-    Number(props.profile.totalDebt || 0)
-
+  Number(props.profile.totalDebt || 0)
 )
+
 
 const overdueDebt = computed(() =>
-
-    Number(props.profile.overdueDebt || 0)
-
+  Number(props.profile.overdueDebt || 0)
 )
+
 
 const contracts = computed(() =>
-
-    Number(props.profile.contractsCount || 0)
-
+  Number(props.profile.contractsCount || 0)
 )
+
 
 const dti = computed(() => {
 
-    if (!income.value)
-        return 0
+  if (!income.value)
+    return 0
 
-    return Math.round(
-
-        (totalDebt.value / income.value) * 100
-
-    )
+  return Math.round(
+    (totalDebt.value / income.value) * 100
+  )
 
 })
+
 
 // =====================================================
 // POSITIVE
@@ -80,23 +81,36 @@ const dti = computed(() => {
 
 const positives = computed(() => {
 
-    const list = []
+  const list = []
 
-    if (creditScore.value >= 700)
-        list.push("Высокий кредитный рейтинг.")
+  if (creditScore.value >= 700) {
+    list.push(
+      t("aiAnalysis.positives.highScore")
+    )
+  }
 
-    if (overdueDebt.value === 0)
-        list.push("Просроченная задолженность отсутствует.")
+  if (overdueDebt.value === 0) {
+    list.push(
+      t("aiAnalysis.positives.noOverdue")
+    )
+  }
 
-    if (dti.value <= 35)
-        list.push("Низкая долговая нагрузка.")
+  if (dti.value <= 35) {
+    list.push(
+      t("aiAnalysis.positives.lowDebtLoad")
+    )
+  }
 
-    if (!list.length)
-        list.push("Положительных факторов пока немного.")
+  if (!list.length) {
+    list.push(
+      t("aiAnalysis.positives.few")
+    )
+  }
 
-    return list
+  return list
 
 })
+
 
 // =====================================================
 // WARNINGS
@@ -104,26 +118,42 @@ const positives = computed(() => {
 
 const warnings = computed(() => {
 
-    const list = []
+  const list = []
 
-    if (creditScore.value < 500)
-        list.push("Низкий кредитный рейтинг.")
+  if (creditScore.value < 500) {
+    list.push(
+      t("aiAnalysis.warnings.lowScore")
+    )
+  }
 
-    if (overdueDebt.value > 0)
-        list.push("Есть просроченная задолженность.")
+  if (overdueDebt.value > 0) {
+    list.push(
+      t("aiAnalysis.warnings.overdue")
+    )
+  }
 
-    if (dti.value > 50)
-        list.push("Высокая долговая нагрузка.")
+  if (dti.value > 50) {
+    list.push(
+      t("aiAnalysis.warnings.highDebtLoad")
+    )
+  }
 
-    if (contracts.value > 5)
-        list.push("Большое количество кредитных договоров.")
+  if (contracts.value > 5) {
+    list.push(
+      t("aiAnalysis.warnings.manyContracts")
+    )
+  }
 
-    if (!list.length)
-        list.push("Критических рисков не обнаружено.")
+  if (!list.length) {
+    list.push(
+      t("aiAnalysis.warnings.noCritical")
+    )
+  }
 
-    return list
+  return list
 
 })
+
 
 // =====================================================
 // RECOMMENDATIONS
@@ -131,133 +161,136 @@ const warnings = computed(() => {
 
 const advice = computed(() => {
 
-    const list = []
+  const list = []
 
-    if (overdueDebt.value > 0)
-        list.push("Погасите просроченную задолженность.")
+  if (overdueDebt.value > 0) {
+    list.push(
+      t("aiAnalysis.advice.payOverdue")
+    )
+  }
 
-    if (dti.value > 40)
-        list.push("Снизьте долговую нагрузку.")
+  if (dti.value > 40) {
+    list.push(
+      t("aiAnalysis.advice.reduceDebtLoad")
+    )
+  }
 
-    if (creditScore.value < 600)
-        list.push("Не рекомендуется оформлять новые кредиты.")
+  if (creditScore.value < 600) {
+    list.push(
+      t("aiAnalysis.advice.newLoans")
+    )
+  }
 
-    if (
+  if (
+    props.recommendations.length &&
+    props.recommendations[0]?.bank
+  ) {
 
-        props.recommendations.length &&
-        props.recommendations[0]?.bank
+    list.push(
+      `${t("aiAnalysis.advice.recommendedBank")}: ${props.recommendations[0].bank}`
+    )
 
-    ) {
+  }
 
-        list.push(
+  if (!list.length) {
+    list.push(
+      t("aiAnalysis.advice.stable")
+    )
+  }
 
-            `Рекомендуемый банк: ${props.recommendations[0].bank}`
-
-        )
-
-    }
-
-    if (!list.length)
-        list.push("Ваше финансовое состояние выглядит стабильным.")
-
-    return list
+  return list
 
 })
 
 </script>
 
+
 <template>
 
-<div class="card">
+  <div class="card">
 
     <div class="header">
 
-        <h2>
+      <h2>
+        🤖 {{ t("aiAnalysis.title") }}
+      </h2>
 
-            🤖 AI Анализ
-
-        </h2>
-
-        <span class="badge">
-
-            Smart Analytics
-
-        </span>
+      <span class="badge">
+        {{ t("aiAnalysis.badge") }}
+      </span>
 
     </div>
+
+
+    <!-- STRONG SIDES -->
 
     <div class="section">
 
-        <h3>
+      <h3>
+        ✅ {{ t("aiAnalysis.strongSides") }}
+      </h3>
 
-            ✅ Сильные стороны
+      <ul>
 
-        </h3>
+        <li
+          v-for="item in positives"
+          :key="item"
+        >
+          {{ item }}
+        </li>
 
-        <ul>
-
-            <li
-                v-for="item in positives"
-                :key="item"
-            >
-
-                {{ item }}
-
-            </li>
-
-        </ul>
+      </ul>
 
     </div>
+
+
+    <!-- RISKS -->
 
     <div class="section">
 
-        <h3>
+      <h3>
+        ⚠ {{ t("aiAnalysis.risks") }}
+      </h3>
 
-            ⚠ Риски
+      <ul>
 
-        </h3>
+        <li
+          v-for="item in warnings"
+          :key="item"
+        >
+          {{ item }}
+        </li>
 
-        <ul>
-
-            <li
-                v-for="item in warnings"
-                :key="item"
-            >
-
-                {{ item }}
-
-            </li>
-
-        </ul>
+      </ul>
 
     </div>
+
+
+    <!-- RECOMMENDATIONS -->
 
     <div class="section">
 
-        <h3>
+      <h3>
+        💡 {{ t("aiAnalysis.recommendations") }}
+      </h3>
 
-            💡 Рекомендации
+      <ul>
 
-        </h3>
+        <li
+          v-for="item in advice"
+          :key="item"
+        >
+          {{ item }}
+        </li>
 
-        <ul>
-
-            <li
-                v-for="item in advice"
-                :key="item"
-            >
-
-                {{ item }}
-
-            </li>
-
-        </ul>
+      </ul>
 
     </div>
 
-</div>
+  </div>
 
 </template>
+
 
 <style scoped>
 

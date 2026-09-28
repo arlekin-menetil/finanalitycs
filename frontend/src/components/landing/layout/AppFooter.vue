@@ -1,30 +1,67 @@
+<script setup>
+
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
+
+</script>
+
 <template>
-  <footer class="footer">
 
-    <div class="footer__content">
+<footer class="footer">
 
-      <div class="footer__left">
-        <h3 class="footer__logo">FinAnalytics</h3>
+  <div class="footer__content">
 
-        <p class="footer__text">
-          Данная платформа разработана в рамках научного исследования
-          по специальности 08.00.16 — «Цифровая экономика и международная цифровая интеграция».
-        </p>
-      </div>
+    <div class="footer__left">
 
-      <div class="footer__right">
-        <h4>Контакты</h4>
-        <p>info@finanalytics.uz</p>
-        <p>Ташкент, Узбекистан</p>
-      </div>
+      <h3 class="footer__logo">
+
+        FinAnalytics
+
+      </h3>
+
+      <p class="footer__text">
+
+        {{ t("footer.description") }}
+
+      </p>
 
     </div>
 
-    <div class="footer__bottom">
-      © 2026 FinAnalytics. Все права защищены.
+    <div class="footer__right">
+
+      <h4>
+
+        {{ t("footer.contacts") }}
+
+      </h4>
+
+      <p>
+
+        info@finanalytics.uz
+
+      </p>
+
+      <p>
+
+        {{ t("footer.location") }}
+
+      </p>
+
     </div>
 
-  </footer>
+  </div>
+
+  <div class="footer__bottom">
+
+    © 2026 FinAnalytics.
+
+    {{ t("footer.rights") }}
+
+  </div>
+
+</footer>
+
 </template>
 
 <style scoped>

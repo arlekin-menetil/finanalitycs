@@ -1,34 +1,65 @@
 <script>
+
+import { useI18n } from "vue-i18n"
+
 export default {
 
   name: "RecommendationsFilters",
 
+  setup() {
+
+    const { t } = useI18n()
+
+    return {
+
+      t
+
+    }
+
+  },
+
   props: {
 
     filterType: {
+
       type: String,
+
       default: "all",
+
     },
 
     sortType: {
+
       type: String,
+
       default: "match",
+
     },
 
     onlineOnly: {
+
       type: Boolean,
+
       default: false,
+
     },
 
     bankFilter: {
+
       type: String,
+
       default: "all",
+
     },
 
     availableBanks: {
+
       type: Array,
+
       default: () => [],
+
     },
+
   },
 
   emits: [
@@ -40,6 +71,7 @@ export default {
     "update:onlineOnly",
 
     "update:bankFilter",
+
   ],
 
   methods: {
@@ -47,48 +79,71 @@ export default {
     // ==========================================
     // 💣 CATEGORY
     // ==========================================
+
     setFilter(type) {
 
       this.$emit(
+
         "update:filterType",
+
         type
+
       )
+
     },
 
     // ==========================================
     // ⚡ ONLINE
     // ==========================================
+
     toggleOnline() {
 
       this.$emit(
+
         "update:onlineOnly",
+
         !this.onlineOnly
+
       )
+
     },
 
     // ==========================================
     // 🏦 BANK
     // ==========================================
+
     updateBank(event) {
 
       this.$emit(
+
         "update:bankFilter",
+
         event.target.value
+
       )
+
     },
 
     // ==========================================
     // 📊 SORT
     // ==========================================
+
     updateSort(event) {
 
       this.$emit(
+
         "update:sortType",
+
         event.target.value
+
       )
+
     },
+
   },
+
 }
+
 </script>
 
 <template>
@@ -110,7 +165,7 @@ export default {
       ]"
       @click="setFilter('all')"
     >
-      🔥 Все
+      🔥 🔥 {{ t("recommendations.filters.all") }}
     </button>
 
     <button
@@ -122,7 +177,7 @@ export default {
       ]"
       @click="setFilter('loan')"
     >
-      💳 Кредиты
+      💳 {{ t("recommendations.filters.loans") }}
     </button>
 
     <button
@@ -134,7 +189,7 @@ export default {
       ]"
       @click="setFilter('micro')"
     >
-      💸 Микрозаймы
+      💸 {{ t("recommendations.filters.micro") }}
     </button>
 
     <button
@@ -146,7 +201,7 @@ export default {
       ]"
       @click="setFilter('mortgage')"
     >
-      🏠 Ипотека
+      🏠 {{ t("recommendations.filters.mortgage") }}
     </button>
 
     <button
@@ -158,7 +213,7 @@ export default {
       ]"
       @click="setFilter('auto')"
     >
-      🚗 Автокредиты
+      🚗 {{ t("recommendations.filters.auto") }}
     </button>
 
     <button
@@ -170,7 +225,7 @@ export default {
       ]"
       @click="setFilter('education')"
     >
-      🎓 Образование
+      🎓 {{ t("recommendations.filters.education") }}
     </button>
 
     <button
@@ -182,7 +237,7 @@ export default {
       ]"
       @click="setFilter('green')"
     >
-      🌱 Green
+      🌱 {{ t("recommendations.filters.green") }}
     </button>
 
     <button
@@ -194,7 +249,7 @@ export default {
       ]"
       @click="setFilter('overdraft')"
     >
-      💰 Овердрафт
+      💰 {{ t("recommendations.filters.overdraft") }}
     </button>
 
   </div>
@@ -221,7 +276,7 @@ export default {
         ]"
         @click="toggleOnline"
       >
-        ⚡ Только онлайн
+        ⚡ {{ t("recommendations.filters.onlineOnly") }}
       </button>
 
     </div>
@@ -239,8 +294,8 @@ export default {
       >
 
         <option value="all">
-          🏦 Все банки
-        </option>
+  🏦 {{ t("recommendations.filters.allBanks") }}
+</option>
 
         <option
           v-for="bank in availableBanks"
@@ -267,19 +322,19 @@ export default {
       >
 
         <option value="match">
-          🔥 Лучшее совпадение
+          🔥 {{ t("recommendations.filters.bestMatch") }}
         </option>
 
         <option value="rate">
-          📉 Минимальная ставка
+          📉 {{ t("recommendations.filters.minRate") }}
         </option>
 
         <option value="approval">
-          ✅ Шанс одобрения
+          ✅ {{ t("recommendations.filters.approval") }}
         </option>
 
         <option value="limit">
-          💰 Максимальная сумма
+          💰 {{ t("recommendations.filters.maxAmount") }}
         </option>
 
       </select>
