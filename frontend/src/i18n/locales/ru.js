@@ -1591,47 +1591,38 @@ analytics: {
   // MOBILE APPS — Мобильные приложения
   // =========================================================
 
-  mobileApps: {
+mobileApps: {
+  title: "Мониторинг мобильных приложений",
 
-    title:
-      "Мониторинг мобильных приложений",
+  subtitle:
+    "Актуальные показатели банковских приложений: установки, рейтинг и количество оценок.",
 
-    subtitle:
-      "Актуальные показатели банковских приложений: установки, рейтинг и количество оценок.",
+  loading: "Загрузка данных Google Play...",
 
-    loading:
-      "Загрузка данных Google Play...",
+  apps: "Приложений",
 
-    apps: "Приложений",
+  averageRating: "Средний рейтинг",
 
-    averageRating: "Средний рейтинг",
+  totalReviews: "Всего оценок",
 
-    totalReviews: "Всего оценок",
+  installs: "Установки",
 
-    installs: "Установки",
+  rating: "Рейтинг",
 
-    rating: "Рейтинг",
+  reviews: "Оценки",
 
-    reviews: "Оценки",
+  installsChart: "Установки приложений",
 
-    installsChart:
-      "Установки приложений",
+  ratingChart: "Рейтинг приложений",
 
-    ratingChart:
-      "Рейтинг приложений",
+  googlePlayData: "Данные из Google Play",
 
-    googlePlayData:
-      "Данные из Google Play",
+  averageUsersRating: "Средняя оценка пользователей",
 
-    averageUsersRating:
-      "Средняя оценка пользователей",
+  footerGoogle: "Данные получены из Google Play",
 
-    footerGoogle:
-      "Данные получены из Google Play",
-
-    footerUpdate:
-      "Обновляются автоматически",
-  },
+  footerUpdate: "Обновляются автоматически",
+},
 
 
 // =========================================================

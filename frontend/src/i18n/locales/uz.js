@@ -1489,52 +1489,58 @@ analytics: {
   // MOBILE APPS — Mobil ilovalar
   // =========================================================
 
-  mobileApps: {
-    title:
-      "Mobil ilovalar monitoringi",
+mobileApps: {
+  title:
+    "Mobil ilovalar monitoringi",
 
-    subtitle:
-      "Bank mobil ilovalarining joriy ko‘rsatkichlari: o‘rnatishlar soni, reyting va baholar.",
+  subtitle:
+    "Bank mobil ilovalarining joriy ko‘rsatkichlari: o‘rnatishlar soni, reyting va baholar.",
 
-    loading:
-      "Google Play ma'lumotlari yuklanmoqda...",
+  loading:
+    "Google Play ma'lumotlari yuklanmoqda...",
 
-    apps:
-      "Ilovalar",
+  apps:
+    "Ilovalar",
 
-    averageRating:
-      "O‘rtacha reyting",
+  averageRating:
+    "O‘rtacha reyting",
 
-    totalReviews:
-      "Jami baholar",
+  totalReviews:
+    "Jami baholar",
 
-    installs:
-      "O‘rnatishlar",
+  installs:
+    "O‘rnatishlar",
 
-    rating:
-      "Reyting",
+  rating:
+    "Reyting",
 
-    reviews:
-      "Baholar",
+  reviews:
+    "Baholar",
 
-    installsChart:
-      "Ilovalar o‘rnatilishi",
+  million:
+    "mln",
 
-    ratingChart:
-      "Ilovalar reytingi",
+  live:
+    "Jonli",
 
-    googlePlayData:
-      "Google Play ma'lumotlari",
+  installsChart:
+    "Ilovalar o‘rnatilishi",
 
-    averageUsersRating:
-      "Foydalanuvchilarning o‘rtacha bahosi",
+  ratingChart:
+    "Ilovalar reytingi",
 
-    footerGoogle:
-      "Ma'lumotlar Google Play'dan olindi",
+  googlePlayData:
+    "Google Play ma'lumotlari",
 
-    footerUpdate:
-      "Avtomatik yangilanadi",
-  },
+  averageUsersRating:
+    "Foydalanuvchilarning o‘rtacha bahosi",
+
+  footerGoogle:
+    "Ma'lumotlar Google Play'dan olindi",
+
+  footerUpdate:
+    "Avtomatik yangilanadi",
+},
 
   // =========================================================
   // FOOTER — Footer

@@ -1574,49 +1574,51 @@ analytics: {
   // MOBILE APPS — Mobile applications
   // =========================================================
 
-  mobileApps: {
+mobileApps: {
+  title: "Mobile App Monitoring",
 
-    title:
-      "Mobile App Monitoring",
+  subtitle:
+    "Current statistics of banking applications: installs, ratings and number of reviews.",
 
-    subtitle:
-      "Current statistics of banking applications: installs, ratings and number of reviews.",
+  loading:
+    "Loading Google Play data...",
 
-    loading:
-      "Loading Google Play data...",
+  apps: "Applications",
 
-    apps: "Applications",
+  averageRating:
+    "Average Rating",
 
-    averageRating:
-      "Average Rating",
+  totalReviews:
+    "Total Reviews",
 
-    totalReviews:
-      "Total Reviews",
+  installs: "Installs",
 
-    installs: "Installs",
+  rating: "Rating",
 
-    rating: "Rating",
+  reviews: "Reviews",
 
-    reviews: "Reviews",
+  million: "M",
 
-    installsChart:
-      "Application Installs",
+  live: "Live",
 
-    ratingChart:
-      "Application Ratings",
+  installsChart:
+    "Application Installs",
 
-    googlePlayData:
-      "Data from Google Play",
+  ratingChart:
+    "Application Ratings",
 
-    averageUsersRating:
-      "Average User Rating",
+  googlePlayData:
+    "Data from Google Play",
 
-    footerGoogle:
-      "Data obtained from Google Play",
+  averageUsersRating:
+    "Average User Rating",
 
-    footerUpdate:
-      "Updated automatically",
-  },
+  footerGoogle:
+    "Data obtained from Google Play",
+
+  footerUpdate:
+    "Updated automatically",
+},
 
 
 // =========================================================
