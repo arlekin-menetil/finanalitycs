@@ -1,17 +1,53 @@
 <script setup>
+import { computed, onMounted, ref } from "vue"
 import { useI18n } from "vue-i18n"
+import api from "@/api/axios"
+
 const { t } = useI18n()
+
+const products = ref([])
+const loading = ref(true)
+
+const banksCount = computed(() => {
+  const banks = new Set(
+    products.value
+      .map((product) => product.bank_name)
+      .filter(Boolean),
+  )
+
+  return banks.size
+})
+
+const productsCount = computed(() => products.value.length)
+
+async function loadStats() {
+  try {
+    loading.value = true
+
+    const response = await api.get("/banks/products/")
+
+    products.value = Array.isArray(response.data)
+      ? response.data
+      : response.data.results || []
+  } catch (error) {
+    console.error("Failed to load landing stats:", error)
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(loadStats)
 </script>
 
 <template>
   <section class="stats">
     <div class="stats__item">
-      <h2>32</h2>
+      <h2>{{ loading ? "—" : banksCount }}</h2>
       <p>{{ t("stats.banks") }}</p>
     </div>
 
     <div class="stats__item">
-      <h2>147</h2>
+      <h2>{{ loading ? "—" : productsCount }}</h2>
       <p>{{ t("stats.products") }}</p>
     </div>
 
@@ -38,10 +74,9 @@ const { t } = useI18n()
   margin-left: auto;
   margin-right: auto;
 
-  box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
 }
 
-/* ITEM */
 .stats__item {
   text-align: center;
   flex: 1;
@@ -58,7 +93,6 @@ const { t } = useI18n()
   font-size: 14px;
 }
 
-/* 📱 MOBILE */
 @media (max-width: 768px) {
   .stats {
     flex-direction: column;

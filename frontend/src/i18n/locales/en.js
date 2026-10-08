@@ -42,6 +42,9 @@ export default {
     unknownBank: "Unknown bank",
 
     ai: "BankAnalytics AI",
+
+    live: "Live",
+    million: "M",
   },
 
 
@@ -1520,7 +1523,13 @@ analytics: {
     securityDesc:
       "Your data is protected",
   },
-
+statsSection: {
+  activity: "Activity",
+  accuracy: "Accuracy",
+  averageTime: "Average Time",
+  reliability: "Reliability",
+  seconds: "sec",
+},
 
   // =========================================================
   // CHART — Charts
@@ -2366,5 +2375,47 @@ navigation: {
   completeProfile: "Complete your profile",
   personalAccount: "Personal account",
   logout: "Logout",
+},
+
+// =========================================================
+// PROFILE SETUP — Profile Setup
+// =========================================================
+
+profileSetup: {
+  title: "Profile Setup",
+  description:
+    "Fill in your information to receive personalized recommendations.",
+},
+
+// =========================================================
+// PROFILE EDIT — Edit Profile
+// =========================================================
+
+profileEdit: {
+  title: "Edit Profile",
+  description: "Update your personal information.",
+
+  fields: {
+    fullName: "Full Name",
+    passport: "Passport",
+    birthDate: "Date of Birth",
+    jobType: "Employment Type",
+    income: "Income",
+    expenses: "Expenses",
+  },
+
+  jobTypes: {
+    employee: "Employee",
+    business: "Business Owner",
+    selfEmployed: "Self-Employed",
+    freelancer: "Freelancer",
+    student: "Student",
+    unemployed: "Unemployed",
+    pensioner: "Pensioner",
+  },
+
+  buttons: {
+    save: "Save",
+  },
 },
 }

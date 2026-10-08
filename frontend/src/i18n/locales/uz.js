@@ -39,6 +39,9 @@ export default {
     offline: "Oflayn",
 
     ai: "BankAnalytics AI",
+
+    live: "Jonli",
+    million: "mln",
   },
 
   // =========================================================
@@ -1424,6 +1427,13 @@ analytics: {
     securityDesc:
       "Ma'lumotlaringiz himoyalangan",
   },
+statsSection: {
+  activity: "Faollik",
+  accuracy: "Aniqlik",
+  averageTime: "O‘rtacha vaqt",
+  reliability: "Ishonchlilik",
+  seconds: "son",
+},
 
   // =========================================================
   // CHART — Grafiklar
@@ -1530,13 +1540,13 @@ mobileApps: {
     "Ilovalar reytingi",
 
   googlePlayData:
-    "Google Play ma'lumotlari",
+    "Google Play ma’lumotlari",
 
   averageUsersRating:
     "Foydalanuvchilarning o‘rtacha bahosi",
 
   footerGoogle:
-    "Ma'lumotlar Google Play'dan olindi",
+    "Ma’lumotlar Google Play’dan olindi",
 
   footerUpdate:
     "Avtomatik yangilanadi",
@@ -2236,5 +2246,46 @@ navigation: {
   completeProfile: "Profilingizni to‘ldiring",
   personalAccount: "Shaxsiy kabinet",
   logout: "Chiqish",
+},
+// =========================================================
+// PROFILE SETUP — Profilni sozlash
+// =========================================================
+
+profileSetup: {
+  title: "Profilni sozlash",
+  description:
+    "Tavsiyalarni shaxsiylashtirish uchun o‘zingiz haqingizdagi ma’lumotlarni kiriting.",
+},
+
+// =========================================================
+// PROFILE EDIT — Profilni tahrirlash
+// =========================================================
+
+profileEdit: {
+  title: "Profilni tahrirlash",
+  description: "Shaxsiy ma’lumotlaringizni yangilang.",
+
+  fields: {
+    fullName: "F.I.Sh.",
+    passport: "Pasport",
+    birthDate: "Tug‘ilgan sana",
+    jobType: "Bandlik turi",
+    income: "Daromad",
+    expenses: "Xarajatlar",
+  },
+
+  jobTypes: {
+    employee: "Yollanma xodim",
+    business: "Tadbirkor",
+    selfEmployed: "O‘zini o‘zi band qilgan",
+    freelancer: "Frilanser",
+    student: "Talaba",
+    unemployed: "Ishsiz",
+    pensioner: "Pensioner",
+  },
+
+  buttons: {
+    save: "Saqlash",
+  },
 },
 }

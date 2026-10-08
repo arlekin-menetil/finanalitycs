@@ -479,261 +479,283 @@ const ratingOptions = {
 
 <template>
 
-<section class="mobile-apps">
+  <section class="mobile-apps">
 
-  <div class="mobile-apps__container">
+    <div class="mobile-apps__container">
 
-    <!-- HEADER -->
+      <!-- HEADER -->
 
-    <div class="mobile-apps__header">
+      <div class="mobile-apps__header">
 
-      <div class="mobile-apps__badge">
+        <div class="mobile-apps__badge">
 
-        <span>▶</span>
+          <span>▶</span>
 
-        Google Play
+          Google Play
+
+        </div>
+
+        <h2 class="mobile-apps__title">
+
+          {{ t("mobileApps.title") }}
+
+        </h2>
+
+        <p class="mobile-apps__subtitle">
+
+          {{ t("mobileApps.subtitle") }}
+
+        </p>
 
       </div>
 
-      <h2 class="mobile-apps__title">
 
-        {{ t("mobileApps.title") }}
+      <!-- LOADING -->
 
-      </h2>
-
-      <p class="mobile-apps__subtitle">
-
-        {{ t("mobileApps.subtitle") }}
-
-      </p>
-
-    </div>
-
-    <!-- LOADING -->
-
-    <div
-      v-if="loading"
-      class="mobile-apps__state"
-    >
-
-      <div class="mobile-apps__loader"></div>
-
-      <span>
-
-        {{ t("mobileApps.loading") }}
-
-      </span>
-
-    </div>
-
-    <!-- ERROR -->
-
-    <div
-      v-else-if="error"
-      class="mobile-apps__state mobile-apps__state--error"
-    >
-
-      <span class="mobile-apps__state-icon">
-
-        !
-
-      </span>
-
-      <span>
-
-        {{ error }}
-
-      </span>
-
-      <button
-        class="mobile-apps__retry"
-        @click="loadMobileData"
+      <div
+        v-if="loading"
+        class="mobile-apps__state"
       >
 
-        {{ t("common.retry") }}
+        <div class="mobile-apps__loader"></div>
 
-      </button>
+        <span>
 
-    </div>
+          {{ t("mobileApps.loading") }}
 
-    <!-- CONTENT -->
-
-    <template v-else>
-
-      <!-- KPI -->
-
-      <div class="mobile-apps__stats">
-
-        <div class="mobile-stat">
-
-          <div class="mobile-stat__icon">
-
-            🏦
-
-          </div>
-
-          <div>
-
-            <span class="mobile-stat__label">
-
-              {{ t("mobileApps.apps") }}
-
-            </span>
-
-            <strong class="mobile-stat__value">
-
-              {{ totalBanks }}
-
-            </strong>
-
-          </div>
-
-        </div>
-
-        <div class="mobile-stat">
-
-          <div class="mobile-stat__icon">
-
-            ⭐
-
-          </div>
-
-          <div>
-
-            <span class="mobile-stat__label">
-
-              {{ t("mobileApps.averageRating") }}
-
-            </span>
-
-            <strong class="mobile-stat__value">
-
-              {{ averageRating.toFixed(2) }}
-
-              <small>/ 5</small>
-
-            </strong>
-
-          </div>
-
-        </div>
-
-        <div class="mobile-stat">
-
-          <div class="mobile-stat__icon">
-
-            💬
-
-          </div>
-
-          <div>
-
-            <span class="mobile-stat__label">
-
-              {{ t("mobileApps.totalReviews") }}
-
-            </span>
-
-            <strong class="mobile-stat__value">
-
-              {{ formatReviews(totalReviews) }}
-
-            </strong>
-
-          </div>
-
-        </div>
+        </span>
 
       </div>
 
-      <!-- CHARTS -->
 
-      <div class="mobile-apps__charts">
+      <!-- ERROR -->
 
-        <!-- INSTALLS -->
+      <div
+        v-else-if="error"
+        class="mobile-apps__state mobile-apps__state--error"
+      >
 
-        <article class="mobile-chart-card">
+        <span class="mobile-apps__state-icon">
 
-          <div class="mobile-chart-card__header">
+          !
 
-            <div>
+        </span>
 
-              <h3>
+        <span>
 
-                📥 {{ t("mobileApps.installsChart") }}
+          {{ error }}
 
-              </h3>
+        </span>
 
-              <p>
+        <button
+          class="mobile-apps__retry"
+          @click="loadMobileData"
+        >
 
-                {{ t("mobileApps.googlePlayData") }}
+          {{ t("common.retry") }}
 
-              </p>
-
-            </div>
-
-            <span class="mobile-chart-card__source">
-
-              {{ t("common.live") }}
-
-            </span>
-
-          </div>
-
-          <div class="mobile-chart">
-
-            <Bar
-              :data="installsData"
-              :options="installsOptions"
-            />
-
-          </div>
-
-        </article>
-
-        <!-- RATING -->
-
-        <article class="mobile-chart-card">
-
-          <div class="mobile-chart-card__header">
-
-            <div>
-
-              <h3>
-
-                ⭐ {{ t("mobileApps.ratingChart") }}
-
-              </h3>
-
-              <p>
-
-                {{ t("mobileApps.averageUsersRating") }}
-
-              </p>
-
-            </div>
-
-            <span class="mobile-chart-card__source">
-
-              {{ t("common.live") }}
-
-            </span>
-
-          </div>
-
-          <div class="mobile-chart">
-
-            <Line
-              :data="ratingData"
-              :options="ratingOptions"
-            />
-
-          </div>
-
-        </article>
+        </button>
 
       </div>
-              <!-- BANK CARDS -->
+
+
+      <!-- CONTENT -->
+
+      <template v-else>
+
+
+        <!-- KPI -->
+
+        <div class="mobile-apps__stats">
+
+
+          <!-- APPLICATIONS -->
+
+          <div class="mobile-stat">
+
+            <div class="mobile-stat__icon">
+
+              🏦
+
+            </div>
+
+            <div>
+
+              <span class="mobile-stat__label">
+
+                {{ t("mobileApps.apps") }}
+
+              </span>
+
+              <strong class="mobile-stat__value">
+
+                {{ totalBanks }}
+
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <!-- AVERAGE RATING -->
+
+          <div class="mobile-stat">
+
+            <div class="mobile-stat__icon">
+
+              ⭐
+
+            </div>
+
+            <div>
+
+              <span class="mobile-stat__label">
+
+                {{ t("mobileApps.averageRating") }}
+
+              </span>
+
+              <strong class="mobile-stat__value">
+
+                {{ averageRating.toFixed(2) }}
+
+                <small>/ 5</small>
+
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <!-- TOTAL REVIEWS -->
+
+          <div class="mobile-stat">
+
+            <div class="mobile-stat__icon">
+
+              💬
+
+            </div>
+
+            <div>
+
+              <span class="mobile-stat__label">
+
+                {{ t("mobileApps.totalReviews") }}
+
+              </span>
+
+              <strong class="mobile-stat__value">
+
+                {{ formatReviews(totalReviews) }}
+
+              </strong>
+
+            </div>
+
+          </div>
+
+
+        </div>
+
+
+        <!-- CHARTS -->
+
+        <div class="mobile-apps__charts">
+
+
+          <!-- INSTALLS -->
+
+          <article class="mobile-chart-card">
+
+            <div class="mobile-chart-card__header">
+
+              <div>
+
+                <h3>
+
+                  📥 {{ t("mobileApps.installsChart") }}
+
+                </h3>
+
+                <p>
+
+                  {{ t("mobileApps.googlePlayData") }}
+
+                </p>
+
+              </div>
+
+              <span class="mobile-chart-card__source">
+
+                {{ t("common.live") }}
+
+              </span>
+
+            </div>
+
+
+            <div class="mobile-chart">
+
+              <Bar
+                :data="installsData"
+                :options="installsOptions"
+              />
+
+            </div>
+
+          </article>
+
+
+          <!-- RATING -->
+
+          <article class="mobile-chart-card">
+
+            <div class="mobile-chart-card__header">
+
+              <div>
+
+                <h3>
+
+                  ⭐ {{ t("mobileApps.ratingChart") }}
+
+                </h3>
+
+                <p>
+
+                  {{ t("mobileApps.averageUsersRating") }}
+
+                </p>
+
+              </div>
+
+              <span class="mobile-chart-card__source">
+
+                {{ t("common.live") }}
+
+              </span>
+
+            </div>
+
+
+            <div class="mobile-chart">
+
+              <Line
+                :data="ratingData"
+                :options="ratingOptions"
+              />
+
+            </div>
+
+          </article>
+
+
+        </div>
+
+
+        <!-- BANK CARDS -->
 
         <div class="mobile-banks">
 
@@ -742,6 +764,9 @@ const ratingOptions = {
             :key="item.bank"
             class="mobile-bank"
           >
+
+
+            <!-- BANK HEADER -->
 
             <div class="mobile-bank__top">
 
@@ -769,7 +794,13 @@ const ratingOptions = {
 
             </div>
 
+
+            <!-- BANK METRICS -->
+
             <div class="mobile-bank__metrics">
+
+
+              <!-- INSTALLS -->
 
               <div class="mobile-bank__metric">
 
@@ -787,6 +818,9 @@ const ratingOptions = {
 
               </div>
 
+
+              <!-- RATING -->
+
               <div class="mobile-bank__metric">
 
                 <span>
@@ -802,6 +836,9 @@ const ratingOptions = {
                 </strong>
 
               </div>
+
+
+              <!-- REVIEWS -->
 
               <div class="mobile-bank__metric">
 
@@ -819,11 +856,13 @@ const ratingOptions = {
 
               </div>
 
+
             </div>
 
           </div>
 
         </div>
+
 
         <!-- FOOTER -->
 
@@ -845,11 +884,12 @@ const ratingOptions = {
 
         </div>
 
-    </template>
 
-  </div>
+      </template>
 
-</section>
+    </div>
+
+  </section>
 
 </template>
 
