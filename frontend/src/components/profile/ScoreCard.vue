@@ -15,15 +15,13 @@ const props = defineProps({
 // SCORE
 // =====================================================
 
-const creditScore = computed(() =>
-  Number(
-    props.score.score || 0,
-  ),
-)
+const creditScore = computed(() => {
+  return Number(props.score?.score ?? 0)
+})
 
-const risk = computed(() =>
-  props.score.risk || "UNKNOWN",
-)
+const risk = computed(() => {
+  return props.score?.risk || "UNKNOWN"
+})
 
 // =====================================================
 // COLOR
@@ -98,13 +96,25 @@ const riskText = computed(() => {
 const progress = computed(() => {
   const score = creditScore.value
 
+  const percentage = (score / 1000) * 100
+
+  // Округляем до 1 знака после запятой,
+  // чтобы не получать 51.800000000000004
   return Math.max(
     0,
     Math.min(
       100,
-      (score / 1000) * 100,
+      Math.round(percentage * 10) / 10,
     ),
   )
+})
+
+// =====================================================
+// PROGRESS TEXT
+// =====================================================
+
+const progressText = computed(() => {
+  return `${progress.value.toFixed(1)}%`
 })
 </script>
 
@@ -146,7 +156,7 @@ const progress = computed(() => {
       <div
         class="fill"
         :style="{
-          width: progress + '%',
+          width: `${progress}%`,
           background: scoreColor,
         }"
       />
@@ -158,7 +168,7 @@ const progress = computed(() => {
       </div>
 
       <strong>
-        {{ progress }}%
+        {{ progressText }}
       </strong>
     </div>
   </div>
@@ -223,7 +233,7 @@ h2 {
 
 .fill {
   height: 100%;
-  transition: 0.35s;
+  transition: width 0.35s ease, background 0.35s ease;
 }
 
 .footer {
