@@ -16,7 +16,6 @@ import CreditReportUpload from "@/components/profile/CreditReportUpload.vue"
 import GovernmentServicesCard from "@/components/profile/GovernmentServicesCard.vue"
 import AiAnalysisCard from "@/components/profile/AiAnalysisCard.vue"
 import EmploymentVerificationCard from "@/components/profile/EmploymentVerificationCard.vue"
-import RecommendationsCard from "@/components/profile/RecommendationsCard.vue"
 
 const { t } = useI18n()
 

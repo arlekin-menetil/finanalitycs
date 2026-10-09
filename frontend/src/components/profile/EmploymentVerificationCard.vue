@@ -279,57 +279,70 @@ function onDragLeave() {
     <!-- NO DOCUMENT -->
     <!-- ===================================== -->
 
-    <template v-if="!hasDocument">
+<template v-if="!hasDocument">
 
-      <div
-        class="upload-zone"
-        :class="{ active: dragOver }"
-        @dragover.prevent="onDragOver"
-        @dragleave="onDragLeave"
-        @drop.prevent="onDrop"
+  <div
+    class="upload-zone"
+    :class="{ active: dragOver }"
+    @dragover.prevent="onDragOver"
+    @dragleave="onDragLeave"
+    @drop.prevent="onDrop"
+  >
+
+    <div class="upload-icon">
+      📄
+    </div>
+
+    <h3>
+      {{ t("employmentVerification.upload.title") }}
+    </h3>
+
+    <p>
+      {{ t("employmentVerification.upload.description") }}
+    </p>
+
+    <div class="upload-actions">
+
+      <!-- ПОЛУЧИТЬ СПРАВКУ -->
+
+      <a
+        class="get-document-btn"
+        :href="myGovCareerUrl"
+        target="_blank"
+        rel="noopener noreferrer"
       >
-
-        <div class="upload-icon">
-          📄
-        </div>
+        📄 {{ t("employmentVerification.actions.getDocument") }}
+      </a>
 
 
-        <h3>
-          {{ t("employmentVerification.upload.title") }}
-        </h3>
+      <!-- ЗАГРУЗИТЬ PDF -->
+
+      <label class="upload-btn">
+
+        📁 {{ t("employmentVerification.upload.choose") }}
+
+        <input
+          hidden
+          type="file"
+          accept=".pdf"
+          @change="onFile"
+        />
+
+      </label>
+
+    </div>
 
 
-        <p>
-          {{ t("employmentVerification.upload.description") }}
-        </p>
+    <div
+      v-if="loading"
+      class="loading"
+    >
+      {{ t("employmentVerification.upload.checking") }}
+    </div>
 
+  </div>
 
-        <label class="upload-btn">
-
-          {{ t("employmentVerification.upload.choose") }}
-
-          <input
-            hidden
-            type="file"
-            accept=".pdf"
-            @change="onFile"
-          />
-
-        </label>
-
-
-        <div
-          v-if="loading"
-          class="loading"
-        >
-
-          {{ t("employmentVerification.upload.checking") }}
-
-        </div>
-
-      </div>
-
-    </template>
+</template>
 
 
     <!-- ===================================== -->
