@@ -2417,5 +2417,8 @@ profileEdit: {
   buttons: {
     save: "Save",
   },
+  placeholders: {
+  fullName: "Enter your full name",
+},
 },
 }

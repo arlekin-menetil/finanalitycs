@@ -2287,5 +2287,9 @@ profileEdit: {
   buttons: {
     save: "Saqlash",
   },
+
+  placeholders: {
+  fullName: "F.I.Sh.ni kiriting",
+},
 },
 }
