@@ -2385,6 +2385,7 @@ profileSetup: {
   title: "Profile Setup",
   description:
     "Fill in your information to receive personalized recommendations.",
+    loading: "Loading...",
 },
 
 // =========================================================

@@ -2255,6 +2255,7 @@ profileSetup: {
   title: "Profilni sozlash",
   description:
     "Tavsiyalarni shaxsiylashtirish uchun o‘zingiz haqingizdagi ma’lumotlarni kiriting.",
+    loading: "Yuklanmoqda...",
 },
 
 // =========================================================
