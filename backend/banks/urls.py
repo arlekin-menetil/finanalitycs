@@ -60,7 +60,16 @@ from .views_currency_history import (
     CurrencyHistoryView,
 )
 
+# ==========================================
+# 📊 PUBLIC STATS
+# ==========================================
+from .views_public import (
+    PublicStatsAPIView,
+)
+
+
 app_name = "banks"
+
 
 urlpatterns = [
 
@@ -107,6 +116,15 @@ urlpatterns = [
         "products/",
         BankProductsAPIView.as_view(),
         name="products-list",
+    ),
+
+    # ==================================================
+    # 📊 PUBLIC STATS
+    # ==================================================
+    path(
+        "public-stats/",
+        PublicStatsAPIView.as_view(),
+        name="public-stats",
     ),
 
     # ==================================================

@@ -1,34 +1,27 @@
 <script setup>
-import { computed, onMounted, ref } from "vue"
+import { onMounted, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import api from "@/api/axios"
 
 const { t } = useI18n()
 
-const products = ref([])
-const loading = ref(true)
-
-const banksCount = computed(() => {
-  const banks = new Set(
-    products.value
-      .map((product) => product.bank_name)
-      .filter(Boolean),
-  )
-
-  return banks.size
+const stats = ref({
+  banks: 0,
+  products: 0,
 })
 
-const productsCount = computed(() => products.value.length)
+const loading = ref(true)
 
 async function loadStats() {
   try {
     loading.value = true
 
-    const response = await api.get("/banks/products/")
+    const response = await api.get("/banks/public-stats/")
 
-    products.value = Array.isArray(response.data)
-      ? response.data
-      : response.data.results || []
+    stats.value = {
+      banks: response.data?.banks ?? 0,
+      products: response.data?.products ?? 0,
+    }
   } catch (error) {
     console.error("Failed to load landing stats:", error)
   } finally {
@@ -42,12 +35,16 @@ onMounted(loadStats)
 <template>
   <section class="stats">
     <div class="stats__item">
-      <h2>{{ loading ? "—" : banksCount }}</h2>
+      <h2>
+        {{ loading ? "—" : stats.banks }}
+      </h2>
       <p>{{ t("stats.banks") }}</p>
     </div>
 
     <div class="stats__item">
-      <h2>{{ loading ? "—" : productsCount }}</h2>
+      <h2>
+        {{ loading ? "—" : stats.products }}
+      </h2>
       <p>{{ t("stats.products") }}</p>
     </div>
 
